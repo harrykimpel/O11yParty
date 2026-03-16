@@ -73,16 +73,16 @@ dotnet dev-certs https --trust
 
 ### Setup View
 
-![Setup View](./Assets/WTH-O11yParty-setup.png)
+![Setup View](./Assets/O11yParty-setup.png)
 
 ### Start View
 
-![Start View](./Assets/WTH-O11yParty-start.png)
+![Start View](./Assets/O11yParty-start.png)
 
 ### Prompt View
 
-![Prompt View](./Assets/WTH-O11yParty-prompt.png)
+![Prompt View](./Assets/O11yParty-prompt.png)
 
 ### Winner View
 
-![Winner View](./Assets/WTH-O11yParty-winner.png)
+![Winner View](./Assets/O11yParty-winner.png)
