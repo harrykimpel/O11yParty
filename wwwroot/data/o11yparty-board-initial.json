@@ -1,0 +1,154 @@
+{
+    "categories": [
+        {
+            "name": "Cloud Fundamentals",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "What is the shared responsibility model?",
+                    "answer": "A cloud model where providers secure the cloud and customers secure what they put in it."
+                },
+                {
+                    "value": 200,
+                    "prompt": "Define IaaS.",
+                    "answer": "Infrastructure as a Service: virtualized compute, storage, and networking resources on demand."
+                },
+                {
+                    "value": 300,
+                    "prompt": "Name a benefit of elasticity.",
+                    "answer": "The ability to scale resources up or down automatically based on demand."
+                },
+                {
+                    "value": 400,
+                    "prompt": "What is a region?",
+                    "answer": "A geographic area containing one or more datacenters."
+                },
+                {
+                    "value": 500,
+                    "prompt": "What is a landing zone?",
+                    "answer": "A foundational set of policies and resources for deploying workloads."
+                }
+            ]
+        },
+        {
+            "name": "Observability",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "Define SLIs.",
+                    "answer": "Service Level Indicators are measurable signals of service performance."
+                },
+                {
+                    "value": 200,
+                    "prompt": "What is distributed tracing?",
+                    "answer": "Tracking a request across services to understand latency and dependencies."
+                },
+                {
+                    "value": 300,
+                    "prompt": "What is an alert?",
+                    "answer": "A notification triggered by a condition that needs attention."
+                },
+                {
+                    "value": 400,
+                    "prompt": "What does MTTR stand for?",
+                    "answer": "Mean Time To Recovery."
+                },
+                {
+                    "value": 500,
+                    "prompt": "Name the three pillars of observability.",
+                    "answer": "Logs, metrics, and traces."
+                }
+            ]
+        },
+        {
+            "name": "DevOps",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "What is CI?",
+                    "answer": "Continuous Integration: merging and validating code frequently."
+                },
+                {
+                    "value": 200,
+                    "prompt": "What is CD?",
+                    "answer": "Continuous Delivery/Deployment: releasing changes automatically."
+                },
+                {
+                    "value": 300,
+                    "prompt": "What is infrastructure as code?",
+                    "answer": "Managing infrastructure with versioned code."
+                },
+                {
+                    "value": 400,
+                    "prompt": "What is a blue/green deployment?",
+                    "answer": "A release strategy using two environments to reduce downtime."
+                },
+                {
+                    "value": 500,
+                    "prompt": "What is trunk-based development?",
+                    "answer": "Working from a single shared branch with short-lived branches."
+                }
+            ]
+        },
+        {
+            "name": "Security",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "Define least privilege.",
+                    "answer": "Grant only the minimum access needed to perform a task."
+                },
+                {
+                    "value": 200,
+                    "prompt": "What is MFA?",
+                    "answer": "Multi-factor authentication."
+                },
+                {
+                    "value": 300,
+                    "prompt": "What is a CVE?",
+                    "answer": "A Common Vulnerabilities and Exposures identifier."
+                },
+                {
+                    "value": 400,
+                    "prompt": "What is zero trust?",
+                    "answer": "Never trust, always verify access to resources."
+                },
+                {
+                    "value": 500,
+                    "prompt": "What is data encryption at rest?",
+                    "answer": "Protecting stored data using encryption keys."
+                }
+            ]
+        },
+        {
+            "name": "AI & Data",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "What is a feature?",
+                    "answer": "An input variable used by a model."
+                },
+                {
+                    "value": 200,
+                    "prompt": "What is model drift?",
+                    "answer": "When model performance degrades due to changing data patterns."
+                },
+                {
+                    "value": 300,
+                    "prompt": "Define ETL.",
+                    "answer": "Extract, Transform, Load."
+                },
+                {
+                    "value": 400,
+                    "prompt": "What is a vector database used for?",
+                    "answer": "Storing embeddings for similarity search."
+                },
+                {
+                    "value": 500,
+                    "prompt": "What is a prompt?",
+                    "answer": "An input instruction to guide a model response."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,154 @@
+{
+    "categories": [
+        {
+            "name": "LET’S SPEAK NRQL",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO",
+                    "answer": "Construct a query that will allow you to get the average duration of all your apps within the account over the last hour."
+                },
+                {
+                    "value": 200,
+                    "prompt": "show event types\nsince 1 day ago",
+                    "answer": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that will allow you to list all tables in an account."
+                },
+                {
+                    "value": 300,
+                    "prompt": "SELECT count(*)\nFROM Transaction\nFACET buckets(duration,5, 10)",
+                    "answer": "Create a query that will allow you to calculate the number of transactions divided into 10 buckets based on duration.\n(Hint: use the buckets() function)"
+                },
+                {
+                    "value": 400,
+                    "prompt": "SELECT 100 *\n\tfilter(count(*), where eventType() = 'TransactionError')\n\t/\n\tfilter(count(*), where eventType() = 'Transaction')\nFROM Transaction, TransactionError\nFACET appName",
+                    "answer": "Create a query that would return the percentage of total TransactionError results relative to total Transaction results."
+                },
+                {
+                    "value": 500,
+                    "prompt": "SELECT latest(avgDuration)\nFROM (\n\tFROM Transaction\n\tSELECT average(duration) AS avgDuration\n\tFACET appName\n\tLIMIT max)\nWHERE avgDuration > 0.3\nFACET appName",
+                    "answer": "Let's say that a threshold for a “slow application” is 0.3 seconds on average. Write a query to only show slow applications over the last hour."
+                }
+            ]
+        },
+        {
+            "name": "AGENT FRAMEWORK 101",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "A goal-driven system that observes, decides, and acts on your behalf using tools and context.",
+                    "answer": "What is an AI agent?"
+                },
+                {
+                    "value": 200,
+                    "prompt": "It breaks a goal into steps and chooses which tool or skill to use next.",
+                    "answer": "What does a planner do in an agent framework?"
+                },
+                {
+                    "value": 300,
+                    "prompt": "Output validation and tool-use constraints (for example, allowlist of tools).",
+                    "answer": "Name two safety guardrails commonly used with agents."
+                },
+                {
+                    "value": 400,
+                    "prompt": "Tools are external actions (API calls), while skills are reusable internal behaviors or prompts.",
+                    "answer": "What is the difference between tools and skills?"
+                },
+                {
+                    "value": 500,
+                    "prompt": "It preserves context across steps so the agent can act consistently over time.",
+                    "answer": "Why is memory important in an agent framework?"
+                }
+            ]
+        },
+        {
+            "name": "FOUNDRY BASICS",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "A platform to build, evaluate, and deploy AI solutions with models, tools, and safety controls.",
+                    "answer": "What is Microsoft Foundry best described as?"
+                },
+                {
+                    "value": 200,
+                    "prompt": "Safety filters/guardrails, content moderation, or evaluation criteria for outputs.",
+                    "answer": "Name one thing you can set up in Foundry to keep models safe."
+                },
+                {
+                    "value": 300,
+                    "prompt": "To measure model quality (accuracy, safety, relevance) before deploying.",
+                    "answer": "What’s the purpose of evaluations in Foundry?"
+                },
+                {
+                    "value": 400,
+                    "prompt": "By sharing projects, datasets, prompts, and deployment configs in one workspace.",
+                    "answer": "How does Foundry help teams collaborate?"
+                },
+                {
+                    "value": 500,
+                    "prompt": "It streamlines hosting, monitoring, and scaling models without managing infrastructure.",
+                    "answer": "Why use Foundry’s managed deployments?"
+                }
+            ]
+        },
+        {
+            "name": "TECH GEOGRAPHY",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "Grant only the minimum access needed to perform a task.",
+                    "answer": "Define least privilege."
+                },
+                {
+                    "value": 200,
+                    "prompt": "Multi-factor authentication.",
+                    "answer": "What is MFA?"
+                },
+                {
+                    "value": 300,
+                    "prompt": "A Common Vulnerabilities and Exposures identifier.",
+                    "answer": "What is a CVE?"
+                },
+                {
+                    "value": 400,
+                    "prompt": "Never trust, always verify access to resources.",
+                    "answer": "What is zero trust?"
+                },
+                {
+                    "value": 500,
+                    "prompt": "Protecting stored data using encryption keys.",
+                    "answer": "What is data encryption at rest?"
+                }
+            ]
+        },
+        {
+            "name": "AI & DATA",
+            "questions": [
+                {
+                    "value": 100,
+                    "prompt": "An input variable used by a model.",
+                    "answer": "What is a feature?"
+                },
+                {
+                    "value": 200,
+                    "prompt": "When model performance degrades due to changing data patterns.",
+                    "answer": "What is model drift?"
+                },
+                {
+                    "value": 300,
+                    "prompt": "Extract, Transform, Load.",
+                    "answer": "Define ETL."
+                },
+                {
+                    "value": 400,
+                    "prompt": "Storing embeddings for similarity search.",
+                    "answer": "What is a vector database used for?"
+                },
+                {
+                    "value": 500,
+                    "prompt": "An input instruction to guide a model response.",
+                    "answer": "What is a prompt?"
+                }
+            ]
+        }
+    ]
+}

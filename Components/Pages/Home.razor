@@ -1,0 +1,725 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject O11yPartyDataService DataService
+@inject NewRelicBuzzService BuzzService
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>WTH O11yParty</PageTitle>
+
+<section class="wth-app">
+    <header class="wth-header">
+        <div>
+            <img class="wth-logo" src="images/O11y-Party.png" alt="WTH O11yParty" />
+            <div class="wth-controls">
+                @if (_phase is GamePhase.Board or GamePhase.Question or GamePhase.Answer)
+                {
+                    <button class="wth-button ghost" @onclick="ResetGame">New Game</button>
+                }
+                @if (_phase is GamePhase.Board)
+                {
+                    <button class="wth-button" @onclick="EndGame">Finish Game</button>
+                }
+            </div>
+        </div>
+    </header>
+
+    <section class="wth-scoreboard">
+        <h2>Teams</h2>
+        <div class="wth-team-grid">
+            @foreach (var team in _teams)
+            {
+                <div class="wth-team-card">
+                    <span class="team-name">@team.Name</span>
+                    <span class="team-score">@team.Score</span>
+                </div>
+            }
+        </div>
+    </section>
+
+    @if (!_isLoaded)
+    {
+        <section class="wth-panel">
+            <h2>Loading board...</h2>
+        </section>
+    }
+    else if (_phase == GamePhase.Setup)
+    {
+        <section class="wth-panel">
+            <h2>Set up teams</h2>
+            <p class="muted">Add the team or candidate names, then start the game.</p>
+
+            <div class="wth-team-editor">
+                @for (var i = 0; i < _teams.Count; i++)
+                {
+                    var teamIndex = i;
+                    <div class="wth-team-row">
+                        <input class="wth-input" value="@_teams[teamIndex].Name"
+                               @oninput="e => UpdateTeamName(teamIndex, e.Value?.ToString())" />
+                        <button class="wth-button ghost" @onclick="() => RemoveTeam(teamIndex)"
+                                disabled="@(_teams.Count <= 1)">Remove</button>
+                    </div>
+                }
+            </div>
+
+            <div class="wth-options">
+                <label class="wth-toggle">
+                    <input type="checkbox" @bind="_enableDailyDouble" />
+                    Daily Double
+                </label>
+                <label class="wth-toggle">
+                    <input type="checkbox" @bind="_enableTimer" />
+                    Question Timer
+                </label>
+                <label class="wth-toggle">
+                    <input type="checkbox" @bind="_enableBuzzer" />
+                    Buzzer Mode
+                </label>
+                <label class="wth-toggle">
+                    Seconds per question
+                    <input class="wth-input small" type="number" min="10" max="120" @bind="_questionSeconds" />
+                </label>
+            </div>
+
+            <div class="wth-actions">
+                <button class="wth-button ghost" @onclick="AddTeam">Add Team</button>
+                <button class="wth-button" @onclick="StartGame"
+                        disabled="@(!_teams.Any(t => !string.IsNullOrWhiteSpace(t.Name)))">Start Game</button>
+            </div>
+        </section>
+    }
+    else if (_phase == GamePhase.Board)
+    {
+        <section class="wth-board">
+            <div class="wth-board-grid">
+                @foreach (var category in _categories)
+                {
+                    <div class="wth-category">
+                        <div class="wth-category-title">@category.Name</div>
+                        @foreach (var question in category.Questions)
+                        {
+                            <button class="wth-tile" disabled="@question.IsAnswered" @onclick="() => SelectQuestion(question)">
+                                @if (question.IsAnswered)
+                                {
+                                    <span class="wth-tile-used">✓</span>
+                                }
+                                else
+                                {
+                                    <span class="wth-tile-value">$@question.Value</span>
+                                }
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+    }
+    else if (_phase is GamePhase.Question or GamePhase.Answer)
+    {
+        <section class="wth-panel wth-question">
+            <div class="wth-question-header">
+                <span class="wth-badge">@_currentQuestion?.CategoryName</span>
+                <span class="wth-badge">$@_currentQuestion?.Value</span>
+                @if (_currentQuestion?.IsDailyDouble == true)
+                {
+                    <span class="wth-badge daily-double">Daily Double</span>
+                }
+                @if (_enableTimer)
+                {
+                    <span class="wth-badge timer">@_timeRemaining s</span>
+                }
+            </div>
+
+            <h2 class="wth-question-text">@GetPromptMarkup()</h2>
+
+            @if (_currentQuestion?.IsDailyDouble == true && _phase == GamePhase.Question)
+            {
+                <div class="wth-daily-double">
+                    <label>Wager</label>
+                    <input class="wth-input small" type="number" min="100" max="@_maxWager" @bind="_dailyDoubleWager" />
+                    <span class="muted">Max @(_maxWager)</span>
+                </div>
+            }
+
+            @if (_enableBuzzer && _phase == GamePhase.Question)
+            {
+                <div class="wth-buzzer">
+                    <h3>Buzzer</h3>
+                    @if (!BuzzService.IsConfigured)
+                    {
+                        <p class="muted">Remote buzzer polling is disabled. Configure New Relic settings to enable it.</p>
+                    }
+                    <div class="wth-buzzer-grid">
+                        @foreach (var team in _teams)
+                        {
+                            <button class="wth-button small" disabled="@_buzzerLocked" @onclick="() => BuzzIn(team)">Buzz:
+                                @team.Name</button>
+                            }
+                        </div>
+
+                        @if (_buzzedTeam is not null)
+                        {
+                            <p class="muted">Buzzed: @_buzzedTeam.Name</p>
+                            <button class="wth-button ghost small" @onclick="ResetBuzz">Reset Buzz</button>
+                        }
+                        else if (!string.IsNullOrWhiteSpace(_remoteBuzzedName))
+                        {
+                            <p class="muted">Buzzed: @_remoteBuzzedName</p>
+                            <button class="wth-button ghost small" @onclick="ResetBuzz">Reset Buzz</button>
+                        }
+                    </div>
+                }
+
+                @if (_phase == GamePhase.Answer)
+                {
+                    <div class="wth-answer">
+                        <h3>Answer</h3>
+                        <p class="wth-answer-text">@GetAnswerMarkup()</p>
+                    </div>
+
+                    <div class="wth-score-actions">
+                        <h3>Score this question</h3>
+                        <p class="muted">Points: @GetQuestionPoints()</p>
+
+                        @if (_buzzedTeam is not null)
+                        {
+                            <div class="wth-quick-score">
+                                <span>Buzzed team:</span>
+                                <button class="wth-button small" @onclick="() => AdjustScore(_buzzedTeam!, GetQuestionPoints())">Award
+                                    @_buzzedTeam.Name</button>
+                                    <button class="wth-button ghost small"
+                                            @onclick="() => AdjustScore(_buzzedTeam!, -GetQuestionPoints())">Penalize @_buzzedTeam.Name</button>
+                                </div>
+                            }
+
+                            <div class="wth-team-score-grid">
+                                @foreach (var team in _teams)
+                                {
+                                    <div class="wth-team-score-row">
+                                        <span>@team.Name</span>
+                                        <div class="wth-team-score-buttons">
+                                            <button class="wth-button small" @onclick="() => AdjustScore(team, GetQuestionPoints())">+
+                                                @GetQuestionPoints()</button>
+                                                <button class="wth-button ghost small"
+                                                        @onclick="() => AdjustScore(team, -GetQuestionPoints())">- @GetQuestionPoints()</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="wth-actions">
+                            @if (_phase == GamePhase.Question)
+                            {
+                                <button class="wth-button" @onclick="RevealAnswer">Show Answer</button>
+                            }
+                            <button class="wth-button ghost" @onclick="ReturnToBoard">Back to Board</button>
+                            <button class="wth-button" @onclick="CompleteQuestion">Mark Answered</button>
+                        </div>
+                    </section>
+                }
+                else if (_phase == GamePhase.Winner)
+                {
+                    var rankedTeams = _teams
+                        .OrderByDescending(t => t.Score)
+                        .ThenBy(t => t.Name)
+                        .ToList();
+                    var podiumTeams = rankedTeams.Take(3).ToList();
+                    var remainingTeams = rankedTeams.Skip(3).ToList();
+
+                    <section class="wth-panel wth-winner">
+                        <h2>Leaderboard</h2>
+
+                        <div class="wth-podium-grid">
+                            @for (var i = 0; i < podiumTeams.Count; i++)
+                            {
+                                var team = podiumTeams[i];
+                                <article class="wth-podium-card @GetPodiumClass(i)">
+                                    <span class="podium-medal">@GetMedalLabel(i)</span>
+                                    <span class="podium-rank">#@(i + 1)</span>
+                                    <span class="podium-name">@team.Name</span>
+                                    <span class="podium-score">@team.Score pts</span>
+                                </article>
+                            }
+                        </div>
+
+                        @if (remainingTeams.Count > 0)
+                        {
+                            <div class="wth-lower-ranks">
+                                <h3>4th Place And Below</h3>
+                                <table class="wth-rank-table" aria-label="Teams ranked fourth place and below">
+                                    <thead>
+                                        <tr>
+                                            <th>Place</th>
+                                            <th>Team</th>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (var i = 0; i < remainingTeams.Count; i++)
+                                        {
+                                            var team = remainingTeams[i];
+                                            <tr>
+                                                <td>@(i + 4)</td>
+                                                <td>@team.Name</td>
+                                                <td>@team.Score</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                        <div class="wth-actions">
+                            <button class="wth-button" @onclick="ResetGame">Play Again</button>
+                        </div>
+                    </section>
+                }
+            </section>
+
+@code {
+    private GamePhase _phase = GamePhase.Setup;
+    private readonly List<Team> _teams = new();
+    private readonly List<O11yPartyCategory> _categories = new();
+    private O11yPartyQuestion? _currentQuestion;
+    private bool _isLoaded;
+    private bool _enableDailyDouble = true;
+    private bool _enableTimer = true;
+    private bool _enableBuzzer = true;
+    private int _questionSeconds = 30;
+    private int _timeRemaining;
+    private int _dailyDoubleWager;
+    private int _maxWager;
+    private bool _buzzerLocked;
+    private Team? _buzzedTeam;
+    private string? _remoteBuzzedName;
+    private bool _scoreApplied;
+    private System.Timers.Timer? _timer;
+    private CancellationTokenSource? _buzzPollingCancellation;
+    private long _questionStartedUnixMs;
+    private long _lastHandledBuzzUnixMs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var teamNames = await DataService.GetTeamsAsync();
+        _teams.Clear();
+        foreach (var name in teamNames)
+        {
+            _teams.Add(new Team(name));
+        }
+
+        if (_teams.Count == 0)
+        {
+            _teams.Add(new Team("Team Azure"));
+            _teams.Add(new Team("Team DevRel"));
+        }
+
+        var board = await DataService.GetBoardAsync();
+        _categories.Clear();
+        _categories.AddRange(board.Categories);
+        foreach (var category in _categories)
+        {
+            foreach (var question in category.Questions)
+            {
+                question.CategoryName = category.Name;
+            }
+        }
+
+        _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q =>
+        q.Value);
+        _isLoaded = true;
+    }
+
+    private void StartGame()
+    {
+        if (_teams.All(t => string.IsNullOrWhiteSpace(t.Name)))
+        {
+            return;
+        }
+
+        foreach (var team in _teams)
+        {
+            team.Name = team.Name.Trim();
+            team.Score = 0;
+        }
+
+        foreach (var question in _categories.SelectMany(c => c.Questions))
+        {
+            question.IsAnswered = false;
+            question.IsDailyDouble = false;
+        }
+
+        if (_enableDailyDouble)
+        {
+            AssignDailyDoubles();
+        }
+
+        _phase = GamePhase.Board;
+        _currentQuestion = null;
+        ResetBuzzState();
+    }
+
+    private void ResetGame()
+    {
+        StopBuzzPolling();
+        StopTimer();
+        _phase = GamePhase.Setup;
+        _currentQuestion = null;
+        ResetBuzzState();
+    }
+
+    private void EndGame()
+    {
+        StopBuzzPolling();
+        StopTimer();
+        _phase = GamePhase.Winner;
+    }
+
+    private void AddTeam()
+    {
+        _teams.Add(new Team($"Team {_teams.Count + 1}"));
+    }
+
+    private void RemoveTeam(int index)
+    {
+        if (_teams.Count <= 1)
+        {
+            return;
+        }
+
+        _teams.RemoveAt(index);
+    }
+
+    private void UpdateTeamName(int index, string? value)
+    {
+        _teams[index].Name = value ?? string.Empty;
+    }
+
+    private void SelectQuestion(O11yPartyQuestion question)
+    {
+        if (question.IsAnswered)
+        {
+            return;
+        }
+
+        _currentQuestion = question;
+        _phase = GamePhase.Question;
+        _dailyDoubleWager = question.Value;
+        _scoreApplied = false;
+        ResetBuzzState();
+        StartTimer();
+        StartBuzzPolling();
+    }
+
+    private void RevealAnswer()
+    {
+        StopBuzzPolling();
+        StopTimer();
+        _phase = GamePhase.Answer;
+    }
+
+    private void ReturnToBoard()
+    {
+        StopBuzzPolling();
+        StopTimer();
+        _phase = GamePhase.Board;
+        _currentQuestion = null;
+        ResetBuzzState();
+    }
+
+    private void CompleteQuestion()
+    {
+        if (_currentQuestion is null)
+        {
+            return;
+        }
+
+        if (!_scoreApplied && _buzzedTeam is not null)
+        {
+            AdjustScore(_buzzedTeam, GetQuestionPoints());
+        }
+
+        StopBuzzPolling();
+        StopTimer();
+        _currentQuestion.IsAnswered = true;
+        _currentQuestion = null;
+        ResetBuzzState();
+        _phase = _categories.SelectMany(c => c.Questions).All(q => q.IsAnswered)
+        ? GamePhase.Winner
+        : GamePhase.Board;
+    }
+
+    private async void AdjustScore(Team team, int delta)
+    {
+        team.Score += delta;
+        _scoreApplied = true;
+
+        await JS.InvokeAsync<string>("RecordTeamScore", team.Name, team.Score);
+    }
+
+    private int GetQuestionPoints()
+    {
+        if (_currentQuestion is null)
+        {
+            return 0;
+        }
+
+        return _currentQuestion.IsDailyDouble
+        ? Math.Clamp(_dailyDoubleWager, 100, _maxWager)
+        : _currentQuestion.Value;
+    }
+
+    private MarkupString GetPromptMarkup()
+    {
+        var prompt = _currentQuestion?.Prompt ?? string.Empty;
+        return FormatWithLineBreaks(prompt);
+    }
+
+    private MarkupString GetAnswerMarkup()
+    {
+        var answer = _currentQuestion?.Answer ?? string.Empty;
+        return FormatWithWhitespace(answer);
+    }
+
+    private static MarkupString FormatWithWhitespace(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return new MarkupString(string.Empty);
+        }
+
+        var encoded = System.Net.WebUtility.HtmlEncode(text);
+        encoded = encoded.Replace("\r\n", "\n");
+        encoded = encoded.Replace("\t", "    ");
+        return new MarkupString(encoded);
+    }
+
+    private static MarkupString FormatWithLineBreaks(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return new MarkupString(string.Empty);
+        }
+
+        var encoded = System.Net.WebUtility.HtmlEncode(text);
+        encoded = encoded.Replace("\r\n", "\n");
+        encoded = encoded.Replace("\n", "<br />");
+        return new MarkupString(encoded);
+    }
+
+    private void BuzzIn(Team team)
+    {
+        if (_buzzerLocked)
+        {
+            return;
+        }
+
+        _buzzedTeam = team;
+        _buzzerLocked = true;
+        StopTimer();
+    }
+
+    private void ResetBuzzState()
+    {
+        _buzzerLocked = false;
+        _buzzedTeam = null;
+        _remoteBuzzedName = null;
+        _scoreApplied = false;
+    }
+
+    private void ResetBuzz()
+    {
+        ResetBuzzState();
+        _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        _lastHandledBuzzUnixMs = _questionStartedUnixMs;
+        StartTimer();
+    }
+
+    private void StartBuzzPolling()
+    {
+        StopBuzzPolling();
+
+        if (!_enableBuzzer || !BuzzService.IsConfigured)
+        {
+            return;
+        }
+
+        _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        _lastHandledBuzzUnixMs = _questionStartedUnixMs;
+        _buzzPollingCancellation = new CancellationTokenSource();
+        _ = PollRemoteBuzzAsync(_buzzPollingCancellation.Token);
+    }
+
+    private void StopBuzzPolling()
+    {
+        if (_buzzPollingCancellation is null)
+        {
+            return;
+        }
+
+        _buzzPollingCancellation.Cancel();
+        _buzzPollingCancellation.Dispose();
+        _buzzPollingCancellation = null;
+    }
+
+    private async Task PollRemoteBuzzAsync(CancellationToken cancellationToken)
+    {
+        using var pollTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        try
+        {
+            while (await pollTimer.WaitForNextTickAsync(cancellationToken))
+            {
+                if (_phase != GamePhase.Question || _buzzerLocked)
+                {
+                    continue;
+                }
+
+                var buzz = await BuzzService.GetLatestBuzzAsync(cancellationToken);
+                if (buzz is null)
+                {
+                    continue;
+                }
+
+                if (buzz.TimestampUnixMs <= _lastHandledBuzzUnixMs || buzz.TimestampUnixMs < _questionStartedUnixMs)
+                {
+                    continue;
+                }
+
+                _lastHandledBuzzUnixMs = buzz.TimestampUnixMs;
+                Console.WriteLine("Handling remote buzz: Name={0}, Timestamp={1}", buzz.Name, buzz.TimestampUnixMs);
+                await InvokeAsync(() => HandleRemoteBuzz(buzz.Name));
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore cancellation when changing phases.
+        }
+    }
+
+    private void HandleRemoteBuzz(string participantName)
+    {
+        if (_buzzerLocked || string.IsNullOrWhiteSpace(participantName))
+        {
+            return;
+        }
+
+        var normalizedName = participantName.Trim();
+        var matchingTeam = _teams.FirstOrDefault(team =>
+            string.Equals(team.Name, normalizedName, StringComparison.OrdinalIgnoreCase));
+
+        if (matchingTeam is not null)
+        {
+            _remoteBuzzedName = matchingTeam.Name;
+            BuzzIn(matchingTeam);
+            StateHasChanged();
+            return;
+        }
+
+        Console.WriteLine("Ignoring remote buzz from unknown team: {0}", normalizedName);
+    }
+
+    private void StartTimer()
+    {
+        StopTimer();
+
+        if (!_enableTimer || _phase != GamePhase.Question)
+        {
+            return;
+        }
+
+        _timeRemaining = Math.Max(1, _questionSeconds);
+        _timer = new System.Timers.Timer(1000);
+        _timer.Elapsed += async (_, _) =>
+        {
+            if (_phase != GamePhase.Question)
+            {
+                return;
+            }
+
+            _timeRemaining--;
+            if (_timeRemaining <= 0)
+            {
+                _timeRemaining = 0;
+                StopTimer();
+                _phase = GamePhase.Answer;
+                _buzzerLocked = true;
+            }
+
+            await InvokeAsync(StateHasChanged);
+        };
+        _timer.AutoReset = true;
+        _timer.Start();
+    }
+
+    private void StopTimer()
+    {
+        if (_timer is null)
+        {
+            return;
+        }
+
+        _timer.Stop();
+        _timer.Dispose();
+        _timer = null;
+    }
+
+    private void AssignDailyDoubles()
+    {
+        var allQuestions = _categories.SelectMany(c => c.Questions).ToList();
+        if (allQuestions.Count == 0)
+        {
+            return;
+        }
+
+        var dailyDoubleCount = Math.Max(1, _categories.Count / 3);
+        var random = Random.Shared;
+        foreach (var question in allQuestions.OrderBy(_ => random.Next()).Take(dailyDoubleCount))
+        {
+            question.IsDailyDouble = true;
+        }
+    }
+
+    private static string GetMedalLabel(int podiumIndex)
+    {
+        return podiumIndex switch
+        {
+            0 => "🥇 Gold",
+            1 => "🥈 Silber",
+            _ => "🥉 Bronze"
+        };
+    }
+
+    private static string GetPodiumClass(int podiumIndex)
+    {
+        return podiumIndex switch
+        {
+            0 => "podium-gold",
+            1 => "podium-silver",
+            _ => "podium-bronze"
+        };
+    }
+
+    public void Dispose()
+    {
+        StopBuzzPolling();
+        StopTimer();
+    }
+
+    private sealed class Team
+    {
+        public Team(string name) => Name = name;
+        public string Name { get; set; }
+        public int Score { get; set; }
+    }
+
+    private enum GamePhase
+    {
+        Setup,
+        Board,
+        Question,
+        Answer,
+        Winner
+    }
+}
