@@ -29,9 +29,6 @@
             ]
         }
     },
-    "forwardPorts": [
-        8080
-    ],
     "postCreateCommand": "dotnet new install Aspire.ProjectTemplates && cd ./SampleApp && dotnet restore",
     "hostRequirements": {
         "memory": "8gb",
@@ -40,11 +37,5 @@
     "remoteEnv": {
         "DOTNET_MULTILEVEL_LOOKUP": "0",
         "TARGET": "net10.0"
-    },
-    "portsAttributes": {
-        "8080": {
-            "label": "O11y-Party",
-            "onAutoForward": "notify"
-        }
     }
 }
