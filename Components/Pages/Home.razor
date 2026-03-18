@@ -8,6 +8,16 @@
 <PageTitle>WTH O11yParty</PageTitle>
 
 <section class="wth-app">
+    @if (_showBuzzHighlight && !string.IsNullOrWhiteSpace(_buzzHighlightName))
+    {
+        <div class="wth-buzz-highlight" role="status" aria-live="assertive" aria-atomic="true">
+            <div class="wth-buzz-highlight-card">
+                <span class="buzz-kicker">Buzz In</span>
+                <strong class="buzz-name">@_buzzHighlightName</strong>
+            </div>
+        </div>
+    }
+
     <header class="wth-header">
         <div>
             <img class="wth-logo" src="images/O11y-Party.png" alt="WTH O11yParty" />
@@ -299,6 +309,9 @@
     private CancellationTokenSource? _buzzPollingCancellation;
     private long _questionStartedUnixMs;
     private long _lastHandledBuzzUnixMs;
+    private bool _showBuzzHighlight;
+    private string? _buzzHighlightName;
+    private int _buzzHighlightVersion;
 
     protected override async Task OnInitializedAsync()
     {
@@ -518,6 +531,7 @@
         _buzzedTeam = team;
         _buzzerLocked = true;
         StopTimer();
+        ShowBuzzHighlight(team.Name);
     }
 
     private void ResetBuzzState()
@@ -526,6 +540,55 @@
         _buzzedTeam = null;
         _remoteBuzzedName = null;
         _scoreApplied = false;
+        ClearBuzzHighlight();
+    }
+
+    private void ShowBuzzHighlight(string teamName)
+    {
+        if (string.IsNullOrWhiteSpace(teamName))
+        {
+            return;
+        }
+
+        _buzzHighlightName = teamName;
+        _showBuzzHighlight = true;
+        var currentVersion = ++_buzzHighlightVersion;
+        _ = HideBuzzHighlightAfterDelayAsync(currentVersion);
+    }
+
+    private async Task HideBuzzHighlightAfterDelayAsync(int expectedVersion)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(5));
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        if (expectedVersion != _buzzHighlightVersion)
+        {
+            return;
+        }
+
+        await InvokeAsync(() =>
+        {
+            if (expectedVersion != _buzzHighlightVersion)
+            {
+                return;
+            }
+
+            _showBuzzHighlight = false;
+            StateHasChanged();
+        });
+    }
+
+    private void ClearBuzzHighlight()
+    {
+        _buzzHighlightVersion++;
+        _showBuzzHighlight = false;
+        _buzzHighlightName = null;
     }
 
     private void ResetBuzz()

@@ -54,59 +54,70 @@ public sealed class NewRelicBuzzService
         };
         request.Headers.Add("API-Key", _apiKey);
 
-        try
+        const int maxAttempts = 2;
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
         {
-            using var response = await _httpClient.SendAsync(request, cancellationToken);
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                _logger.LogWarning("New Relic poll failed with status code {StatusCode}. Response: {ResponseBody}", response.StatusCode, errorBody);
+                using var response = await _httpClient.SendAsync(request, cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                    _logger.LogWarning("New Relic poll failed with status code {StatusCode}. Response: {ResponseBody}", response.StatusCode, errorBody);
+                    return null;
+                }
+
+                await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+                using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
+                //_logger.LogInformation("New Relic poll succeeded. Parsing results: {Results}", document.RootElement);
+
+                if (!TryGetResults(document.RootElement, out var results) || results.GetArrayLength() == 0)
+                {
+                    return null;
+                }
+
+                var latestResult = results[0];
+                if (!latestResult.TryGetProperty("buzzedName", out var nameElement))
+                {
+                    return null;
+                }
+
+                var buzzedName = nameElement.GetString();
+                if (string.IsNullOrWhiteSpace(buzzedName))
+                {
+                    return null;
+                }
+
+                if (!latestResult.TryGetProperty("buzzedTimestamp", out var timestampElement))
+                {
+                    return null;
+                }
+
+                var timestampUnixMs = ParseUnixMs(timestampElement);
+                if (timestampUnixMs <= 0)
+                {
+                    return null;
+                }
+                _logger.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", buzzedName, timestampUnixMs);
+                return new BuzzEvent(buzzedName.Trim(), timestampUnixMs);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (HttpRequestException exception) when (attempt < maxAttempts)
+            {
+                _logger.LogWarning(exception, "Transient New Relic poll failure on attempt {Attempt}. Retrying once.", attempt);
+                await Task.Delay(TimeSpan.FromMilliseconds(250), cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogDebug(exception, "New Relic poll failed.");
                 return null;
             }
-
-            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
-            //_logger.LogInformation("New Relic poll succeeded. Parsing results: {Results}", document.RootElement);
-
-            if (!TryGetResults(document.RootElement, out var results) || results.GetArrayLength() == 0)
-            {
-                return null;
-            }
-
-            var latestResult = results[0];
-            if (!latestResult.TryGetProperty("buzzedName", out var nameElement))
-            {
-                return null;
-            }
-
-            var buzzedName = nameElement.GetString();
-            if (string.IsNullOrWhiteSpace(buzzedName))
-            {
-                return null;
-            }
-
-            if (!latestResult.TryGetProperty("buzzedTimestamp", out var timestampElement))
-            {
-                return null;
-            }
-
-            var timestampUnixMs = ParseUnixMs(timestampElement);
-            if (timestampUnixMs <= 0)
-            {
-                return null;
-            }
-            _logger.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", buzzedName, timestampUnixMs);
-            return new BuzzEvent(buzzedName.Trim(), timestampUnixMs);
         }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception exception)
-        {
-            _logger.LogDebug(exception, "New Relic poll failed.");
-            return null;
-        }
+
+        return null;
     }
 
     private static bool TryGetResults(JsonElement root, out JsonElement results)

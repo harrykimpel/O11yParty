@@ -1,5 +1,6 @@
 using O11yParty.Components;
 using O11yParty.Services;
+using System.Net;
 
 namespace O11yParty;
 
@@ -16,6 +17,14 @@ public class Program
         builder.Services.AddHttpClient<NewRelicBuzzService>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(5);
+            client.DefaultRequestVersion = new Version(1, 1);
+            client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+        })
+        .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+        {
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            PooledConnectionLifetime = TimeSpan.FromMinutes(10),
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2)
         });
 
         var app = builder.Build();
