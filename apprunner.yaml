@@ -1,0 +1,8 @@
+version: 1.0
+runtime: dotnet10
+build:
+  commands:
+  build:
+    - dotnet publish -c Release -o out
+run:
+  command: dotnet out/O11yParty.dll
