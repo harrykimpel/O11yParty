@@ -19,16 +19,16 @@
     }
 
     <header class="wth-header">
-        <div>
+        <div class="wth-header-row">
             <img class="wth-logo" src="images/O11y-Party.png" alt="WTH O11yParty" />
             <div class="wth-controls">
                 @if (_phase is GamePhase.Board or GamePhase.Question or GamePhase.Answer)
                 {
-                    <button class="wth-button ghost" @onclick="ResetGame">New Game</button>
+                    <button class="wth-button ghost" @onclick="ResetGame">New game</button>
                 }
                 @if (_phase is GamePhase.Board)
                 {
-                    <button class="wth-button" @onclick="EndGame">Finish Game</button>
+                    <button class="wth-button" @onclick="EndGame">Finish game</button>
                 }
             </div>
         </div>
@@ -241,17 +241,29 @@
                     <section class="wth-panel wth-winner">
                         <h2>Leaderboard</h2>
 
-                        <div class="wth-podium-grid">
-                            @for (var i = 0; i < podiumTeams.Count; i++)
-                            {
-                                var team = podiumTeams[i];
-                                <article class="wth-podium-card @GetPodiumClass(i)">
-                                    <span class="podium-medal">@GetMedalLabel(i)</span>
-                                    <span class="podium-rank">#@(i + 1)</span>
-                                    <span class="podium-name">@team.Name</span>
-                                    <span class="podium-score">@team.Score pts</span>
-                                </article>
-                            }
+                        <div class="wth-winner-top">
+                            <div class="wth-podium-grid">
+                                @for (var i = 0; i < podiumTeams.Count; i++)
+                                {
+                                    var team = podiumTeams[i];
+                                    <article class="wth-podium-card @GetPodiumClass(i)">
+                                        <span class="podium-medal">@GetMedalLabel(i)</span>
+                                        <span class="podium-rank">#@(i + 1)</span>
+                                        <span class="podium-name">@team.Name</span>
+                                        <span class="podium-score">@team.Score pts</span>
+                                    </article>
+                                }
+                            </div>
+
+                            <aside class="wth-winner-video-panel" aria-label="Celebration video">
+                                <video class="wth-winner-video"
+                                       src="https://cdn.kimpel.com/ANI-Astronaut-in-field-of-flowers_crop.mp4"
+                                       autoplay
+                                       loop
+                                       muted
+                                       playsinline>
+                                </video>
+                            </aside>
                         </div>
 
                         @if (remainingTeams.Count > 0)
@@ -749,7 +761,7 @@
         return podiumIndex switch
         {
             0 => "🥇 Gold",
-            1 => "🥈 Silber",
+            1 => "🥈 Silver",
             _ => "🥉 Bronze"
         };
     }

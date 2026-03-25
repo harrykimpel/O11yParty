@@ -90,9 +90,16 @@ a {
 
 .wth-header {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.wth-header-row {
+    width: 100%;
+    display: flex;
     align-items: center;
-    gap: 2rem;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .wth-eyebrow {
@@ -109,8 +116,8 @@ a {
 }
 
 .wth-logo {
-    width: 100%;
-    max-width: none;
+    width: min(52vw, 560px);
+    max-width: 100%;
     height: auto;
     display: block;
     margin: 0;
@@ -126,8 +133,9 @@ a {
 .wth-controls {
     display: flex;
     gap: 0.75rem;
-    justify-content: center;
-    margin-top: 1rem;
+    justify-content: flex-end;
+    margin-top: 0;
+    flex-wrap: wrap;
 }
 
 .wth-scoreboard {
@@ -443,11 +451,35 @@ a {
     text-align: center;
 }
 
+.wth-winner-top {
+    margin-top: 1.25rem;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
 .wth-podium-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1rem;
-    margin-top: 1.25rem;
+    margin-top: 0;
+}
+
+.wth-winner-video-panel {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.28);
+}
+
+.wth-winner-video {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    display: block;
+    object-fit: cover;
 }
 
 .wth-podium-card {
@@ -543,9 +575,25 @@ a {
 }
 
 @media (max-width: 900px) {
-    .wth-header {
+    .wth-header-row {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .wth-logo {
+        width: min(100%, 480px);
+    }
+
+    .wth-controls {
+        justify-content: flex-start;
+    }
+
+    .wth-winner-top {
+        grid-template-columns: 1fr;
+    }
+
+    .wth-winner-video {
+        min-height: 200px;
     }
 
     .wth-buzz-highlight {

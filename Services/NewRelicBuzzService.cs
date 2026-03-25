@@ -18,7 +18,7 @@ public sealed class NewRelicBuzzService
     public NewRelicBuzzService(HttpClient httpClient, IConfiguration configuration, ILogger<NewRelicBuzzService> logger)
     {
         _httpClient = httpClient;
-        _logger = logger;
+        _O11yParty = logger;
 
         _apiKey = (configuration["NewRelic:UserApiKey"] ?? string.Empty).Trim();
         _accountId = int.TryParse(configuration["NewRelic:AccountId"], out var accountId) ? accountId : 0;
