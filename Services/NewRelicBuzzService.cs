@@ -9,7 +9,7 @@ public sealed class NewRelicBuzzService
     private const string GraphQlQuery = "query($accountId:Int!, $nrql:Nrql!) { actor { account(id: $accountId) { nrql(query: $nrql) { results } } } }";
 
     private readonly HttpClient _httpClient;
-    private readonly ILogger<NewRelicBuzzService> _logger;
+    private readonly ILogger<NewRelicBuzzService> _O11yParty;
     private readonly string _apiKey;
     private readonly int _accountId;
     private readonly string _eventType;
@@ -46,7 +46,7 @@ public sealed class NewRelicBuzzService
             }
         };
 
-        _logger.LogDebug("Polling New Relic NerdGraph for latest buzz event.");
+        _O11yParty.LogDebug("Polling New Relic NerdGraph for latest buzz event.");
 
         using var request = new HttpRequestMessage(HttpMethod.Post, GraphQlEndpoint)
         {
@@ -63,7 +63,7 @@ public sealed class NewRelicBuzzService
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                    _logger.LogWarning("New Relic poll failed with status code {StatusCode}. Response: {ResponseBody}", response.StatusCode, errorBody);
+                    _O11yParty.LogWarning("New Relic poll failed with status code {StatusCode}. Response: {ResponseBody}", response.StatusCode, errorBody);
                     return null;
                 }
 
@@ -98,7 +98,7 @@ public sealed class NewRelicBuzzService
                 {
                     return null;
                 }
-                _logger.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", buzzedName, timestampUnixMs);
+                _O11yParty.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", buzzedName, timestampUnixMs);
                 return new BuzzEvent(buzzedName.Trim(), timestampUnixMs);
             }
             catch (OperationCanceledException)
@@ -107,12 +107,12 @@ public sealed class NewRelicBuzzService
             }
             catch (HttpRequestException exception) when (attempt < maxAttempts)
             {
-                _logger.LogWarning(exception, "Transient New Relic poll failure on attempt {Attempt}. Retrying once.", attempt);
+                _O11yParty.LogWarning(exception, "Transient New Relic poll failure on attempt {Attempt}. Retrying once.", attempt);
                 await Task.Delay(TimeSpan.FromMilliseconds(250), cancellationToken);
             }
             catch (Exception exception)
             {
-                _logger.LogDebug(exception, "New Relic poll failed.");
+                _O11yParty.LogDebug(exception, "New Relic poll failed.");
                 return null;
             }
         }
