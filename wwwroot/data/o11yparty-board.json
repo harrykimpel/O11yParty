@@ -2,151 +2,355 @@
     "categories": [
         {
             "name": "LET’S SPEAK NRQL",
-            "questions": [
+            "questionLevels": [
                 {
-                    "value": 100,
-                    "prompt": "Construct a query that will allow you to get the average duration of all your apps within the account over the last hour.",
-                    "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "Construct a query that will allow you to get the average duration of all your apps within the account over the last hour.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        }
+                    ]
                 },
                 {
-                    "value": 200,
-                    "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that will allow you to list all tables in an account.",
-                    "answer": "show event types\nsince 1 day ago"
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that will allow you to list all tables in an account.",
+                            "answer": "show event types\nsince 1 day ago"
+                        }
+                    ]
                 },
                 {
-                    "value": 300,
-                    "prompt": "Create a query that will allow you to calculate the number of transactions divided into 10 buckets based on duration.\n(Hint: use the buckets() function)",
-                    "answer": "SELECT count(*)\nFROM Transaction\nFACET buckets(duration,5, 10)"
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Create a query that will allow you to calculate the number of transactions divided into 10 buckets based on duration.\n(Hint: use the buckets() function)",
+                            "answer": "SELECT count(*)\nFROM Transaction\nFACET buckets(duration,5, 10)"
+                        }
+                    ]
                 },
                 {
-                    "value": 400,
-                    "prompt": "Create a query that would return the percentage of total TransactionError results relative to total Transaction results.",
-                    "answer": "SELECT 100 *\n\tfilter(count(*), where eventType() = 'TransactionError')\n\t/\n\tfilter(count(*), where eventType() = 'Transaction')\nFROM Transaction, TransactionError\nFACET appName"
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "Create a query that would return the percentage of total TransactionError results relative to total Transaction results.",
+                            "answer": "SELECT 100 *\n\tfilter(count(*), where eventType() = 'TransactionError')\n\t/\n\tfilter(count(*), where eventType() = 'Transaction')\nFROM Transaction, TransactionError\nFACET appName"
+                        }
+                    ]
                 },
                 {
-                    "value": 500,
-                    "prompt": "Let's say that a threshold for a “slow application” is 0.3 seconds on average. Write a query to only show slow applications over the last hour.",
-                    "answer": "SELECT latest(avgDuration)\nFROM (\n\tFROM Transaction\n\tSELECT average(duration) AS avgDuration\n\tFACET appName\n\tLIMIT max)\nWHERE avgDuration > 0.3\nFACET appName"
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Let's say that a threshold for a “slow application” is 0.3 seconds on average. Write a query to only show slow applications over the last hour.",
+                            "answer": "SELECT latest(avgDuration)\nFROM (\n\tFROM Transaction\n\tSELECT average(duration) AS avgDuration\n\tFACET appName\n\tLIMIT max)\nWHERE avgDuration > 0.3\nFACET appName"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "AGENT FRAMEWORK 101",
-            "questions": [
+            "questionLevels": [
                 {
-                    "value": 100,
-                    "prompt": "In one sentence, what is an AI agent?",
-                    "answer": "A goal-driven system that observes, decides, and acts on your behalf using tools and context."
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "In one sentence, what is an AI agent?",
+                            "answer": "A goal-driven system that observes, decides, and acts on your behalf using tools and context."
+                        }
+                    ]
                 },
                 {
-                    "value": 200,
-                    "prompt": "What does a planner do in an agent framework?",
-                    "answer": "It breaks a goal into steps and chooses which tool or skill to use next."
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What does a planner do in an agent framework?",
+                            "answer": "It breaks a goal into steps and chooses which tool or skill to use next."
+                        }
+                    ]
                 },
                 {
-                    "value": 300,
-                    "prompt": "Name two safety guardrails commonly used with agents.",
-                    "answer": "Output validation and tool-use constraints (for example, allowlist of tools)."
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Name two safety guardrails commonly used with agents.",
+                            "answer": "Output validation and tool-use constraints (for example, allowlist of tools)."
+                        }
+                    ]
                 },
                 {
-                    "value": 400,
-                    "prompt": "What is the difference between tools and skills?",
-                    "answer": "Tools are external actions (API calls), while skills are reusable internal behaviors or prompts."
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What is the difference between tools and skills?",
+                            "answer": "Tools are external actions (API calls), while skills are reusable internal behaviors or prompts."
+                        }
+                    ]
                 },
                 {
-                    "value": 500,
-                    "prompt": "Why is memory important in an agent framework?",
-                    "answer": "It preserves context across steps so the agent can act consistently over time."
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Why is memory important in an agent framework?",
+                            "answer": "It preserves context across steps so the agent can act consistently over time."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "AWS",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What does AWS stand for?",
+                            "answer": "Amazon Web Services"
+                        },
+                        {
+                            "prompt": "Name one AWS service used for databases.",
+                            "answer": "DynamoDB, RDS, Aurora, etc."
+                        },
+                        {
+                            "prompt": "What AWS service would you use for serverless functions?",
+                            "answer": "Lambda"
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Name one AWS service used for compute.",
+                            "answer": "EC2, Lambda, ECS, EKS, etc."
+                        },
+                        {
+                            "prompt": "What AWS service would you use for content delivery?",
+                            "answer": "CloudFront"
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What AWS service is commonly used for object storage?",
+                            "answer": "S3 (Simple Storage Service)"
+                        },
+                        {
+                            "prompt": "Name one AWS service used for machine learning.",
+                            "answer": "SageMaker, Comprehend, Rekognition, etc."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What AWS service would you use for a relational database?",
+                            "answer": "RDS (Relational Database Service)"
+                        },
+                        {
+                            "prompt": "Name one AWS service used for security.",
+                            "answer": "IAM (Identity and Access Management), GuardDuty, etc."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Name one AWS service used for monitoring and observability.",
+                            "answer": "CloudWatch, X-Ray, etc."
+                        },
+                        {
+                            "prompt": "What AWS service would you use for infrastructure as code?",
+                            "answer": "CloudFormation or CDK (Cloud Development Kit)"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "FOUNDRY BASICS",
-            "questions": [
+            "questionLevels": [
                 {
-                    "value": 100,
-                    "prompt": "What is Microsoft Foundry best described as?",
-                    "answer": "A platform to build, evaluate, and deploy AI solutions with models, tools, and safety controls."
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is Microsoft Foundry best described as?",
+                            "answer": "A platform to build, evaluate, and deploy AI solutions with models, tools, and safety controls."
+                        }
+                    ]
                 },
                 {
-                    "value": 200,
-                    "prompt": "Name one thing you can set up in Foundry to keep models safe.",
-                    "answer": "Safety filters/guardrails, content moderation, or evaluation criteria for outputs."
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Name one thing you can set up in Foundry to keep models safe.",
+                            "answer": "Safety filters/guardrails, content moderation, or evaluation criteria for outputs."
+                        }
+                    ]
                 },
                 {
-                    "value": 300,
-                    "prompt": "What’s the purpose of evaluations in Foundry?",
-                    "answer": "To measure model quality (accuracy, safety, relevance) before deploying."
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What’s the purpose of evaluations in Foundry?",
+                            "answer": "To measure model quality (accuracy, safety, relevance) before deploying."
+                        }
+                    ]
                 },
                 {
-                    "value": 400,
-                    "prompt": "How does Foundry help teams collaborate?",
-                    "answer": "By sharing projects, datasets, prompts, and deployment configs in one workspace."
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "How does Foundry help teams collaborate?",
+                            "answer": "By sharing projects, datasets, prompts, and deployment configs in one workspace."
+                        }
+                    ]
                 },
                 {
-                    "value": 500,
-                    "prompt": "Why use Foundry’s managed deployments?",
-                    "answer": "It streamlines hosting, monitoring, and scaling models without managing infrastructure."
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Why use Foundry’s managed deployments?",
+                            "answer": "It streamlines hosting, monitoring, and scaling models without managing infrastructure."
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "TECH GEOGRAPHY",
-            "questions": [
+            "questionLevels": [
                 {
-                    "value": 100,
-                    "prompt": "Define least privilege.",
-                    "answer": "Grant only the minimum access needed to perform a task."
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "Define least privilege.",
+                            "answer": "Grant only the minimum access needed to perform a task."
+                        }
+                    ]
                 },
                 {
-                    "value": 200,
-                    "prompt": "What is MFA?",
-                    "answer": "Multi-factor authentication."
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is MFA?",
+                            "answer": "Multi-factor authentication."
+                        }
+                    ]
                 },
                 {
-                    "value": 300,
-                    "prompt": "What is a CVE?",
-                    "answer": "A Common Vulnerabilities and Exposures identifier."
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What is a CVE?",
+                            "answer": "A Common Vulnerabilities and Exposures identifier."
+                        }
+                    ]
                 },
                 {
-                    "value": 400,
-                    "prompt": "What is zero trust?",
-                    "answer": "Never trust, always verify access to resources."
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What is zero trust?",
+                            "answer": "Never trust, always verify access to resources."
+                        }
+                    ]
                 },
                 {
-                    "value": 500,
-                    "prompt": "What is data encryption at rest?",
-                    "answer": "Protecting stored data using encryption keys."
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is data encryption at rest?",
+                            "answer": "Protecting stored data using encryption keys."
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "AI & DATA",
-            "questions": [
+            "questionLevels": [
                 {
-                    "value": 100,
-                    "prompt": "What is a feature?",
-                    "answer": "An input variable used by a model."
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is a feature?",
+                            "answer": "An input variable used by a model."
+                        }
+                    ]
                 },
                 {
-                    "value": 200,
-                    "prompt": "What is model drift?",
-                    "answer": "When model performance degrades due to changing data patterns."
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is model drift?",
+                            "answer": "When model performance degrades due to changing data patterns."
+                        }
+                    ]
                 },
                 {
-                    "value": 300,
-                    "prompt": "Define ETL.",
-                    "answer": "Extract, Transform, Load."
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Define ETL.",
+                            "answer": "Extract, Transform, Load."
+                        }
+                    ]
                 },
                 {
-                    "value": 400,
-                    "prompt": "What is a vector database used for?",
-                    "answer": "Storing embeddings for similarity search."
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What is a vector database used for?",
+                            "answer": "Storing embeddings for similarity search."
+                        }
+                    ]
                 },
                 {
-                    "value": 500,
-                    "prompt": "What is a prompt?",
-                    "answer": "An input instruction to guide a model response."
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is a prompt?",
+                            "answer": "An input instruction to guide a model response."
+                        }
+                    ]
                 }
             ]
         }

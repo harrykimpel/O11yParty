@@ -3,6 +3,8 @@
 @inject O11yPartyDataService DataService
 @inject NewRelicBuzzService BuzzService
 @inject IJSRuntime JS
+@inject IConfiguration Configuration
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
 <PageTitle>WTH O11yParty</PageTitle>
@@ -19,8 +21,17 @@
     }
 
     <header class="wth-header">
-        <div class="wth-header-row">
+        <div style="display: flex; flex-direction: column; align-items: center;">
             <img class="wth-logo" src="images/O11y-Party.png" alt="WTH O11yParty" />
+            @if (_phase == GamePhase.Setup && !IsBoardValid)
+            {
+                <div class="muted"
+                     style="color: #ff4d4d; font-size: 1.15rem; font-weight: bold; margin: 0.5rem 0 0.5rem 0; text-align: center;">
+                    Each selected category must have at least @_numberOfQuestions questions.
+                </div>
+            }
+        </div>
+        <div class="wth-header-row">
             <div class="wth-controls">
                 @if (_phase is GamePhase.Board or GamePhase.Question or GamePhase.Answer)
                 {
@@ -57,6 +68,7 @@
     {
         <section class="wth-panel">
             <h2>Set up teams</h2>
+            <!-- Board validation message is now shown in the header for prominence -->
             <p class="muted">Add the team or candidate names, then start the game.</p>
 
             <div class="wth-team-editor">
@@ -94,19 +106,19 @@
             <div class="wth-actions">
                 <button class="wth-button ghost" @onclick="AddTeam">Add Team</button>
                 <button class="wth-button" @onclick="StartGame"
-                        disabled="@(!_teams.Any(t => !string.IsNullOrWhiteSpace(t.Name)))">Start Game</button>
+                        disabled="@(!_teams.Any(t => !string.IsNullOrWhiteSpace(t.Name)) || !IsBoardValid)">Start Game</button>
             </div>
         </section>
     }
     else if (_phase == GamePhase.Board)
     {
         <section class="wth-board">
-            <div class="wth-board-grid">
-                @foreach (var category in _categories)
+            <div class="wth-board-grid" style="grid-template-columns: repeat(@_numberOfCategories, minmax(180px, 1fr));">
+                @foreach (var category in _categories.Take(_numberOfCategories))
                 {
                     <div class="wth-category">
                         <div class="wth-category-title">@category.Name</div>
-                        @foreach (var question in category.Questions)
+                        @foreach (var question in category.Questions.Take(_numberOfQuestions))
                         {
                             <button class="wth-tile" disabled="@question.IsAnswered" @onclick="() => SelectQuestion(question)">
                                 @if (question.IsAnswered)
@@ -256,12 +268,8 @@
                             </div>
 
                             <aside class="wth-winner-video-panel" aria-label="Celebration video">
-                                <video class="wth-winner-video"
-                                       src="https://cdn.kimpel.com/ANI-Astronaut-in-field-of-flowers_crop.mp4"
-                                       autoplay
-                                       loop
-                                       muted
-                                       playsinline>
+                                <video class="wth-winner-video" src="https://cdn.kimpel.com/ANI-Astronaut-in-field-of-flowers_crop.mp4"
+                                       autoplay loop muted playsinline>
                                 </video>
                             </aside>
                         </div>
@@ -301,9 +309,25 @@
             </section>
 
 @code {
+    // Returns true if all selected categories have at least one question for each required level (e.g., 100, 200, ...)
+    private bool IsBoardValid
+    {
+        get
+        {
+            var requiredLevels = Enumerable.Range(1, _numberOfQuestions).Select(i => i * 100).ToList();
+            return _categories.Take(_numberOfCategories).All(category =>
+                requiredLevels.All(level =>
+                    category.Questions.Any(q => q.Value == level)
+                )
+            );
+        }
+    }
     private GamePhase _phase = GamePhase.Setup;
     private readonly List<Team> _teams = new();
+    private readonly List<O11yPartyCategory> _sourceCategories = new();
     private readonly List<O11yPartyCategory> _categories = new();
+    private int _numberOfCategories = 5;
+    private int _numberOfQuestions = 5;
     private O11yPartyQuestion? _currentQuestion;
     private bool _isLoaded;
     private bool _enableDailyDouble = true;
@@ -327,6 +351,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Read settings from configuration
+        _numberOfCategories = Configuration.GetValue<int>("Board:NumberOfCategories", 5);
+        _numberOfQuestions = Configuration.GetValue<int>("Board:NumberOfQuestions", 5);
+
         var teamNames = await DataService.GetTeamsAsync();
         _teams.Clear();
         foreach (var name in teamNames)
@@ -340,26 +368,126 @@
             _teams.Add(new Team("Team DevRel"));
         }
 
-        var board = await DataService.GetBoardAsync();
-        _categories.Clear();
-        _categories.AddRange(board.Categories);
-        foreach (var category in _categories)
+        await LoadSourceCategoriesAsync();
+        RebuildBoardWithRandomQuestions();
+
+        _isLoaded = true;
+    }
+
+    private async Task LoadSourceCategoriesAsync()
+    {
+        using var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
+        var boardJson = await http.GetStringAsync("data/o11yparty-board.json");
+        using var doc = System.Text.Json.JsonDocument.Parse(boardJson);
+        var root = doc.RootElement;
+        var categoriesElem = root.GetProperty("categories");
+
+        _sourceCategories.Clear();
+        foreach (var catElem in categoriesElem.EnumerateArray())
         {
-            foreach (var question in category.Questions)
+            var catName = catElem.GetProperty("name").GetString() ?? "";
+            var questions = new List<O11yPartyQuestion>();
+            if (catElem.TryGetProperty("questionLevels", out var levelsElem))
             {
-                question.CategoryName = category.Name;
+                foreach (var levelElem in levelsElem.EnumerateArray())
+                {
+                    var levelValue = levelElem.TryGetProperty("difficulty", out var diffElem) ? diffElem.GetInt32() :
+                        (levelElem.TryGetProperty("level", out var lvlElem) ? lvlElem.GetInt32() * 100 : 0);
+                    if (levelElem.TryGetProperty("questions", out var qsElem))
+                    {
+                        foreach (var qElem in qsElem.EnumerateArray())
+                        {
+                            var prompt = qElem.TryGetProperty("prompt", out var pElem) ? pElem.GetString() ?? "" : "";
+                            var answer = qElem.TryGetProperty("answer", out var aElem) ? aElem.GetString() ?? "" : "";
+                            questions.Add(new O11yPartyQuestion
+                            {
+                                Value = levelValue,
+                                Prompt = prompt,
+                                Answer = answer,
+                                CategoryName = catName
+                            });
+                        }
+                    }
+                }
             }
+            else if (catElem.TryGetProperty("questions", out var flatQsElem))
+            {
+                foreach (var qElem in flatQsElem.EnumerateArray())
+                {
+                    var value = qElem.TryGetProperty("value", out var vElem) ? vElem.GetInt32() : 0;
+                    var prompt = qElem.TryGetProperty("prompt", out var pElem) ? pElem.GetString() ?? "" : "";
+                    var answer = qElem.TryGetProperty("answer", out var aElem) ? aElem.GetString() ?? "" : "";
+                    questions.Add(new O11yPartyQuestion
+                    {
+                        Value = value,
+                        Prompt = prompt,
+                        Answer = answer,
+                        CategoryName = catName
+                    });
+                }
+            }
+
+            _sourceCategories.Add(new O11yPartyCategory
+            {
+                Name = catName,
+                Questions = questions
+            });
+        }
+    }
+
+    private void RebuildBoardWithRandomQuestions()
+    {
+        var requiredLevels = Enumerable.Range(1, _numberOfQuestions).Select(i => i * 100).ToList();
+        _categories.Clear();
+        foreach (var sourceCategory in _sourceCategories.Take(_numberOfCategories))
+        {
+            var catName = sourceCategory.Name;
+            var questions = sourceCategory.Questions;
+
+            // Only keep one question per required level (if available)
+            var questionsForLevels = requiredLevels
+                .Select(level =>
+                {
+                    var matchingQuestions = questions.Where(q => q.Value == level).ToList();
+                    if (matchingQuestions.Count == 0)
+                    {
+                        return null;
+                    }
+
+                    var selected = matchingQuestions[Random.Shared.Next(matchingQuestions.Count)];
+                    return new O11yPartyQuestion
+                    {
+                        Value = selected.Value,
+                        Prompt = selected.Prompt,
+                        Answer = selected.Answer,
+                        CategoryName = catName
+                    };
+                })
+                .OfType<O11yPartyQuestion>()
+                .ToList();
+            var limitedCategory = new O11yPartyCategory
+            {
+                Name = catName,
+                Questions = questionsForLevels!
+            };
+            _categories.Add(limitedCategory);
         }
 
         _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q =>
-        q.Value);
-        _isLoaded = true;
+q.Value);
     }
 
     private void StartGame()
     {
+        RebuildBoardWithRandomQuestions();
+
         if (_teams.All(t => string.IsNullOrWhiteSpace(t.Name)))
         {
+            return;
+        }
+        if (!IsBoardValid)
+        {
+            // Optionally, show a message or just return
             return;
         }
 
