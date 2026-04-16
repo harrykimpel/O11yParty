@@ -944,6 +944,556 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Pager Roulette",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What phrase means your on-call shift has started?",
+                            "answer": "Taking the pager (or being on-call)."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is the first thing to check when paged at 2 AM?",
+                            "answer": "Whether the alert is real and what the customer impact is."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Name one way to reduce repeat pages from the same issue.",
+                            "answer": "Fix root cause, tune alert thresholds, or add deduplication."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What incident metric tracks how long services are unavailable?",
+                            "answer": "Downtime (or availability impact over time)."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What practice helps keep midnight pages calm and consistent?",
+                            "answer": "Runbooks with clear triage and escalation steps."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Log Archaeology",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is a log line?",
+                            "answer": "A single timestamped event message from a system."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Why are correlation IDs useful in logs?",
+                            "answer": "They link related events across services for easier tracing."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What does log sampling do?",
+                            "answer": "Keeps a subset of logs to reduce volume and cost."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What query pattern helps find rare errors quickly?",
+                            "answer": "Filter by error level and facet by message or service."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is a key principle of useful production logging?",
+                            "answer": "Structured, contextual logs without sensitive data."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Dashboard Glow-Up",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is a dashboard in observability?",
+                            "answer": "A visual collection of charts for system health and trends."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Name one anti-pattern in dashboards.",
+                            "answer": "Too many charts with no clear story or ownership."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Why include units and labels on charts?",
+                            "answer": "They prevent misreading and improve decision speed."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What should top-row dashboard widgets usually show?",
+                            "answer": "Golden signals like latency, traffic, errors, and saturation."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is the best test of a dashboard redesign?",
+                            "answer": "Teams detect and diagnose incidents faster with less confusion."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Alert Fatigue Hall of Fame",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is alert fatigue?",
+                            "answer": "When too many alerts cause responders to ignore or miss critical ones."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Name one way to reduce noisy alerts.",
+                            "answer": "Tune thresholds, add windows, or deduplicate notifications."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Why should alerts include runbook links?",
+                            "answer": "To speed up triage and reduce decision friction."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What metric tracks useful vs noisy paging behavior?",
+                            "answer": "Signal-to-noise ratio (or actionable alert rate)."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is a healthy goal for paging alerts?",
+                            "answer": "Each page should be actionable, urgent, and tied to user impact."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Latency Legends",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What does latency measure?",
+                            "answer": "How long a request takes from start to finish."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What does p95 latency mean?",
+                            "answer": "95% of requests are faster than that value."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Name one common source of high latency.",
+                            "answer": "Slow database queries, network hops, or lock contention."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "Why watch tail latency instead of only averages?",
+                            "answer": "Averages hide bad outliers that hurt real user experience."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What architecture pattern can reduce cross-service latency?",
+                            "answer": "Caching, async processing, or reducing chatty synchronous calls."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Blameless Bingo",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What does blameless postmortem mean?",
+                            "answer": "Focus on systems and learning, not blaming individuals."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Name one benefit of blameless language.",
+                            "answer": "People share details openly, leading to better fixes."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What question starts a strong retrospective?",
+                            "answer": "What conditions made this outcome possible?"
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What should an incident action item include?",
+                            "answer": "Owner, due date, and specific measurable outcome."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What cultural signal shows retros are truly blameless?",
+                            "answer": "People volunteer context and mistakes without fear."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Deploy or Die Trying",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is a deployment rollback?",
+                            "answer": "Reverting to a previous stable release."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is a canary release?",
+                            "answer": "Gradually releasing to a small subset before full rollout."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Why use feature flags in deployments?",
+                            "answer": "To decouple release from exposure and reduce risk."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What should a deployment checklist include first?",
+                            "answer": "Health checks, rollback plan, and stakeholder communication."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Which metric best confirms a safe rollout in real time?",
+                            "answer": "Error rate and latency compared to baseline."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SRE Mythbusters",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "True or false: More alerts always means better reliability.",
+                            "answer": "False. Better signal quality matters more than volume."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is one myth about uptime percentages?",
+                            "answer": "That 99.9% and 99.99% are almost the same in user impact."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What does an error budget represent?",
+                            "answer": "Allowed unreliability within an SLO target window."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "Why is 'just add retries' sometimes harmful?",
+                            "answer": "It can amplify load and worsen outages without backoff/jitter."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What principle replaces heroics in mature SRE teams?",
+                            "answer": "Automation, standards, and resilient system design."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Observability Pet Peeves",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "Name one common observability pet peeve.",
+                            "answer": "Unlabeled charts or missing units."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "Why are inconsistent service names frustrating?",
+                            "answer": "They break filtering, grouping, and cross-team clarity."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What happens when logs miss request IDs?",
+                            "answer": "Root-cause investigation gets slower and more manual."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "Why are broad wildcard alerts often noisy?",
+                            "answer": "They lack context and trigger on non-actionable events."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What governance habit reduces observability chaos?",
+                            "answer": "Shared naming/tagging conventions with regular hygiene reviews."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chaos Confessions",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is chaos engineering in one sentence?",
+                            "answer": "Safely testing failures to improve system resilience."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is a blast radius in experiments?",
+                            "answer": "The scope of users/systems that could be affected."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Why start chaos tests in lower environments first?",
+                            "answer": "To validate hypotheses and safety before production impact."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What makes a chaos experiment successful even if things break?",
+                            "answer": "You learn, improve controls, and reduce future incident risk."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "Which guardrail is essential before running production chaos tests?",
+                            "answer": "Clear abort conditions and real-time monitoring/ownership."
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
