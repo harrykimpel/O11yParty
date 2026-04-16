@@ -1,1499 +1,2299 @@
 {
-    "categories": [
+  "categories": [
+    {
+      "name": "AWS",
+      "questionLevels": [
         {
-            "name": "AWS",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What does AWS stand for?",
-                            "answer": "Amazon Web Services"
-                        },
-                        {
-                            "prompt": "Name one AWS service used for databases.",
-                            "answer": "DynamoDB, RDS, Aurora, etc."
-                        },
-                        {
-                            "prompt": "What AWS service would you use for serverless functions?",
-                            "answer": "Lambda"
-                        },
-                        {
-                            "prompt": "What AWS service provides object storage?",
-                            "answer": "Amazon S3"
-                        },
-                        {
-                            "prompt": "What AWS service provides DNS management?",
-                            "answer": "Route 53"
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Name one AWS service used for compute.",
-                            "answer": "EC2, Lambda, ECS, EKS, etc."
-                        },
-                        {
-                            "prompt": "What AWS service would you use for content delivery?",
-                            "answer": "CloudFront"
-                        },
-                        {
-                            "prompt": "What AWS service would you use to manage containers without managing servers?",
-                            "answer": "ECS (or EKS with managed nodes/Fargate)."
-                        },
-                        {
-                            "prompt": "What is the AWS service for centralized logging and metrics?",
-                            "answer": "CloudWatch"
-                        },
-                        {
-                            "prompt": "What AWS service would you use for a managed message queue?",
-                            "answer": "SQS"
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What AWS service is commonly used for object storage?",
-                            "answer": "S3 (Simple Storage Service)"
-                        },
-                        {
-                            "prompt": "Name one AWS service used for machine learning.",
-                            "answer": "SageMaker, Comprehend, Rekognition, etc."
-                        },
-                        {
-                            "prompt": "Which AWS service provides a managed Kubernetes control plane?",
-                            "answer": "EKS"
-                        },
-                        {
-                            "prompt": "Which AWS service provides a managed relational data warehouse?",
-                            "answer": "Redshift"
-                        },
-                        {
-                            "prompt": "What AWS service would you use to store secrets like database passwords?",
-                            "answer": "Secrets Manager"
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What AWS service would you use for a relational database?",
-                            "answer": "RDS (Relational Database Service)"
-                        },
-                        {
-                            "prompt": "Name one AWS service used for security.",
-                            "answer": "IAM (Identity and Access Management), GuardDuty, etc."
-                        },
-                        {
-                            "prompt": "What AWS service helps protect against DDoS attacks?",
-                            "answer": "AWS Shield"
-                        },
-                        {
-                            "prompt": "What AWS service would you use for distributed tracing of requests?",
-                            "answer": "AWS X-Ray"
-                        },
-                        {
-                            "prompt": "What AWS service provides a managed firewall for web apps at the edge?",
-                            "answer": "AWS WAF (often with CloudFront)."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "Name one AWS service used for monitoring and observability.",
-                            "answer": "CloudWatch, X-Ray, etc."
-                        },
-                        {
-                            "prompt": "What AWS service would you use for infrastructure as code?",
-                            "answer": "CloudFormation or CDK (Cloud Development Kit)"
-                        },
-                        {
-                            "prompt": "How would you securely grant an EC2 instance access to S3 without static credentials?",
-                            "answer": "Attach an IAM role to the instance (instance profile) with least-privilege S3 permissions."
-                        },
-                        {
-                            "prompt": "What is a best practice to reduce blast radius across AWS accounts?",
-                            "answer": "Use a multi-account strategy (AWS Organizations) with separate accounts per environment/workload."
-                        },
-                        {
-                            "prompt": "Name an AWS service or feature for encrypting data at rest using customer-managed keys.",
-                            "answer": "AWS KMS (Key Management Service)"
-                        }
-                    ]
-                }
-            ]
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What does AWS stand for?",
+              "answer": "Amazon Web Services"
+            },
+            {
+              "prompt": "Name one AWS service used for databases.",
+              "answer": "DynamoDB, RDS, Aurora, etc."
+            },
+            {
+              "prompt": "What AWS service would you use for serverless functions?",
+              "answer": "Lambda"
+            },
+            {
+              "prompt": "What AWS service provides object storage?",
+              "answer": "Amazon S3"
+            },
+            {
+              "prompt": "What AWS service provides DNS management?",
+              "answer": "Route 53"
+            }
+          ]
         },
         {
-            "name": "New Relic",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What does APM stand for?",
-                            "answer": "Application Performance Monitoring."
-                        },
-                        {
-                            "prompt": "What is a 'service' in New Relic?",
-                            "answer": "An instrumented application/component reported as an entity (e.g., APM service) producing telemetry."
-                        },
-                        {
-                            "prompt": "Name one of the three pillars of observability.",
-                            "answer": "Metrics, logs, or traces."
-                        },
-                        {
-                            "prompt": "What is a dashboard used for in New Relic?",
-                            "answer": "To visualize and share charts/widgets from NRDB data."
-                        },
-                        {
-                            "prompt": "What is an alert condition used for?",
-                            "answer": "To detect an issue (based on a signal) and notify via an alert policy/workflow."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is NRDB?",
-                            "answer": "New Relic Database—the platform’s telemetry data store queried by NRQL."
-                        },
-                        {
-                            "prompt": "What does 'entity' mean in New Relic?",
-                            "answer": "A monitored thing (service, host, browser app, k8s cluster, etc.) with a unique identity."
-                        },
-                        {
-                            "prompt": "What is distributed tracing?",
-                            "answer": "Tracing requests end-to-end across services using spans/trace context."
-                        },
-                        {
-                            "prompt": "What is OpenTelemetry (OTel) commonly used for with New Relic?",
-                            "answer": "Vendor-neutral collection/export of traces/metrics/logs into New Relic."
-                        },
-                        {
-                            "prompt": "What is a SLI vs SLO?",
-                            "answer": "SLI is the metric; SLO is the target/threshold for that metric."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What is NerdGraph?",
-                            "answer": "New Relic’s GraphQL API for querying and managing data/configuration."
-                        },
-                        {
-                            "prompt": "What is a 'span'?",
-                            "answer": "A timed operation within a trace (a unit of work with attributes)."
-                        },
-                        {
-                            "prompt": "Why would you add 'custom attributes' to telemetry?",
-                            "answer": "To enable better filtering/faceting, correlation, and richer context in charts/alerts/traces."
-                        },
-                        {
-                            "prompt": "What does 'Golden Metrics' typically refer to in APM?",
-                            "answer": "Latency, traffic/throughput, errors, and saturation (or similar core health signals)."
-                        },
-                        {
-                            "prompt": "What is 'service map' used for?",
-                            "answer": "To visualize dependencies between services/entities and navigate to related telemetry."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What is the difference between logs in context and traces in context?",
-                            "answer": "Logs in context pivot from errors/requests to relevant logs; traces in context pivot to trace/span data for the same work."
-                        },
-                        {
-                            "prompt": "What is sampling in distributed tracing?",
-                            "answer": "Recording only a subset of traces/spans to control volume/cost while retaining visibility."
-                        },
-                        {
-                            "prompt": "What’s a practical way to correlate logs and traces?",
-                            "answer": "Include trace.id/span.id in logs (or use automatic correlation via agents/OTel) so logs can link to traces."
-                        },
-                        {
-                            "prompt": "What is an 'anomaly' alert vs a static threshold alert?",
-                            "answer": "Anomaly adapts to baseline behavior; static uses fixed thresholds."
-                        },
-                        {
-                            "prompt": "Why use tags/labels on entities?",
-                            "answer": "To organize, filter, and scope dashboards/alerts (e.g., env=prod, team=payments)."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What problem does 'high cardinality' cause in observability?",
-                            "answer": "Explodes metric/log/attribute dimensionality, increasing cost and reducing query/aggregation efficiency."
-                        },
-                        {
-                            "prompt": "What’s a safe way to add user identifiers to telemetry?",
-                            "answer": "Use hashed/pseudonymous IDs and avoid PII; apply data governance/attribute allowlists."
-                        },
-                        {
-                            "prompt": "What is an incident workflow trying to optimize?",
-                            "answer": "Fast detection, correct routing, clear ownership, and reduced mean time to acknowledge/resolve (MTTA/MTTR)."
-                        },
-                        {
-                            "prompt": "How would you validate an alert condition before rolling it out widely?",
-                            "answer": "Test against historical data, tune thresholds, use preview/testing, and stage rollout to avoid noise."
-                        },
-                        {
-                            "prompt": "What’s a good strategy for instrumenting a large system incrementally?",
-                            "answer": "Start with critical paths/services, add standard attributes, ensure trace propagation, then expand coverage iteratively."
-                        }
-                    ]
-                }
-            ]
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Name one AWS service used for compute.",
+              "answer": "EC2, Lambda, ECS, EKS, etc."
+            },
+            {
+              "prompt": "What AWS service would you use for content delivery?",
+              "answer": "CloudFront"
+            },
+            {
+              "prompt": "What AWS service would you use to manage containers without managing servers?",
+              "answer": "ECS (or EKS with managed nodes/Fargate)."
+            },
+            {
+              "prompt": "What is the AWS service for centralized logging and metrics?",
+              "answer": "CloudWatch"
+            },
+            {
+              "prompt": "What AWS service would you use for a managed message queue?",
+              "answer": "SQS"
+            }
+          ]
         },
         {
-            "name": "TECH GEOGRAPHY",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "Define least privilege.",
-                            "answer": "Grant only the minimum access needed to perform a task."
-                        },
-                        {
-                            "prompt": "What is 'availability' in the CIA triad?",
-                            "answer": "Ensuring systems and data are accessible when needed."
-                        },
-                        {
-                            "prompt": "What is a firewall used for?",
-                            "answer": "To control network traffic based on rules (allow/deny)."
-                        },
-                        {
-                            "prompt": "What is a vulnerability?",
-                            "answer": "A weakness in software or configuration that can be exploited."
-                        },
-                        {
-                            "prompt": "What does 'patching' mean?",
-                            "answer": "Updating software to fix bugs or security issues."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is MFA?",
-                            "answer": "Multi-factor authentication."
-                        },
-                        {
-                            "prompt": "What is phishing?",
-                            "answer": "A social engineering attack that tricks users into revealing sensitive info."
-                        },
-                        {
-                            "prompt": "What is a VPN used for?",
-                            "answer": "To securely connect to a private network over the internet."
-                        },
-                        {
-                            "prompt": "What is a password manager?",
-                            "answer": "A tool that generates and stores strong, unique passwords."
-                        },
-                        {
-                            "prompt": "What is an access control list (ACL)?",
-                            "answer": "A list of permissions that defines who can access a resource and how."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What is a CVE?",
-                            "answer": "A Common Vulnerabilities and Exposures identifier."
-                        },
-                        {
-                            "prompt": "What is the difference between authentication and authorization?",
-                            "answer": "Authentication verifies who you are; authorization determines what you can do."
-                        },
-                        {
-                            "prompt": "What is a hash function used for in security?",
-                            "answer": "To create a fixed-length digest for integrity checks and password storage."
-                        },
-                        {
-                            "prompt": "What is TLS used for?",
-                            "answer": "Encrypting data in transit between clients and servers."
-                        },
-                        {
-                            "prompt": "What is a security incident?",
-                            "answer": "An event that compromises (or threatens) confidentiality, integrity, or availability."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What is zero trust?",
-                            "answer": "Never trust, always verify access to resources."
-                        },
-                        {
-                            "prompt": "What is defense in depth?",
-                            "answer": "Using multiple layers of controls so one failure doesn’t compromise the system."
-                        },
-                        {
-                            "prompt": "What is a supply-chain attack?",
-                            "answer": "Compromising software through dependencies, build systems, or distribution channels."
-                        },
-                        {
-                            "prompt": "What is data loss prevention (DLP)?",
-                            "answer": "Controls that detect and prevent sensitive data from leaving approved channels."
-                        },
-                        {
-                            "prompt": "What is a SIEM?",
-                            "answer": "Security Information and Event Management—centralized collection and correlation of security logs."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What is data encryption at rest?",
-                            "answer": "Protecting stored data using encryption keys."
-                        },
-                        {
-                            "prompt": "What is key rotation and why is it important?",
-                            "answer": "Regularly changing keys to reduce the impact of key compromise."
-                        },
-                        {
-                            "prompt": "What is a threat model?",
-                            "answer": "A structured way to identify assets, threats, and mitigations in a system."
-                        },
-                        {
-                            "prompt": "What is the principle of secure defaults?",
-                            "answer": "Systems should start in the safest configuration unless explicitly loosened."
-                        },
-                        {
-                            "prompt": "What is a post-incident review (PIR)?",
-                            "answer": "A blameless analysis to learn from an incident and prevent recurrence."
-                        }
-                    ]
-                }
-            ]
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What AWS service is commonly used for object storage?",
+              "answer": "S3 (Simple Storage Service)"
+            },
+            {
+              "prompt": "Name one AWS service used for machine learning.",
+              "answer": "SageMaker, Comprehend, Rekognition, etc."
+            },
+            {
+              "prompt": "Which AWS service provides a managed Kubernetes control plane?",
+              "answer": "EKS"
+            },
+            {
+              "prompt": "Which AWS service provides a managed relational data warehouse?",
+              "answer": "Redshift"
+            },
+            {
+              "prompt": "What AWS service would you use to store secrets like database passwords?",
+              "answer": "Secrets Manager"
+            }
+          ]
         },
         {
-            "name": "LET’S SPEAK NRQL",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "Construct a query that returns the average duration per application over the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write an NRQL query to count all transactions in the last 30 minutes.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nSINCE 30 minutes AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the top 10 applications by transaction count in the last day.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nFACET appName\nLIMIT 10\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to return the latest transaction duration for each app.",
-                            "answer": "FROM Transaction\nSELECT latest(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compute the average duration for a single app named 'MyApp' over the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 1 hour AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that lists all event types in an account.",
-                            "answer": "SHOW EVENT TYPES\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to list the top 20 transaction names by average duration over the last 6 hours.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET name\nLIMIT 20\nSINCE 6 hours AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show error percentage for each application over the last hour (hint: filter()).",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compare the average duration this hour vs. one hour ago for a single app.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 2 hours AGO\nCOMPARE WITH 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the 95th percentile of duration by app over the last 3 hours.",
-                            "answer": "FROM Transaction\nSELECT percentile(duration, 95)\nFACET appName\nLIMIT max\nSINCE 3 hours AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Create a query that calculates the number of transactions divided into 10 buckets based on duration (hint: buckets()).",
-                            "answer": "FROM Transaction\nSELECT count(*)\nFACET buckets(duration, 0, 10, 10)\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show average duration over time in 1-minute timeseries for the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nTIMESERIES 1 minute\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the slowest (max) transaction duration per app in the last hour.",
-                            "answer": "FROM Transaction\nSELECT max(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query that returns unique users (uniqueCount) per app over the last day.",
-                            "answer": "FROM Transaction\nSELECT uniqueCount(user)\nFACET appName\nLIMIT max\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the top 5 endpoints by 99th percentile duration in the last 24 hours.",
-                            "answer": "FROM Transaction\nSELECT percentile(duration, 99)\nFACET name\nLIMIT 5\nSINCE 24 hours AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "Create a query that returns the percentage of TransactionError events relative to Transaction events over the last hour.",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to alert on apps where error percentage is above 2% (return appName and errorPct).",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorPct\nFACET appName\nLIMIT max\nSINCE 10 minutes AGO\nHAVING errorPct > 2"
-                        },
-                        {
-                            "prompt": "Write a query to calculate Apdex by app (target 0.5s) over the last hour.",
-                            "answer": "FROM Transaction\nSELECT apdex(duration, 0.5)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query that correlates average duration with request method (GET/POST) over the last 6 hours.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET request.method\nLIMIT max\nSINCE 6 hours AGO"
-                        },
-                        {
-                            "prompt": "Write a query to find transactions with unusually high duration using a WHERE clause threshold of 2 seconds.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nWHERE duration > 2\nFACET name\nLIMIT 20\nSINCE 1 hour AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "A threshold for a slow application is 0.3 seconds on average. Write a query to show only apps whose average duration exceeds 0.3s over the last hour.",
-                            "answer": "FROM (FROM Transaction SELECT average(duration) AS avgDuration FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(avgDuration)\nWHERE avgDuration > 0.3\nLIMIT max"
-                        },
-                        {
-                            "prompt": "Write a nested query that returns apps whose 95th percentile duration is above 1 second in the last hour.",
-                            "answer": "FROM (FROM Transaction SELECT percentile(duration, 95) AS p95 FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(p95)\nWHERE p95 > 1\nLIMIT max"
-                        },
-                        {
-                            "prompt": "Write a query that shows the ratio of erroring transactions to total transactions per app and filters to only apps with >100 total transactions.",
-                            "answer": "FROM Transaction, TransactionError\nSELECT filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorRatio\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nHAVING filter(count(*), WHERE eventType() = 'Transaction') > 100"
-                        },
-                        {
-                            "prompt": "Write a query to identify the top 10 apps by throughput (rpm) using rate(count(*), 1 minute) over the last 30 minutes.",
-                            "answer": "FROM Transaction\nSELECT rate(count(*), 1 minute) AS rpm\nFACET appName\nLIMIT 10\nSINCE 30 minutes AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compute average duration for each app and compare it with the same period one day ago.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nCOMPARE WITH 1 day AGO"
-                        }
-                    ]
-                }
-            ]
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What AWS service would you use for a relational database?",
+              "answer": "RDS (Relational Database Service)"
+            },
+            {
+              "prompt": "Name one AWS service used for security.",
+              "answer": "IAM (Identity and Access Management), GuardDuty, etc."
+            },
+            {
+              "prompt": "What AWS service helps protect against DDoS attacks?",
+              "answer": "AWS Shield"
+            },
+            {
+              "prompt": "What AWS service would you use for distributed tracing of requests?",
+              "answer": "AWS X-Ray"
+            },
+            {
+              "prompt": "What AWS service provides a managed firewall for web apps at the edge?",
+              "answer": "AWS WAF (often with CloudFront)."
+            }
+          ]
         },
         {
-            "name": "AGENT FRAMEWORK 101",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "In one sentence, what is an AI agent?",
-                            "answer": "A goal-driven system that observes, decides, and acts on your behalf using tools and context."
-                        },
-                        {
-                            "prompt": "What is a 'tool' in an agent system?",
-                            "answer": "A callable capability (like an API) the agent can use to take actions or fetch information."
-                        },
-                        {
-                            "prompt": "What is a 'task' for an agent?",
-                            "answer": "A unit of work the agent is trying to complete to achieve a goal."
-                        },
-                        {
-                            "prompt": "What does 'context' mean for an LLM agent?",
-                            "answer": "The information the agent uses to decide what to do next (instructions, conversation, retrieved data)."
-                        },
-                        {
-                            "prompt": "What is a simple example of an agent action?",
-                            "answer": "Creating a calendar event, opening a ticket, or running a database query via a tool."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What does a planner do in an agent framework?",
-                            "answer": "It breaks a goal into steps and chooses which tool or skill to use next."
-                        },
-                        {
-                            "prompt": "What is 'tool calling' (function calling) in agent frameworks?",
-                            "answer": "When the model outputs a structured request to invoke a tool and use the tool result in reasoning."
-                        },
-                        {
-                            "prompt": "What is the role of an 'executor' in many agent designs?",
-                            "answer": "It carries out the chosen step, calls tools, and returns results to the agent loop."
-                        },
-                        {
-                            "prompt": "What is 'prompt injection' in the context of agents?",
-                            "answer": "Malicious content that tries to override instructions or cause unsafe tool actions."
-                        },
-                        {
-                            "prompt": "What is 'RAG' and why is it useful for agents?",
-                            "answer": "Retrieval-Augmented Generation; it helps agents ground answers using external documents and reduces hallucinations."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Name two safety guardrails commonly used with agents.",
-                            "answer": "Output validation and tool-use constraints (for example, an allowlist of tools)."
-                        },
-                        {
-                            "prompt": "What is a 'scratchpad' (or reasoning trace) used for?",
-                            "answer": "To keep intermediate thoughts and plans while the agent works through a multi-step problem."
-                        },
-                        {
-                            "prompt": "What is 'state' in an agent loop?",
-                            "answer": "The data representing what the agent knows so far (messages, variables, memory, tool outputs)."
-                        },
-                        {
-                            "prompt": "Why do agents often use 'stop conditions'?",
-                            "answer": "To prevent infinite loops and to end execution when the goal is met or no progress is possible."
-                        },
-                        {
-                            "prompt": "What is a 'reflection' step in some agent frameworks?",
-                            "answer": "A step where the agent evaluates its own output or plan and improves it before finalizing."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What is the difference between tools and skills?",
-                            "answer": "Tools are external actions (API calls), while skills are reusable internal behaviors or prompts."
-                        },
-                        {
-                            "prompt": "What is 'policy enforcement' for tool use?",
-                            "answer": "Rules that restrict what tools can be used and with what parameters (e.g., no deletes, only read APIs)."
-                        },
-                        {
-                            "prompt": "Why is 'grounding' important for agent responses?",
-                            "answer": "It reduces hallucinations by tying outputs to retrieved facts, observations, or tool results."
-                        },
-                        {
-                            "prompt": "What is a 'router' in a multi-agent system?",
-                            "answer": "A component that decides which specialized agent or skill should handle the current request."
-                        },
-                        {
-                            "prompt": "What does 'idempotent tool call' mean and why is it useful?",
-                            "answer": "A tool call that can be repeated safely without changing state unexpectedly, improving reliability and retry behavior."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "Why is memory important in an agent framework?",
-                            "answer": "It preserves context across steps so the agent can act consistently over time."
-                        },
-                        {
-                            "prompt": "What is the tradeoff between short-term and long-term memory in agents?",
-                            "answer": "Short-term memory is fast and relevant but limited; long-term memory scales but requires retrieval and can introduce noise."
-                        },
-                        {
-                            "prompt": "How can agents reduce tool-call errors in production?",
-                            "answer": "Use schema validation, retries with backoff, timeouts, and precondition checks before executing actions."
-                        },
-                        {
-                            "prompt": "What is a 'human-in-the-loop' pattern for agents?",
-                            "answer": "The agent pauses for approval or clarification before taking high-impact actions."
-                        },
-                        {
-                            "prompt": "What is a common evaluation method for agent tool use?",
-                            "answer": "Run scripted scenarios and score success rate, latency, and correctness of tool selection and parameters."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "FOUNDRY BASICS",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is Microsoft Foundry best described as?",
-                            "answer": "A platform to build, evaluate, and deploy AI solutions with models, tools, and safety controls."
-                        },
-                        {
-                            "prompt": "What is a 'model deployment' in Foundry?",
-                            "answer": "A hosted endpoint that serves a model for inference (often with auth, scaling, and monitoring)."
-                        },
-                        {
-                            "prompt": "What is a dataset in Foundry used for?",
-                            "answer": "Providing training, evaluation, or grounding data for prompts and applications."
-                        },
-                        {
-                            "prompt": "What is a prompt template?",
-                            "answer": "A reusable prompt with placeholders/variables for consistent model calls."
-                        },
-                        {
-                            "prompt": "What is an evaluation (eval) used for?",
-                            "answer": "Measuring model quality and safety before shipping changes."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Name one thing you can set up in Foundry to keep models safe.",
-                            "answer": "Safety filters/guardrails, content moderation, or evaluation criteria for outputs."
-                        },
-                        {
-                            "prompt": "Why would you use role-based access control (RBAC) in Foundry?",
-                            "answer": "To ensure only authorized users can view data, edit prompts, or deploy models."
-                        },
-                        {
-                            "prompt": "What is the purpose of a 'project' or workspace in Foundry?",
-                            "answer": "To group prompts, datasets, evaluations, and deployments for a solution."
-                        },
-                        {
-                            "prompt": "What is the benefit of versioning prompts/models?",
-                            "answer": "It enables reproducibility, rollback, and controlled experimentation."
-                        },
-                        {
-                            "prompt": "What is an 'endpoint' in Foundry typically used for?",
-                            "answer": "Calling a deployed model from an app or workflow over HTTP."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What’s the purpose of evaluations in Foundry?",
-                            "answer": "To measure model quality (accuracy, safety, relevance) before deploying."
-                        },
-                        {
-                            "prompt": "What is 'grounding' in an AI app?",
-                            "answer": "Using trusted sources (docs/data) to constrain the model’s answer and reduce hallucinations."
-                        },
-                        {
-                            "prompt": "What is a common metric in LLM evaluations besides accuracy?",
-                            "answer": "Toxicity/safety, relevance, faithfulness/groundedness, or latency."
-                        },
-                        {
-                            "prompt": "Why do teams run evals after prompt changes?",
-                            "answer": "Small prompt changes can regress behavior; evals catch issues before deployment."
-                        },
-                        {
-                            "prompt": "What is an embedding used for in Foundry-like apps?",
-                            "answer": "Representing text as vectors for similarity search and retrieval."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "How does Foundry help teams collaborate?",
-                            "answer": "By sharing projects, datasets, prompts, and deployment configs in one workspace."
-                        },
-                        {
-                            "prompt": "What is a governance feature you’d want in an enterprise AI platform?",
-                            "answer": "Audit logs, approvals, access controls, and data lineage for compliance."
-                        },
-                        {
-                            "prompt": "Why integrate observability with model deployments?",
-                            "answer": "To monitor latency, errors, and quality signals and to debug issues in production."
-                        },
-                        {
-                            "prompt": "What is a staged rollout and why use it for models?",
-                            "answer": "Gradually shifting traffic to a new model version to reduce risk and catch regressions."
-                        },
-                        {
-                            "prompt": "What is a 'deployment policy' used for?",
-                            "answer": "Enforcing requirements like approvals, allowed models, or safety checks before deploying."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "Why use Foundry’s managed deployments?",
-                            "answer": "It streamlines hosting, monitoring, and scaling models without managing infrastructure."
-                        },
-                        {
-                            "prompt": "What is a recommended approach for evaluating RAG systems end-to-end?",
-                            "answer": "Evaluate retrieval (precision/recall) plus answer quality (groundedness, correctness) using curated QA sets."
-                        },
-                        {
-                            "prompt": "Name two ways to reduce hallucinations in production LLM apps.",
-                            "answer": "Use retrieval grounding and require citations/structured outputs with validation."
-                        },
-                        {
-                            "prompt": "What is a 'red team' exercise for an AI app?",
-                            "answer": "Testing the system with adversarial prompts to find jailbreaks, data leaks, or unsafe outputs."
-                        },
-                        {
-                            "prompt": "Why is continuous monitoring needed after deployment?",
-                            "answer": "Because data, user behavior, and failure modes change, causing drift and new risks over time."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "AI & DATA",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is a feature?",
-                            "answer": "An input variable used by a model."
-                        },
-                        {
-                            "prompt": "What is a label in supervised learning?",
-                            "answer": "The target output value the model is trained to predict."
-                        },
-                        {
-                            "prompt": "What is an embedding?",
-                            "answer": "A vector representation of data (often text) that captures semantic meaning."
-                        },
-                        {
-                            "prompt": "What is overfitting?",
-                            "answer": "When a model learns noise in training data and performs poorly on new data."
-                        },
-                        {
-                            "prompt": "What is a dataset split?",
-                            "answer": "Dividing data into training/validation/test sets to evaluate generalization."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is model drift?",
-                            "answer": "When model performance degrades due to changing data patterns."
-                        },
-                        {
-                            "prompt": "What is precision?",
-                            "answer": "Of the predicted positives, the fraction that are truly positive."
-                        },
-                        {
-                            "prompt": "What is recall?",
-                            "answer": "Of the true positives, the fraction that the model correctly finds."
-                        },
-                        {
-                            "prompt": "What is data leakage?",
-                            "answer": "When information from the future or target leaks into training features, inflating performance."
-                        },
-                        {
-                            "prompt": "What is a baseline model?",
-                            "answer": "A simple reference model used to compare improvements."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Define ETL.",
-                            "answer": "Extract, Transform, Load."
-                        },
-                        {
-                            "prompt": "What is cross-validation used for?",
-                            "answer": "Estimating model performance by training/testing across multiple folds."
-                        },
-                        {
-                            "prompt": "What is a confusion matrix?",
-                            "answer": "A table summarizing true/false positives/negatives for a classifier."
-                        },
-                        {
-                            "prompt": "What is a learning rate?",
-                            "answer": "A hyperparameter that controls step size during optimization."
-                        },
-                        {
-                            "prompt": "What is feature scaling?",
-                            "answer": "Normalizing/standardizing features to improve training stability."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What is a vector database used for?",
-                            "answer": "Storing embeddings for similarity search."
-                        },
-                        {
-                            "prompt": "What is cosine similarity used for?",
-                            "answer": "Measuring similarity between vectors based on their angle."
-                        },
-                        {
-                            "prompt": "What is dimensionality reduction?",
-                            "answer": "Reducing the number of features while preserving important structure (e.g., PCA)."
-                        },
-                        {
-                            "prompt": "What is an LLM 'temperature' parameter?",
-                            "answer": "A setting that controls randomness/creativity of generated text."
-                        },
-                        {
-                            "prompt": "What is data lineage?",
-                            "answer": "Tracking where data came from, how it changed, and how it’s used."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What is a prompt?",
-                            "answer": "An input instruction to guide a model response."
-                        },
-                        {
-                            "prompt": "What is prompt chaining?",
-                            "answer": "Linking multiple prompts/steps so outputs feed into subsequent steps."
-                        },
-                        {
-                            "prompt": "What is RLHF?",
-                            "answer": "Reinforcement Learning from Human Feedback—a method to align model behavior to preferences."
-                        },
-                        {
-                            "prompt": "What is a hallucination in LLMs?",
-                            "answer": "A generated claim that is not supported by the source context or reality."
-                        },
-                        {
-                            "prompt": "What is an end-to-end eval for a RAG system?",
-                            "answer": "A test that evaluates retrieval plus answer quality (correctness and groundedness) together."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Pager Roulette",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What phrase means your on-call shift has started?",
-                            "answer": "Taking the pager (or being on-call)."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is the first thing to check when paged at 2 AM?",
-                            "answer": "Whether the alert is real and what the customer impact is."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Name one way to reduce repeat pages from the same issue.",
-                            "answer": "Fix root cause, tune alert thresholds, or add deduplication."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What incident metric tracks how long services are unavailable?",
-                            "answer": "Downtime (or availability impact over time)."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What practice helps keep midnight pages calm and consistent?",
-                            "answer": "Runbooks with clear triage and escalation steps."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Log Archaeology",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is a log line?",
-                            "answer": "A single timestamped event message from a system."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Why are correlation IDs useful in logs?",
-                            "answer": "They link related events across services for easier tracing."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What does log sampling do?",
-                            "answer": "Keeps a subset of logs to reduce volume and cost."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What query pattern helps find rare errors quickly?",
-                            "answer": "Filter by error level and facet by message or service."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What is a key principle of useful production logging?",
-                            "answer": "Structured, contextual logs without sensitive data."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Dashboard Glow-Up",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is a dashboard in observability?",
-                            "answer": "A visual collection of charts for system health and trends."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Name one anti-pattern in dashboards.",
-                            "answer": "Too many charts with no clear story or ownership."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Why include units and labels on charts?",
-                            "answer": "They prevent misreading and improve decision speed."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What should top-row dashboard widgets usually show?",
-                            "answer": "Golden signals like latency, traffic, errors, and saturation."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What is the best test of a dashboard redesign?",
-                            "answer": "Teams detect and diagnose incidents faster with less confusion."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Alert Fatigue Hall of Fame",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is alert fatigue?",
-                            "answer": "When too many alerts cause responders to ignore or miss critical ones."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Name one way to reduce noisy alerts.",
-                            "answer": "Tune thresholds, add windows, or deduplicate notifications."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Why should alerts include runbook links?",
-                            "answer": "To speed up triage and reduce decision friction."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What metric tracks useful vs noisy paging behavior?",
-                            "answer": "Signal-to-noise ratio (or actionable alert rate)."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What is a healthy goal for paging alerts?",
-                            "answer": "Each page should be actionable, urgent, and tied to user impact."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Latency Legends",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What does latency measure?",
-                            "answer": "How long a request takes from start to finish."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What does p95 latency mean?",
-                            "answer": "95% of requests are faster than that value."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Name one common source of high latency.",
-                            "answer": "Slow database queries, network hops, or lock contention."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "Why watch tail latency instead of only averages?",
-                            "answer": "Averages hide bad outliers that hurt real user experience."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What architecture pattern can reduce cross-service latency?",
-                            "answer": "Caching, async processing, or reducing chatty synchronous calls."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Blameless Bingo",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What does blameless postmortem mean?",
-                            "answer": "Focus on systems and learning, not blaming individuals."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Name one benefit of blameless language.",
-                            "answer": "People share details openly, leading to better fixes."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What question starts a strong retrospective?",
-                            "answer": "What conditions made this outcome possible?"
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What should an incident action item include?",
-                            "answer": "Owner, due date, and specific measurable outcome."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What cultural signal shows retros are truly blameless?",
-                            "answer": "People volunteer context and mistakes without fear."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Deploy or Die Trying",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is a deployment rollback?",
-                            "answer": "Reverting to a previous stable release."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is a canary release?",
-                            "answer": "Gradually releasing to a small subset before full rollout."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Why use feature flags in deployments?",
-                            "answer": "To decouple release from exposure and reduce risk."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What should a deployment checklist include first?",
-                            "answer": "Health checks, rollback plan, and stakeholder communication."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "Which metric best confirms a safe rollout in real time?",
-                            "answer": "Error rate and latency compared to baseline."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "SRE Mythbusters",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "True or false: More alerts always means better reliability.",
-                            "answer": "False. Better signal quality matters more than volume."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is one myth about uptime percentages?",
-                            "answer": "That 99.9% and 99.99% are almost the same in user impact."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What does an error budget represent?",
-                            "answer": "Allowed unreliability within an SLO target window."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "Why is 'just add retries' sometimes harmful?",
-                            "answer": "It can amplify load and worsen outages without backoff/jitter."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What principle replaces heroics in mature SRE teams?",
-                            "answer": "Automation, standards, and resilient system design."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Observability Pet Peeves",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "Name one common observability pet peeve.",
-                            "answer": "Unlabeled charts or missing units."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "Why are inconsistent service names frustrating?",
-                            "answer": "They break filtering, grouping, and cross-team clarity."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "What happens when logs miss request IDs?",
-                            "answer": "Root-cause investigation gets slower and more manual."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "Why are broad wildcard alerts often noisy?",
-                            "answer": "They lack context and trigger on non-actionable events."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "What governance habit reduces observability chaos?",
-                            "answer": "Shared naming/tagging conventions with regular hygiene reviews."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Chaos Confessions",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "What is chaos engineering in one sentence?",
-                            "answer": "Safely testing failures to improve system resilience."
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "What is a blast radius in experiments?",
-                            "answer": "The scope of users/systems that could be affected."
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Why start chaos tests in lower environments first?",
-                            "answer": "To validate hypotheses and safety before production impact."
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "What makes a chaos experiment successful even if things break?",
-                            "answer": "You learn, improve controls, and reduce future incident risk."
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "Which guardrail is essential before running production chaos tests?",
-                            "answer": "Clear abort conditions and real-time monitoring/ownership."
-                        }
-                    ]
-                }
-            ]
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "Name one AWS service used for monitoring and observability.",
+              "answer": "CloudWatch, X-Ray, etc."
+            },
+            {
+              "prompt": "What AWS service would you use for infrastructure as code?",
+              "answer": "CloudFormation or CDK (Cloud Development Kit)"
+            },
+            {
+              "prompt": "How would you securely grant an EC2 instance access to S3 without static credentials?",
+              "answer": "Attach an IAM role to the instance (instance profile) with least-privilege S3 permissions."
+            },
+            {
+              "prompt": "What is a best practice to reduce blast radius across AWS accounts?",
+              "answer": "Use a multi-account strategy (AWS Organizations) with separate accounts per environment/workload."
+            },
+            {
+              "prompt": "Name an AWS service or feature for encrypting data at rest using customer-managed keys.",
+              "answer": "AWS KMS (Key Management Service)"
+            }
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "name": "New Relic",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What does APM stand for?",
+              "answer": "Application Performance Monitoring."
+            },
+            {
+              "prompt": "What is a 'service' in New Relic?",
+              "answer": "An instrumented application/component reported as an entity (e.g., APM service) producing telemetry."
+            },
+            {
+              "prompt": "Name one of the three pillars of observability.",
+              "answer": "Metrics, logs, or traces."
+            },
+            {
+              "prompt": "What is a dashboard used for in New Relic?",
+              "answer": "To visualize and share charts/widgets from NRDB data."
+            },
+            {
+              "prompt": "What is an alert condition used for?",
+              "answer": "To detect an issue (based on a signal) and notify via an alert policy/workflow."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is NRDB?",
+              "answer": "New Relic Database—the platform’s telemetry data store queried by NRQL."
+            },
+            {
+              "prompt": "What does 'entity' mean in New Relic?",
+              "answer": "A monitored thing (service, host, browser app, k8s cluster, etc.) with a unique identity."
+            },
+            {
+              "prompt": "What is distributed tracing?",
+              "answer": "Tracing requests end-to-end across services using spans/trace context."
+            },
+            {
+              "prompt": "What is OpenTelemetry (OTel) commonly used for with New Relic?",
+              "answer": "Vendor-neutral collection/export of traces/metrics/logs into New Relic."
+            },
+            {
+              "prompt": "What is a SLI vs SLO?",
+              "answer": "SLI is the metric; SLO is the target/threshold for that metric."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What is NerdGraph?",
+              "answer": "New Relic’s GraphQL API for querying and managing data/configuration."
+            },
+            {
+              "prompt": "What is a 'span'?",
+              "answer": "A timed operation within a trace (a unit of work with attributes)."
+            },
+            {
+              "prompt": "Why would you add 'custom attributes' to telemetry?",
+              "answer": "To enable better filtering/faceting, correlation, and richer context in charts/alerts/traces."
+            },
+            {
+              "prompt": "What does 'Golden Metrics' typically refer to in APM?",
+              "answer": "Latency, traffic/throughput, errors, and saturation (or similar core health signals)."
+            },
+            {
+              "prompt": "What is 'service map' used for?",
+              "answer": "To visualize dependencies between services/entities and navigate to related telemetry."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What is the difference between logs in context and traces in context?",
+              "answer": "Logs in context pivot from errors/requests to relevant logs; traces in context pivot to trace/span data for the same work."
+            },
+            {
+              "prompt": "What is sampling in distributed tracing?",
+              "answer": "Recording only a subset of traces/spans to control volume/cost while retaining visibility."
+            },
+            {
+              "prompt": "What’s a practical way to correlate logs and traces?",
+              "answer": "Include trace.id/span.id in logs (or use automatic correlation via agents/OTel) so logs can link to traces."
+            },
+            {
+              "prompt": "What is an 'anomaly' alert vs a static threshold alert?",
+              "answer": "Anomaly adapts to baseline behavior; static uses fixed thresholds."
+            },
+            {
+              "prompt": "Why use tags/labels on entities?",
+              "answer": "To organize, filter, and scope dashboards/alerts (e.g., env=prod, team=payments)."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What problem does 'high cardinality' cause in observability?",
+              "answer": "Explodes metric/log/attribute dimensionality, increasing cost and reducing query/aggregation efficiency."
+            },
+            {
+              "prompt": "What’s a safe way to add user identifiers to telemetry?",
+              "answer": "Use hashed/pseudonymous IDs and avoid PII; apply data governance/attribute allowlists."
+            },
+            {
+              "prompt": "What is an incident workflow trying to optimize?",
+              "answer": "Fast detection, correct routing, clear ownership, and reduced mean time to acknowledge/resolve (MTTA/MTTR)."
+            },
+            {
+              "prompt": "How would you validate an alert condition before rolling it out widely?",
+              "answer": "Test against historical data, tune thresholds, use preview/testing, and stage rollout to avoid noise."
+            },
+            {
+              "prompt": "What’s a good strategy for instrumenting a large system incrementally?",
+              "answer": "Start with critical paths/services, add standard attributes, ensure trace propagation, then expand coverage iteratively."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TECH GEOGRAPHY",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "Define least privilege.",
+              "answer": "Grant only the minimum access needed to perform a task."
+            },
+            {
+              "prompt": "What is 'availability' in the CIA triad?",
+              "answer": "Ensuring systems and data are accessible when needed."
+            },
+            {
+              "prompt": "What is a firewall used for?",
+              "answer": "To control network traffic based on rules (allow/deny)."
+            },
+            {
+              "prompt": "What is a vulnerability?",
+              "answer": "A weakness in software or configuration that can be exploited."
+            },
+            {
+              "prompt": "What does 'patching' mean?",
+              "answer": "Updating software to fix bugs or security issues."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is MFA?",
+              "answer": "Multi-factor authentication."
+            },
+            {
+              "prompt": "What is phishing?",
+              "answer": "A social engineering attack that tricks users into revealing sensitive info."
+            },
+            {
+              "prompt": "What is a VPN used for?",
+              "answer": "To securely connect to a private network over the internet."
+            },
+            {
+              "prompt": "What is a password manager?",
+              "answer": "A tool that generates and stores strong, unique passwords."
+            },
+            {
+              "prompt": "What is an access control list (ACL)?",
+              "answer": "A list of permissions that defines who can access a resource and how."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What is a CVE?",
+              "answer": "A Common Vulnerabilities and Exposures identifier."
+            },
+            {
+              "prompt": "What is the difference between authentication and authorization?",
+              "answer": "Authentication verifies who you are; authorization determines what you can do."
+            },
+            {
+              "prompt": "What is a hash function used for in security?",
+              "answer": "To create a fixed-length digest for integrity checks and password storage."
+            },
+            {
+              "prompt": "What is TLS used for?",
+              "answer": "Encrypting data in transit between clients and servers."
+            },
+            {
+              "prompt": "What is a security incident?",
+              "answer": "An event that compromises (or threatens) confidentiality, integrity, or availability."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What is zero trust?",
+              "answer": "Never trust, always verify access to resources."
+            },
+            {
+              "prompt": "What is defense in depth?",
+              "answer": "Using multiple layers of controls so one failure doesn’t compromise the system."
+            },
+            {
+              "prompt": "What is a supply-chain attack?",
+              "answer": "Compromising software through dependencies, build systems, or distribution channels."
+            },
+            {
+              "prompt": "What is data loss prevention (DLP)?",
+              "answer": "Controls that detect and prevent sensitive data from leaving approved channels."
+            },
+            {
+              "prompt": "What is a SIEM?",
+              "answer": "Security Information and Event Management—centralized collection and correlation of security logs."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What is data encryption at rest?",
+              "answer": "Protecting stored data using encryption keys."
+            },
+            {
+              "prompt": "What is key rotation and why is it important?",
+              "answer": "Regularly changing keys to reduce the impact of key compromise."
+            },
+            {
+              "prompt": "What is a threat model?",
+              "answer": "A structured way to identify assets, threats, and mitigations in a system."
+            },
+            {
+              "prompt": "What is the principle of secure defaults?",
+              "answer": "Systems should start in the safest configuration unless explicitly loosened."
+            },
+            {
+              "prompt": "What is a post-incident review (PIR)?",
+              "answer": "A blameless analysis to learn from an incident and prevent recurrence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LET’S SPEAK NRQL",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "Construct a query that returns the average duration per application over the last hour.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write an NRQL query to count all transactions in the last 30 minutes.",
+              "answer": "FROM Transaction\nSELECT count(*)\nSINCE 30 minutes AGO"
+            },
+            {
+              "prompt": "Write a query to show the top 10 applications by transaction count in the last day.",
+              "answer": "FROM Transaction\nSELECT count(*)\nFACET appName\nLIMIT 10\nSINCE 1 day AGO"
+            },
+            {
+              "prompt": "Write a query to return the latest transaction duration for each app.",
+              "answer": "FROM Transaction\nSELECT latest(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to compute the average duration for a single app named 'MyApp' over the last hour.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 1 hour AGO"
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that lists all event types in an account.",
+              "answer": "SHOW EVENT TYPES\nSINCE 1 day AGO"
+            },
+            {
+              "prompt": "Write a query to list the top 20 transaction names by average duration over the last 6 hours.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nFACET name\nLIMIT 20\nSINCE 6 hours AGO"
+            },
+            {
+              "prompt": "Write a query to show error percentage for each application over the last hour (hint: filter()).",
+              "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to compare the average duration this hour vs. one hour ago for a single app.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 2 hours AGO\nCOMPARE WITH 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to show the 95th percentile of duration by app over the last 3 hours.",
+              "answer": "FROM Transaction\nSELECT percentile(duration, 95)\nFACET appName\nLIMIT max\nSINCE 3 hours AGO"
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Create a query that calculates the number of transactions divided into 10 buckets based on duration (hint: buckets()).",
+              "answer": "FROM Transaction\nSELECT count(*)\nFACET buckets(duration, 0, 10, 10)\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to show average duration over time in 1-minute timeseries for the last hour.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nTIMESERIES 1 minute\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to show the slowest (max) transaction duration per app in the last hour.",
+              "answer": "FROM Transaction\nSELECT max(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query that returns unique users (uniqueCount) per app over the last day.",
+              "answer": "FROM Transaction\nSELECT uniqueCount(user)\nFACET appName\nLIMIT max\nSINCE 1 day AGO"
+            },
+            {
+              "prompt": "Write a query to show the top 5 endpoints by 99th percentile duration in the last 24 hours.",
+              "answer": "FROM Transaction\nSELECT percentile(duration, 99)\nFACET name\nLIMIT 5\nSINCE 24 hours AGO"
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "Create a query that returns the percentage of TransactionError events relative to Transaction events over the last hour.",
+              "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query to alert on apps where error percentage is above 2% (return appName and errorPct).",
+              "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorPct\nFACET appName\nLIMIT max\nSINCE 10 minutes AGO\nHAVING errorPct > 2"
+            },
+            {
+              "prompt": "Write a query to calculate Apdex by app (target 0.5s) over the last hour.",
+              "answer": "FROM Transaction\nSELECT apdex(duration, 0.5)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+            },
+            {
+              "prompt": "Write a query that correlates average duration with request method (GET/POST) over the last 6 hours.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nFACET request.method\nLIMIT max\nSINCE 6 hours AGO"
+            },
+            {
+              "prompt": "Write a query to find transactions with unusually high duration using a WHERE clause threshold of 2 seconds.",
+              "answer": "FROM Transaction\nSELECT count(*)\nWHERE duration > 2\nFACET name\nLIMIT 20\nSINCE 1 hour AGO"
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "A threshold for a slow application is 0.3 seconds on average. Write a query to show only apps whose average duration exceeds 0.3s over the last hour.",
+              "answer": "FROM (FROM Transaction SELECT average(duration) AS avgDuration FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(avgDuration)\nWHERE avgDuration > 0.3\nLIMIT max"
+            },
+            {
+              "prompt": "Write a nested query that returns apps whose 95th percentile duration is above 1 second in the last hour.",
+              "answer": "FROM (FROM Transaction SELECT percentile(duration, 95) AS p95 FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(p95)\nWHERE p95 > 1\nLIMIT max"
+            },
+            {
+              "prompt": "Write a query that shows the ratio of erroring transactions to total transactions per app and filters to only apps with >100 total transactions.",
+              "answer": "FROM Transaction, TransactionError\nSELECT filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorRatio\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nHAVING filter(count(*), WHERE eventType() = 'Transaction') > 100"
+            },
+            {
+              "prompt": "Write a query to identify the top 10 apps by throughput (rpm) using rate(count(*), 1 minute) over the last 30 minutes.",
+              "answer": "FROM Transaction\nSELECT rate(count(*), 1 minute) AS rpm\nFACET appName\nLIMIT 10\nSINCE 30 minutes AGO"
+            },
+            {
+              "prompt": "Write a query to compute average duration for each app and compare it with the same period one day ago.",
+              "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nCOMPARE WITH 1 day AGO"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AGENT FRAMEWORK 101",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "In one sentence, what is an AI agent?",
+              "answer": "A goal-driven system that observes, decides, and acts on your behalf using tools and context."
+            },
+            {
+              "prompt": "What is a 'tool' in an agent system?",
+              "answer": "A callable capability (like an API) the agent can use to take actions or fetch information."
+            },
+            {
+              "prompt": "What is a 'task' for an agent?",
+              "answer": "A unit of work the agent is trying to complete to achieve a goal."
+            },
+            {
+              "prompt": "What does 'context' mean for an LLM agent?",
+              "answer": "The information the agent uses to decide what to do next (instructions, conversation, retrieved data)."
+            },
+            {
+              "prompt": "What is a simple example of an agent action?",
+              "answer": "Creating a calendar event, opening a ticket, or running a database query via a tool."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What does a planner do in an agent framework?",
+              "answer": "It breaks a goal into steps and chooses which tool or skill to use next."
+            },
+            {
+              "prompt": "What is 'tool calling' (function calling) in agent frameworks?",
+              "answer": "When the model outputs a structured request to invoke a tool and use the tool result in reasoning."
+            },
+            {
+              "prompt": "What is the role of an 'executor' in many agent designs?",
+              "answer": "It carries out the chosen step, calls tools, and returns results to the agent loop."
+            },
+            {
+              "prompt": "What is 'prompt injection' in the context of agents?",
+              "answer": "Malicious content that tries to override instructions or cause unsafe tool actions."
+            },
+            {
+              "prompt": "What is 'RAG' and why is it useful for agents?",
+              "answer": "Retrieval-Augmented Generation; it helps agents ground answers using external documents and reduces hallucinations."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Name two safety guardrails commonly used with agents.",
+              "answer": "Output validation and tool-use constraints (for example, an allowlist of tools)."
+            },
+            {
+              "prompt": "What is a 'scratchpad' (or reasoning trace) used for?",
+              "answer": "To keep intermediate thoughts and plans while the agent works through a multi-step problem."
+            },
+            {
+              "prompt": "What is 'state' in an agent loop?",
+              "answer": "The data representing what the agent knows so far (messages, variables, memory, tool outputs)."
+            },
+            {
+              "prompt": "Why do agents often use 'stop conditions'?",
+              "answer": "To prevent infinite loops and to end execution when the goal is met or no progress is possible."
+            },
+            {
+              "prompt": "What is a 'reflection' step in some agent frameworks?",
+              "answer": "A step where the agent evaluates its own output or plan and improves it before finalizing."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What is the difference between tools and skills?",
+              "answer": "Tools are external actions (API calls), while skills are reusable internal behaviors or prompts."
+            },
+            {
+              "prompt": "What is 'policy enforcement' for tool use?",
+              "answer": "Rules that restrict what tools can be used and with what parameters (e.g., no deletes, only read APIs)."
+            },
+            {
+              "prompt": "Why is 'grounding' important for agent responses?",
+              "answer": "It reduces hallucinations by tying outputs to retrieved facts, observations, or tool results."
+            },
+            {
+              "prompt": "What is a 'router' in a multi-agent system?",
+              "answer": "A component that decides which specialized agent or skill should handle the current request."
+            },
+            {
+              "prompt": "What does 'idempotent tool call' mean and why is it useful?",
+              "answer": "A tool call that can be repeated safely without changing state unexpectedly, improving reliability and retry behavior."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "Why is memory important in an agent framework?",
+              "answer": "It preserves context across steps so the agent can act consistently over time."
+            },
+            {
+              "prompt": "What is the tradeoff between short-term and long-term memory in agents?",
+              "answer": "Short-term memory is fast and relevant but limited; long-term memory scales but requires retrieval and can introduce noise."
+            },
+            {
+              "prompt": "How can agents reduce tool-call errors in production?",
+              "answer": "Use schema validation, retries with backoff, timeouts, and precondition checks before executing actions."
+            },
+            {
+              "prompt": "What is a 'human-in-the-loop' pattern for agents?",
+              "answer": "The agent pauses for approval or clarification before taking high-impact actions."
+            },
+            {
+              "prompt": "What is a common evaluation method for agent tool use?",
+              "answer": "Run scripted scenarios and score success rate, latency, and correctness of tool selection and parameters."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FOUNDRY BASICS",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is Microsoft Foundry best described as?",
+              "answer": "A platform to build, evaluate, and deploy AI solutions with models, tools, and safety controls."
+            },
+            {
+              "prompt": "What is a 'model deployment' in Foundry?",
+              "answer": "A hosted endpoint that serves a model for inference (often with auth, scaling, and monitoring)."
+            },
+            {
+              "prompt": "What is a dataset in Foundry used for?",
+              "answer": "Providing training, evaluation, or grounding data for prompts and applications."
+            },
+            {
+              "prompt": "What is a prompt template?",
+              "answer": "A reusable prompt with placeholders/variables for consistent model calls."
+            },
+            {
+              "prompt": "What is an evaluation (eval) used for?",
+              "answer": "Measuring model quality and safety before shipping changes."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Name one thing you can set up in Foundry to keep models safe.",
+              "answer": "Safety filters/guardrails, content moderation, or evaluation criteria for outputs."
+            },
+            {
+              "prompt": "Why would you use role-based access control (RBAC) in Foundry?",
+              "answer": "To ensure only authorized users can view data, edit prompts, or deploy models."
+            },
+            {
+              "prompt": "What is the purpose of a 'project' or workspace in Foundry?",
+              "answer": "To group prompts, datasets, evaluations, and deployments for a solution."
+            },
+            {
+              "prompt": "What is the benefit of versioning prompts/models?",
+              "answer": "It enables reproducibility, rollback, and controlled experimentation."
+            },
+            {
+              "prompt": "What is an 'endpoint' in Foundry typically used for?",
+              "answer": "Calling a deployed model from an app or workflow over HTTP."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What’s the purpose of evaluations in Foundry?",
+              "answer": "To measure model quality (accuracy, safety, relevance) before deploying."
+            },
+            {
+              "prompt": "What is 'grounding' in an AI app?",
+              "answer": "Using trusted sources (docs/data) to constrain the model’s answer and reduce hallucinations."
+            },
+            {
+              "prompt": "What is a common metric in LLM evaluations besides accuracy?",
+              "answer": "Toxicity/safety, relevance, faithfulness/groundedness, or latency."
+            },
+            {
+              "prompt": "Why do teams run evals after prompt changes?",
+              "answer": "Small prompt changes can regress behavior; evals catch issues before deployment."
+            },
+            {
+              "prompt": "What is an embedding used for in Foundry-like apps?",
+              "answer": "Representing text as vectors for similarity search and retrieval."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "How does Foundry help teams collaborate?",
+              "answer": "By sharing projects, datasets, prompts, and deployment configs in one workspace."
+            },
+            {
+              "prompt": "What is a governance feature you’d want in an enterprise AI platform?",
+              "answer": "Audit logs, approvals, access controls, and data lineage for compliance."
+            },
+            {
+              "prompt": "Why integrate observability with model deployments?",
+              "answer": "To monitor latency, errors, and quality signals and to debug issues in production."
+            },
+            {
+              "prompt": "What is a staged rollout and why use it for models?",
+              "answer": "Gradually shifting traffic to a new model version to reduce risk and catch regressions."
+            },
+            {
+              "prompt": "What is a 'deployment policy' used for?",
+              "answer": "Enforcing requirements like approvals, allowed models, or safety checks before deploying."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "Why use Foundry’s managed deployments?",
+              "answer": "It streamlines hosting, monitoring, and scaling models without managing infrastructure."
+            },
+            {
+              "prompt": "What is a recommended approach for evaluating RAG systems end-to-end?",
+              "answer": "Evaluate retrieval (precision/recall) plus answer quality (groundedness, correctness) using curated QA sets."
+            },
+            {
+              "prompt": "Name two ways to reduce hallucinations in production LLM apps.",
+              "answer": "Use retrieval grounding and require citations/structured outputs with validation."
+            },
+            {
+              "prompt": "What is a 'red team' exercise for an AI app?",
+              "answer": "Testing the system with adversarial prompts to find jailbreaks, data leaks, or unsafe outputs."
+            },
+            {
+              "prompt": "Why is continuous monitoring needed after deployment?",
+              "answer": "Because data, user behavior, and failure modes change, causing drift and new risks over time."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AI & DATA",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is a feature?",
+              "answer": "An input variable used by a model."
+            },
+            {
+              "prompt": "What is a label in supervised learning?",
+              "answer": "The target output value the model is trained to predict."
+            },
+            {
+              "prompt": "What is an embedding?",
+              "answer": "A vector representation of data (often text) that captures semantic meaning."
+            },
+            {
+              "prompt": "What is overfitting?",
+              "answer": "When a model learns noise in training data and performs poorly on new data."
+            },
+            {
+              "prompt": "What is a dataset split?",
+              "answer": "Dividing data into training/validation/test sets to evaluate generalization."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is model drift?",
+              "answer": "When model performance degrades due to changing data patterns."
+            },
+            {
+              "prompt": "What is precision?",
+              "answer": "Of the predicted positives, the fraction that are truly positive."
+            },
+            {
+              "prompt": "What is recall?",
+              "answer": "Of the true positives, the fraction that the model correctly finds."
+            },
+            {
+              "prompt": "What is data leakage?",
+              "answer": "When information from the future or target leaks into training features, inflating performance."
+            },
+            {
+              "prompt": "What is a baseline model?",
+              "answer": "A simple reference model used to compare improvements."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Define ETL.",
+              "answer": "Extract, Transform, Load."
+            },
+            {
+              "prompt": "What is cross-validation used for?",
+              "answer": "Estimating model performance by training/testing across multiple folds."
+            },
+            {
+              "prompt": "What is a confusion matrix?",
+              "answer": "A table summarizing true/false positives/negatives for a classifier."
+            },
+            {
+              "prompt": "What is a learning rate?",
+              "answer": "A hyperparameter that controls step size during optimization."
+            },
+            {
+              "prompt": "What is feature scaling?",
+              "answer": "Normalizing/standardizing features to improve training stability."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What is a vector database used for?",
+              "answer": "Storing embeddings for similarity search."
+            },
+            {
+              "prompt": "What is cosine similarity used for?",
+              "answer": "Measuring similarity between vectors based on their angle."
+            },
+            {
+              "prompt": "What is dimensionality reduction?",
+              "answer": "Reducing the number of features while preserving important structure (e.g., PCA)."
+            },
+            {
+              "prompt": "What is an LLM 'temperature' parameter?",
+              "answer": "A setting that controls randomness/creativity of generated text."
+            },
+            {
+              "prompt": "What is data lineage?",
+              "answer": "Tracking where data came from, how it changed, and how it’s used."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What is a prompt?",
+              "answer": "An input instruction to guide a model response."
+            },
+            {
+              "prompt": "What is prompt chaining?",
+              "answer": "Linking multiple prompts/steps so outputs feed into subsequent steps."
+            },
+            {
+              "prompt": "What is RLHF?",
+              "answer": "Reinforcement Learning from Human Feedback—a method to align model behavior to preferences."
+            },
+            {
+              "prompt": "What is a hallucination in LLMs?",
+              "answer": "A generated claim that is not supported by the source context or reality."
+            },
+            {
+              "prompt": "What is an end-to-end eval for a RAG system?",
+              "answer": "A test that evaluates retrieval plus answer quality (correctness and groundedness) together."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pager Roulette",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What phrase means your on-call shift has started?",
+              "answer": "Taking the pager (or being on-call)."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Pager Roulette' teams should know? (Bonus 2)",
+              "answer": "A core idea is incident triage, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Pager Roulette' teams should know? (Bonus 3)",
+              "answer": "A core idea is incident triage, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Pager Roulette' teams should know? (Bonus 4)",
+              "answer": "A core idea is incident triage, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Pager Roulette' teams should know? (Bonus 5)",
+              "answer": "A core idea is incident triage, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is the first thing to check when paged at 2 AM?",
+              "answer": "Whether the alert is real and what the customer impact is."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Pager Roulette'. (Bonus 2)",
+              "answer": "A useful signal is customer impact, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Pager Roulette'. (Bonus 3)",
+              "answer": "A useful signal is customer impact, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Pager Roulette'. (Bonus 4)",
+              "answer": "A useful signal is customer impact, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Pager Roulette'. (Bonus 5)",
+              "answer": "A useful signal is customer impact, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Name one way to reduce repeat pages from the same issue.",
+              "answer": "Fix root cause, tune alert thresholds, or add deduplication."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Pager Roulette' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is panic-driven changes; teams avoid it by applying clear escalation paths consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Pager Roulette' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is panic-driven changes; teams avoid it by applying clear escalation paths consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Pager Roulette' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is panic-driven changes; teams avoid it by applying clear escalation paths consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Pager Roulette' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is panic-driven changes; teams avoid it by applying clear escalation paths consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What incident metric tracks how long services are unavailable?",
+              "answer": "Downtime (or availability impact over time)."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Pager Roulette'? (Bonus 2)",
+              "answer": "A high-impact habit is clear escalation paths, paired with routine review of customer impact."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Pager Roulette'? (Bonus 3)",
+              "answer": "A high-impact habit is clear escalation paths, paired with routine review of customer impact."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Pager Roulette'? (Bonus 4)",
+              "answer": "A high-impact habit is clear escalation paths, paired with routine review of customer impact."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Pager Roulette'? (Bonus 5)",
+              "answer": "A high-impact habit is clear escalation paths, paired with routine review of customer impact."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What practice helps keep midnight pages calm and consistent?",
+              "answer": "Runbooks with clear triage and escalation steps."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Pager Roulette' effectively? (Bonus 2)",
+              "answer": "Treat incident triage as a system-level practice, measure with customer impact, and continuously refine via clear escalation paths."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Pager Roulette' effectively? (Bonus 3)",
+              "answer": "Treat incident triage as a system-level practice, measure with customer impact, and continuously refine via clear escalation paths."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Pager Roulette' effectively? (Bonus 4)",
+              "answer": "Treat incident triage as a system-level practice, measure with customer impact, and continuously refine via clear escalation paths."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Pager Roulette' effectively? (Bonus 5)",
+              "answer": "Treat incident triage as a system-level practice, measure with customer impact, and continuously refine via clear escalation paths."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Log Archaeology",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is a log line?",
+              "answer": "A single timestamped event message from a system."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Log Archaeology' teams should know? (Bonus 2)",
+              "answer": "A core idea is structured logging, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Log Archaeology' teams should know? (Bonus 3)",
+              "answer": "A core idea is structured logging, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Log Archaeology' teams should know? (Bonus 4)",
+              "answer": "A core idea is structured logging, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Log Archaeology' teams should know? (Bonus 5)",
+              "answer": "A core idea is structured logging, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Why are correlation IDs useful in logs?",
+              "answer": "They link related events across services for easier tracing."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Log Archaeology'. (Bonus 2)",
+              "answer": "A useful signal is correlation IDs, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Log Archaeology'. (Bonus 3)",
+              "answer": "A useful signal is correlation IDs, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Log Archaeology'. (Bonus 4)",
+              "answer": "A useful signal is correlation IDs, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Log Archaeology'. (Bonus 5)",
+              "answer": "A useful signal is correlation IDs, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What does log sampling do?",
+              "answer": "Keeps a subset of logs to reduce volume and cost."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Log Archaeology' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is free-text only logs; teams avoid it by applying consistent fields consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Log Archaeology' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is free-text only logs; teams avoid it by applying consistent fields consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Log Archaeology' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is free-text only logs; teams avoid it by applying consistent fields consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Log Archaeology' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is free-text only logs; teams avoid it by applying consistent fields consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What query pattern helps find rare errors quickly?",
+              "answer": "Filter by error level and facet by message or service."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Log Archaeology'? (Bonus 2)",
+              "answer": "A high-impact habit is consistent fields, paired with routine review of correlation IDs."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Log Archaeology'? (Bonus 3)",
+              "answer": "A high-impact habit is consistent fields, paired with routine review of correlation IDs."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Log Archaeology'? (Bonus 4)",
+              "answer": "A high-impact habit is consistent fields, paired with routine review of correlation IDs."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Log Archaeology'? (Bonus 5)",
+              "answer": "A high-impact habit is consistent fields, paired with routine review of correlation IDs."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What is a key principle of useful production logging?",
+              "answer": "Structured, contextual logs without sensitive data."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Log Archaeology' effectively? (Bonus 2)",
+              "answer": "Treat structured logging as a system-level practice, measure with correlation IDs, and continuously refine via consistent fields."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Log Archaeology' effectively? (Bonus 3)",
+              "answer": "Treat structured logging as a system-level practice, measure with correlation IDs, and continuously refine via consistent fields."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Log Archaeology' effectively? (Bonus 4)",
+              "answer": "Treat structured logging as a system-level practice, measure with correlation IDs, and continuously refine via consistent fields."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Log Archaeology' effectively? (Bonus 5)",
+              "answer": "Treat structured logging as a system-level practice, measure with correlation IDs, and continuously refine via consistent fields."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Glow-Up",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is a dashboard in observability?",
+              "answer": "A visual collection of charts for system health and trends."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Dashboard Glow-Up' teams should know? (Bonus 2)",
+              "answer": "A core idea is golden signals, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Dashboard Glow-Up' teams should know? (Bonus 3)",
+              "answer": "A core idea is golden signals, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Dashboard Glow-Up' teams should know? (Bonus 4)",
+              "answer": "A core idea is golden signals, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Dashboard Glow-Up' teams should know? (Bonus 5)",
+              "answer": "A core idea is golden signals, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Name one anti-pattern in dashboards.",
+              "answer": "Too many charts with no clear story or ownership."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Dashboard Glow-Up'. (Bonus 2)",
+              "answer": "A useful signal is clear units/labels, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Dashboard Glow-Up'. (Bonus 3)",
+              "answer": "A useful signal is clear units/labels, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Dashboard Glow-Up'. (Bonus 4)",
+              "answer": "A useful signal is clear units/labels, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Dashboard Glow-Up'. (Bonus 5)",
+              "answer": "A useful signal is clear units/labels, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Why include units and labels on charts?",
+              "answer": "They prevent misreading and improve decision speed."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Dashboard Glow-Up' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is chart overload; teams avoid it by applying owner-focused views consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Dashboard Glow-Up' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is chart overload; teams avoid it by applying owner-focused views consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Dashboard Glow-Up' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is chart overload; teams avoid it by applying owner-focused views consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Dashboard Glow-Up' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is chart overload; teams avoid it by applying owner-focused views consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What should top-row dashboard widgets usually show?",
+              "answer": "Golden signals like latency, traffic, errors, and saturation."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Dashboard Glow-Up'? (Bonus 2)",
+              "answer": "A high-impact habit is owner-focused views, paired with routine review of clear units/labels."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Dashboard Glow-Up'? (Bonus 3)",
+              "answer": "A high-impact habit is owner-focused views, paired with routine review of clear units/labels."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Dashboard Glow-Up'? (Bonus 4)",
+              "answer": "A high-impact habit is owner-focused views, paired with routine review of clear units/labels."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Dashboard Glow-Up'? (Bonus 5)",
+              "answer": "A high-impact habit is owner-focused views, paired with routine review of clear units/labels."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What is the best test of a dashboard redesign?",
+              "answer": "Teams detect and diagnose incidents faster with less confusion."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Dashboard Glow-Up' effectively? (Bonus 2)",
+              "answer": "Treat golden signals as a system-level practice, measure with clear units/labels, and continuously refine via owner-focused views."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Dashboard Glow-Up' effectively? (Bonus 3)",
+              "answer": "Treat golden signals as a system-level practice, measure with clear units/labels, and continuously refine via owner-focused views."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Dashboard Glow-Up' effectively? (Bonus 4)",
+              "answer": "Treat golden signals as a system-level practice, measure with clear units/labels, and continuously refine via owner-focused views."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Dashboard Glow-Up' effectively? (Bonus 5)",
+              "answer": "Treat golden signals as a system-level practice, measure with clear units/labels, and continuously refine via owner-focused views."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Alert Fatigue Hall of Fame",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is alert fatigue?",
+              "answer": "When too many alerts cause responders to ignore or miss critical ones."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Alert Fatigue Hall of Fame' teams should know? (Bonus 2)",
+              "answer": "A core idea is actionable alerts, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Alert Fatigue Hall of Fame' teams should know? (Bonus 3)",
+              "answer": "A core idea is actionable alerts, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Alert Fatigue Hall of Fame' teams should know? (Bonus 4)",
+              "answer": "A core idea is actionable alerts, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Alert Fatigue Hall of Fame' teams should know? (Bonus 5)",
+              "answer": "A core idea is actionable alerts, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Name one way to reduce noisy alerts.",
+              "answer": "Tune thresholds, add windows, or deduplicate notifications."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Alert Fatigue Hall of Fame'. (Bonus 2)",
+              "answer": "A useful signal is signal-to-noise ratio, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Alert Fatigue Hall of Fame'. (Bonus 3)",
+              "answer": "A useful signal is signal-to-noise ratio, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Alert Fatigue Hall of Fame'. (Bonus 4)",
+              "answer": "A useful signal is signal-to-noise ratio, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Alert Fatigue Hall of Fame'. (Bonus 5)",
+              "answer": "A useful signal is signal-to-noise ratio, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Why should alerts include runbook links?",
+              "answer": "To speed up triage and reduce decision friction."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Alert Fatigue Hall of Fame' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is non-actionable pages; teams avoid it by applying threshold tuning consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Alert Fatigue Hall of Fame' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is non-actionable pages; teams avoid it by applying threshold tuning consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Alert Fatigue Hall of Fame' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is non-actionable pages; teams avoid it by applying threshold tuning consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Alert Fatigue Hall of Fame' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is non-actionable pages; teams avoid it by applying threshold tuning consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What metric tracks useful vs noisy paging behavior?",
+              "answer": "Signal-to-noise ratio (or actionable alert rate)."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Alert Fatigue Hall of Fame'? (Bonus 2)",
+              "answer": "A high-impact habit is threshold tuning, paired with routine review of signal-to-noise ratio."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Alert Fatigue Hall of Fame'? (Bonus 3)",
+              "answer": "A high-impact habit is threshold tuning, paired with routine review of signal-to-noise ratio."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Alert Fatigue Hall of Fame'? (Bonus 4)",
+              "answer": "A high-impact habit is threshold tuning, paired with routine review of signal-to-noise ratio."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Alert Fatigue Hall of Fame'? (Bonus 5)",
+              "answer": "A high-impact habit is threshold tuning, paired with routine review of signal-to-noise ratio."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What is a healthy goal for paging alerts?",
+              "answer": "Each page should be actionable, urgent, and tied to user impact."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Alert Fatigue Hall of Fame' effectively? (Bonus 2)",
+              "answer": "Treat actionable alerts as a system-level practice, measure with signal-to-noise ratio, and continuously refine via threshold tuning."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Alert Fatigue Hall of Fame' effectively? (Bonus 3)",
+              "answer": "Treat actionable alerts as a system-level practice, measure with signal-to-noise ratio, and continuously refine via threshold tuning."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Alert Fatigue Hall of Fame' effectively? (Bonus 4)",
+              "answer": "Treat actionable alerts as a system-level practice, measure with signal-to-noise ratio, and continuously refine via threshold tuning."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Alert Fatigue Hall of Fame' effectively? (Bonus 5)",
+              "answer": "Treat actionable alerts as a system-level practice, measure with signal-to-noise ratio, and continuously refine via threshold tuning."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Latency Legends",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What does latency measure?",
+              "answer": "How long a request takes from start to finish."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Latency Legends' teams should know? (Bonus 2)",
+              "answer": "A core idea is tail latency, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Latency Legends' teams should know? (Bonus 3)",
+              "answer": "A core idea is tail latency, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Latency Legends' teams should know? (Bonus 4)",
+              "answer": "A core idea is tail latency, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Latency Legends' teams should know? (Bonus 5)",
+              "answer": "A core idea is tail latency, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What does p95 latency mean?",
+              "answer": "95% of requests are faster than that value."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Latency Legends'. (Bonus 2)",
+              "answer": "A useful signal is p95/p99, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Latency Legends'. (Bonus 3)",
+              "answer": "A useful signal is p95/p99, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Latency Legends'. (Bonus 4)",
+              "answer": "A useful signal is p95/p99, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Latency Legends'. (Bonus 5)",
+              "answer": "A useful signal is p95/p99, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Name one common source of high latency.",
+              "answer": "Slow database queries, network hops, or lock contention."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Latency Legends' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is average-only monitoring; teams avoid it by applying query optimization consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Latency Legends' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is average-only monitoring; teams avoid it by applying query optimization consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Latency Legends' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is average-only monitoring; teams avoid it by applying query optimization consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Latency Legends' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is average-only monitoring; teams avoid it by applying query optimization consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "Why watch tail latency instead of only averages?",
+              "answer": "Averages hide bad outliers that hurt real user experience."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Latency Legends'? (Bonus 2)",
+              "answer": "A high-impact habit is query optimization, paired with routine review of p95/p99."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Latency Legends'? (Bonus 3)",
+              "answer": "A high-impact habit is query optimization, paired with routine review of p95/p99."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Latency Legends'? (Bonus 4)",
+              "answer": "A high-impact habit is query optimization, paired with routine review of p95/p99."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Latency Legends'? (Bonus 5)",
+              "answer": "A high-impact habit is query optimization, paired with routine review of p95/p99."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What architecture pattern can reduce cross-service latency?",
+              "answer": "Caching, async processing, or reducing chatty synchronous calls."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Latency Legends' effectively? (Bonus 2)",
+              "answer": "Treat tail latency as a system-level practice, measure with p95/p99, and continuously refine via query optimization."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Latency Legends' effectively? (Bonus 3)",
+              "answer": "Treat tail latency as a system-level practice, measure with p95/p99, and continuously refine via query optimization."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Latency Legends' effectively? (Bonus 4)",
+              "answer": "Treat tail latency as a system-level practice, measure with p95/p99, and continuously refine via query optimization."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Latency Legends' effectively? (Bonus 5)",
+              "answer": "Treat tail latency as a system-level practice, measure with p95/p99, and continuously refine via query optimization."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Blameless Bingo",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What does blameless postmortem mean?",
+              "answer": "Focus on systems and learning, not blaming individuals."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Blameless Bingo' teams should know? (Bonus 2)",
+              "answer": "A core idea is learning culture, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Blameless Bingo' teams should know? (Bonus 3)",
+              "answer": "A core idea is learning culture, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Blameless Bingo' teams should know? (Bonus 4)",
+              "answer": "A core idea is learning culture, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Blameless Bingo' teams should know? (Bonus 5)",
+              "answer": "A core idea is learning culture, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Name one benefit of blameless language.",
+              "answer": "People share details openly, leading to better fixes."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Blameless Bingo'. (Bonus 2)",
+              "answer": "A useful signal is open sharing, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Blameless Bingo'. (Bonus 3)",
+              "answer": "A useful signal is open sharing, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Blameless Bingo'. (Bonus 4)",
+              "answer": "A useful signal is open sharing, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Blameless Bingo'. (Bonus 5)",
+              "answer": "A useful signal is open sharing, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What question starts a strong retrospective?",
+              "answer": "What conditions made this outcome possible?"
+            },
+            {
+              "prompt": "What is one common pitfall in 'Blameless Bingo' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is person-focused blame; teams avoid it by applying blameless PIRs consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Blameless Bingo' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is person-focused blame; teams avoid it by applying blameless PIRs consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Blameless Bingo' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is person-focused blame; teams avoid it by applying blameless PIRs consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Blameless Bingo' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is person-focused blame; teams avoid it by applying blameless PIRs consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What should an incident action item include?",
+              "answer": "Owner, due date, and specific measurable outcome."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Blameless Bingo'? (Bonus 2)",
+              "answer": "A high-impact habit is blameless PIRs, paired with routine review of open sharing."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Blameless Bingo'? (Bonus 3)",
+              "answer": "A high-impact habit is blameless PIRs, paired with routine review of open sharing."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Blameless Bingo'? (Bonus 4)",
+              "answer": "A high-impact habit is blameless PIRs, paired with routine review of open sharing."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Blameless Bingo'? (Bonus 5)",
+              "answer": "A high-impact habit is blameless PIRs, paired with routine review of open sharing."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What cultural signal shows retros are truly blameless?",
+              "answer": "People volunteer context and mistakes without fear."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Blameless Bingo' effectively? (Bonus 2)",
+              "answer": "Treat learning culture as a system-level practice, measure with open sharing, and continuously refine via blameless PIRs."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Blameless Bingo' effectively? (Bonus 3)",
+              "answer": "Treat learning culture as a system-level practice, measure with open sharing, and continuously refine via blameless PIRs."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Blameless Bingo' effectively? (Bonus 4)",
+              "answer": "Treat learning culture as a system-level practice, measure with open sharing, and continuously refine via blameless PIRs."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Blameless Bingo' effectively? (Bonus 5)",
+              "answer": "Treat learning culture as a system-level practice, measure with open sharing, and continuously refine via blameless PIRs."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Deploy or Die Trying",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is a deployment rollback?",
+              "answer": "Reverting to a previous stable release."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Deploy or Die Trying' teams should know? (Bonus 2)",
+              "answer": "A core idea is safe rollout, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Deploy or Die Trying' teams should know? (Bonus 3)",
+              "answer": "A core idea is safe rollout, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Deploy or Die Trying' teams should know? (Bonus 4)",
+              "answer": "A core idea is safe rollout, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Deploy or Die Trying' teams should know? (Bonus 5)",
+              "answer": "A core idea is safe rollout, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is a canary release?",
+              "answer": "Gradually releasing to a small subset before full rollout."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Deploy or Die Trying'. (Bonus 2)",
+              "answer": "A useful signal is error/latency deltas, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Deploy or Die Trying'. (Bonus 3)",
+              "answer": "A useful signal is error/latency deltas, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Deploy or Die Trying'. (Bonus 4)",
+              "answer": "A useful signal is error/latency deltas, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Deploy or Die Trying'. (Bonus 5)",
+              "answer": "A useful signal is error/latency deltas, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Why use feature flags in deployments?",
+              "answer": "To decouple release from exposure and reduce risk."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Deploy or Die Trying' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is big-bang deploys; teams avoid it by applying canary + rollback consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Deploy or Die Trying' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is big-bang deploys; teams avoid it by applying canary + rollback consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Deploy or Die Trying' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is big-bang deploys; teams avoid it by applying canary + rollback consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Deploy or Die Trying' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is big-bang deploys; teams avoid it by applying canary + rollback consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What should a deployment checklist include first?",
+              "answer": "Health checks, rollback plan, and stakeholder communication."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Deploy or Die Trying'? (Bonus 2)",
+              "answer": "A high-impact habit is canary + rollback, paired with routine review of error/latency deltas."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Deploy or Die Trying'? (Bonus 3)",
+              "answer": "A high-impact habit is canary + rollback, paired with routine review of error/latency deltas."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Deploy or Die Trying'? (Bonus 4)",
+              "answer": "A high-impact habit is canary + rollback, paired with routine review of error/latency deltas."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Deploy or Die Trying'? (Bonus 5)",
+              "answer": "A high-impact habit is canary + rollback, paired with routine review of error/latency deltas."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "Which metric best confirms a safe rollout in real time?",
+              "answer": "Error rate and latency compared to baseline."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Deploy or Die Trying' effectively? (Bonus 2)",
+              "answer": "Treat safe rollout as a system-level practice, measure with error/latency deltas, and continuously refine via canary + rollback."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Deploy or Die Trying' effectively? (Bonus 3)",
+              "answer": "Treat safe rollout as a system-level practice, measure with error/latency deltas, and continuously refine via canary + rollback."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Deploy or Die Trying' effectively? (Bonus 4)",
+              "answer": "Treat safe rollout as a system-level practice, measure with error/latency deltas, and continuously refine via canary + rollback."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Deploy or Die Trying' effectively? (Bonus 5)",
+              "answer": "Treat safe rollout as a system-level practice, measure with error/latency deltas, and continuously refine via canary + rollback."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SRE Mythbusters",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "True or false: More alerts always means better reliability.",
+              "answer": "False. Better signal quality matters more than volume."
+            },
+            {
+              "prompt": "What is one foundational idea in 'SRE Mythbusters' teams should know? (Bonus 2)",
+              "answer": "A core idea is reliability engineering, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'SRE Mythbusters' teams should know? (Bonus 3)",
+              "answer": "A core idea is reliability engineering, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'SRE Mythbusters' teams should know? (Bonus 4)",
+              "answer": "A core idea is reliability engineering, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'SRE Mythbusters' teams should know? (Bonus 5)",
+              "answer": "A core idea is reliability engineering, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is one myth about uptime percentages?",
+              "answer": "That 99.9% and 99.99% are almost the same in user impact."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'SRE Mythbusters'. (Bonus 2)",
+              "answer": "A useful signal is SLO/error budget, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'SRE Mythbusters'. (Bonus 3)",
+              "answer": "A useful signal is SLO/error budget, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'SRE Mythbusters'. (Bonus 4)",
+              "answer": "A useful signal is SLO/error budget, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'SRE Mythbusters'. (Bonus 5)",
+              "answer": "A useful signal is SLO/error budget, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What does an error budget represent?",
+              "answer": "Allowed unreliability within an SLO target window."
+            },
+            {
+              "prompt": "What is one common pitfall in 'SRE Mythbusters' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is heroic firefighting; teams avoid it by applying automation first consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'SRE Mythbusters' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is heroic firefighting; teams avoid it by applying automation first consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'SRE Mythbusters' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is heroic firefighting; teams avoid it by applying automation first consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'SRE Mythbusters' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is heroic firefighting; teams avoid it by applying automation first consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "Why is 'just add retries' sometimes harmful?",
+              "answer": "It can amplify load and worsen outages without backoff/jitter."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'SRE Mythbusters'? (Bonus 2)",
+              "answer": "A high-impact habit is automation first, paired with routine review of SLO/error budget."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'SRE Mythbusters'? (Bonus 3)",
+              "answer": "A high-impact habit is automation first, paired with routine review of SLO/error budget."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'SRE Mythbusters'? (Bonus 4)",
+              "answer": "A high-impact habit is automation first, paired with routine review of SLO/error budget."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'SRE Mythbusters'? (Bonus 5)",
+              "answer": "A high-impact habit is automation first, paired with routine review of SLO/error budget."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What principle replaces heroics in mature SRE teams?",
+              "answer": "Automation, standards, and resilient system design."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'SRE Mythbusters' effectively? (Bonus 2)",
+              "answer": "Treat reliability engineering as a system-level practice, measure with SLO/error budget, and continuously refine via automation first."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'SRE Mythbusters' effectively? (Bonus 3)",
+              "answer": "Treat reliability engineering as a system-level practice, measure with SLO/error budget, and continuously refine via automation first."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'SRE Mythbusters' effectively? (Bonus 4)",
+              "answer": "Treat reliability engineering as a system-level practice, measure with SLO/error budget, and continuously refine via automation first."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'SRE Mythbusters' effectively? (Bonus 5)",
+              "answer": "Treat reliability engineering as a system-level practice, measure with SLO/error budget, and continuously refine via automation first."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Observability Pet Peeves",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "Name one common observability pet peeve.",
+              "answer": "Unlabeled charts or missing units."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Observability Pet Peeves' teams should know? (Bonus 2)",
+              "answer": "A core idea is telemetry hygiene, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Observability Pet Peeves' teams should know? (Bonus 3)",
+              "answer": "A core idea is telemetry hygiene, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Observability Pet Peeves' teams should know? (Bonus 4)",
+              "answer": "A core idea is telemetry hygiene, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Observability Pet Peeves' teams should know? (Bonus 5)",
+              "answer": "A core idea is telemetry hygiene, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "Why are inconsistent service names frustrating?",
+              "answer": "They break filtering, grouping, and cross-team clarity."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Observability Pet Peeves'. (Bonus 2)",
+              "answer": "A useful signal is consistent naming, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Observability Pet Peeves'. (Bonus 3)",
+              "answer": "A useful signal is consistent naming, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Observability Pet Peeves'. (Bonus 4)",
+              "answer": "A useful signal is consistent naming, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Observability Pet Peeves'. (Bonus 5)",
+              "answer": "A useful signal is consistent naming, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "What happens when logs miss request IDs?",
+              "answer": "Root-cause investigation gets slower and more manual."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Observability Pet Peeves' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is missing context; teams avoid it by applying tag standards consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Observability Pet Peeves' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is missing context; teams avoid it by applying tag standards consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Observability Pet Peeves' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is missing context; teams avoid it by applying tag standards consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Observability Pet Peeves' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is missing context; teams avoid it by applying tag standards consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "Why are broad wildcard alerts often noisy?",
+              "answer": "They lack context and trigger on non-actionable events."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Observability Pet Peeves'? (Bonus 2)",
+              "answer": "A high-impact habit is tag standards, paired with routine review of consistent naming."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Observability Pet Peeves'? (Bonus 3)",
+              "answer": "A high-impact habit is tag standards, paired with routine review of consistent naming."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Observability Pet Peeves'? (Bonus 4)",
+              "answer": "A high-impact habit is tag standards, paired with routine review of consistent naming."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Observability Pet Peeves'? (Bonus 5)",
+              "answer": "A high-impact habit is tag standards, paired with routine review of consistent naming."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "What governance habit reduces observability chaos?",
+              "answer": "Shared naming/tagging conventions with regular hygiene reviews."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Observability Pet Peeves' effectively? (Bonus 2)",
+              "answer": "Treat telemetry hygiene as a system-level practice, measure with consistent naming, and continuously refine via tag standards."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Observability Pet Peeves' effectively? (Bonus 3)",
+              "answer": "Treat telemetry hygiene as a system-level practice, measure with consistent naming, and continuously refine via tag standards."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Observability Pet Peeves' effectively? (Bonus 4)",
+              "answer": "Treat telemetry hygiene as a system-level practice, measure with consistent naming, and continuously refine via tag standards."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Observability Pet Peeves' effectively? (Bonus 5)",
+              "answer": "Treat telemetry hygiene as a system-level practice, measure with consistent naming, and continuously refine via tag standards."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chaos Confessions",
+      "questionLevels": [
+        {
+          "level": 1,
+          "difficulty": 100,
+          "questions": [
+            {
+              "prompt": "What is chaos engineering in one sentence?",
+              "answer": "Safely testing failures to improve system resilience."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Chaos Confessions' teams should know? (Bonus 2)",
+              "answer": "A core idea is controlled experiments, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Chaos Confessions' teams should know? (Bonus 3)",
+              "answer": "A core idea is controlled experiments, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Chaos Confessions' teams should know? (Bonus 4)",
+              "answer": "A core idea is controlled experiments, which improves day-to-day reliability decisions."
+            },
+            {
+              "prompt": "What is one foundational idea in 'Chaos Confessions' teams should know? (Bonus 5)",
+              "answer": "A core idea is controlled experiments, which improves day-to-day reliability decisions."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "difficulty": 200,
+          "questions": [
+            {
+              "prompt": "What is a blast radius in experiments?",
+              "answer": "The scope of users/systems that could be affected."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Chaos Confessions'. (Bonus 2)",
+              "answer": "A useful signal is defined blast radius, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Chaos Confessions'. (Bonus 3)",
+              "answer": "A useful signal is defined blast radius, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Chaos Confessions'. (Bonus 4)",
+              "answer": "A useful signal is defined blast radius, because it highlights meaningful service behavior quickly."
+            },
+            {
+              "prompt": "Name one practical signal to watch in 'Chaos Confessions'. (Bonus 5)",
+              "answer": "A useful signal is defined blast radius, because it highlights meaningful service behavior quickly."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "difficulty": 300,
+          "questions": [
+            {
+              "prompt": "Why start chaos tests in lower environments first?",
+              "answer": "To validate hypotheses and safety before production impact."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Chaos Confessions' and how do teams avoid it? (Bonus 2)",
+              "answer": "A common pitfall is unguarded production tests; teams avoid it by applying abort conditions consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Chaos Confessions' and how do teams avoid it? (Bonus 3)",
+              "answer": "A common pitfall is unguarded production tests; teams avoid it by applying abort conditions consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Chaos Confessions' and how do teams avoid it? (Bonus 4)",
+              "answer": "A common pitfall is unguarded production tests; teams avoid it by applying abort conditions consistently."
+            },
+            {
+              "prompt": "What is one common pitfall in 'Chaos Confessions' and how do teams avoid it? (Bonus 5)",
+              "answer": "A common pitfall is unguarded production tests; teams avoid it by applying abort conditions consistently."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "difficulty": 400,
+          "questions": [
+            {
+              "prompt": "What makes a chaos experiment successful even if things break?",
+              "answer": "You learn, improve controls, and reduce future incident risk."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Chaos Confessions'? (Bonus 2)",
+              "answer": "A high-impact habit is abort conditions, paired with routine review of defined blast radius."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Chaos Confessions'? (Bonus 3)",
+              "answer": "A high-impact habit is abort conditions, paired with routine review of defined blast radius."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Chaos Confessions'? (Bonus 4)",
+              "answer": "A high-impact habit is abort conditions, paired with routine review of defined blast radius."
+            },
+            {
+              "prompt": "What team habit most improves outcomes in 'Chaos Confessions'? (Bonus 5)",
+              "answer": "A high-impact habit is abort conditions, paired with routine review of defined blast radius."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "difficulty": 500,
+          "questions": [
+            {
+              "prompt": "Which guardrail is essential before running production chaos tests?",
+              "answer": "Clear abort conditions and real-time monitoring/ownership."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Chaos Confessions' effectively? (Bonus 2)",
+              "answer": "Treat controlled experiments as a system-level practice, measure with defined blast radius, and continuously refine via abort conditions."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Chaos Confessions' effectively? (Bonus 3)",
+              "answer": "Treat controlled experiments as a system-level practice, measure with defined blast radius, and continuously refine via abort conditions."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Chaos Confessions' effectively? (Bonus 4)",
+              "answer": "Treat controlled experiments as a system-level practice, measure with defined blast radius, and continuously refine via abort conditions."
+            },
+            {
+              "prompt": "What advanced principle helps scale 'Chaos Confessions' effectively? (Bonus 5)",
+              "answer": "Treat controlled experiments as a system-level practice, measure with defined blast radius, and continuously refine via abort conditions."
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
