@@ -1,201 +1,6 @@
 {
     "categories": [
         {
-  "name": "NEW RELIC (GENERAL)",
-  "questionLevels": [
-    {
-      "level": 1,
-      "difficulty": 100,
-      "questions": [
-        { "prompt": "What does APM stand for?", "answer": "Application Performance Monitoring." },
-        { "prompt": "What is a 'service' in New Relic?", "answer": "An instrumented application/component reported as an entity (e.g., APM service) producing telemetry." },
-        { "prompt": "Name one of the three pillars of observability.", "answer": "Metrics, logs, or traces." },
-        { "prompt": "What is a dashboard used for in New Relic?", "answer": "To visualize and share charts/widgets from NRDB data." },
-        { "prompt": "What is an alert condition used for?", "answer": "To detect an issue (based on a signal) and notify via an alert policy/workflow." }
-      ]
-    },
-    {
-      "level": 2,
-      "difficulty": 200,
-      "questions": [
-        { "prompt": "What is NRDB?", "answer": "New Relic Database—the platform’s telemetry data store queried by NRQL." },
-        { "prompt": "What does 'entity' mean in New Relic?", "answer": "A monitored thing (service, host, browser app, k8s cluster, etc.) with a unique identity." },
-        { "prompt": "What is distributed tracing?", "answer": "Tracing requests end-to-end across services using spans/trace context." },
-        { "prompt": "What is OpenTelemetry (OTel) commonly used for with New Relic?", "answer": "Vendor-neutral collection/export of traces/metrics/logs into New Relic." },
-        { "prompt": "What is a SLI vs SLO?", "answer": "SLI is the metric; SLO is the target/threshold for that metric." }
-      ]
-    },
-    {
-      "level": 3,
-      "difficulty": 300,
-      "questions": [
-        { "prompt": "What is NerdGraph?", "answer": "New Relic’s GraphQL API for querying and managing data/configuration." },
-        { "prompt": "What is a 'span'?", "answer": "A timed operation within a trace (a unit of work with attributes)." },
-        { "prompt": "Why would you add 'custom attributes' to telemetry?", "answer": "To enable better filtering/faceting, correlation, and richer context in charts/alerts/traces." },
-        { "prompt": "What does 'Golden Metrics' typically refer to in APM?", "answer": "Latency, traffic/throughput, errors, and saturation (or similar core health signals)." },
-        { "prompt": "What is 'service map' used for?", "answer": "To visualize dependencies between services/entities and navigate to related telemetry." }
-      ]
-    },
-    {
-      "level": 4,
-      "difficulty": 400,
-      "questions": [
-        { "prompt": "What is the difference between logs in context and traces in context?", "answer": "Logs in context pivot from errors/requests to relevant logs; traces in context pivot to trace/span data for the same work." },
-        { "prompt": "What is sampling in distributed tracing?", "answer": "Recording only a subset of traces/spans to control volume/cost while retaining visibility." },
-        { "prompt": "What’s a practical way to correlate logs and traces?", "answer": "Include trace.id/span.id in logs (or use automatic correlation via agents/OTel) so logs can link to traces." },
-        { "prompt": "What is an 'anomaly' alert vs a static threshold alert?", "answer": "Anomaly adapts to baseline behavior; static uses fixed thresholds." },
-        { "prompt": "Why use tags/labels on entities?", "answer": "To organize, filter, and scope dashboards/alerts (e.g., env=prod, team=payments)." }
-      ]
-    },
-    {
-      "level": 5,
-      "difficulty": 500,
-      "questions": [
-        { "prompt": "What problem does 'high cardinality' cause in observability?", "answer": "Explodes metric/log/attribute dimensionality, increasing cost and reducing query/aggregation efficiency." },
-        { "prompt": "What’s a safe way to add user identifiers to telemetry?", "answer": "Use hashed/pseudonymous IDs and avoid PII; apply data governance/attribute allowlists." },
-        { "prompt": "What is an incident workflow trying to optimize?", "answer": "Fast detection, correct routing, clear ownership, and reduced mean time to acknowledge/resolve (MTTA/MTTR)." },
-        { "prompt": "How would you validate an alert condition before rolling it out widely?", "answer": "Test against historical data, tune thresholds, use preview/testing, and stage rollout to avoid noise." },
-        { "prompt": "What’s a good strategy for instrumenting a large system incrementally?", "answer": "Start with critical paths/services, add standard attributes, ensure trace propagation, then expand coverage iteratively." }
-      ]
-    }
-  ]
-},
-        {
-            "name": "LET’S SPEAK NRQL",
-            "questionLevels": [
-                {
-                    "level": 1,
-                    "difficulty": 100,
-                    "questions": [
-                        {
-                            "prompt": "Construct a query that returns the average duration per application over the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write an NRQL query to count all transactions in the last 30 minutes.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nSINCE 30 minutes AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the top 10 applications by transaction count in the last day.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nFACET appName\nLIMIT 10\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to return the latest transaction duration for each app.",
-                            "answer": "FROM Transaction\nSELECT latest(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compute the average duration for a single app named 'MyApp' over the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 1 hour AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 2,
-                    "difficulty": 200,
-                    "questions": [
-                        {
-                            "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that lists all event types in an account.",
-                            "answer": "SHOW EVENT TYPES\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to list the top 20 transaction names by average duration over the last 6 hours.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET name\nLIMIT 20\nSINCE 6 hours AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show error percentage for each application over the last hour (hint: filter()).",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compare the average duration this hour vs. one hour ago for a single app.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 2 hours AGO\nCOMPARE WITH 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the 95th percentile of duration by app over the last 3 hours.",
-                            "answer": "FROM Transaction\nSELECT percentile(duration, 95)\nFACET appName\nLIMIT max\nSINCE 3 hours AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 3,
-                    "difficulty": 300,
-                    "questions": [
-                        {
-                            "prompt": "Create a query that calculates the number of transactions divided into 10 buckets based on duration (hint: buckets()).",
-                            "answer": "FROM Transaction\nSELECT count(*)\nFACET buckets(duration, 0, 10, 10)\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show average duration over time in 1-minute timeseries for the last hour.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nTIMESERIES 1 minute\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the slowest (max) transaction duration per app in the last hour.",
-                            "answer": "FROM Transaction\nSELECT max(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query that returns unique users (uniqueCount) per app over the last day.",
-                            "answer": "FROM Transaction\nSELECT uniqueCount(user)\nFACET appName\nLIMIT max\nSINCE 1 day AGO"
-                        },
-                        {
-                            "prompt": "Write a query to show the top 5 endpoints by 99th percentile duration in the last 24 hours.",
-                            "answer": "FROM Transaction\nSELECT percentile(duration, 99)\nFACET name\nLIMIT 5\nSINCE 24 hours AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 4,
-                    "difficulty": 400,
-                    "questions": [
-                        {
-                            "prompt": "Create a query that returns the percentage of TransactionError events relative to Transaction events over the last hour.",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query to alert on apps where error percentage is above 2% (return appName and errorPct).",
-                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorPct\nFACET appName\nLIMIT max\nSINCE 10 minutes AGO\nHAVING errorPct > 2"
-                        },
-                        {
-                            "prompt": "Write a query to calculate Apdex by app (target 0.5s) over the last hour.",
-                            "answer": "FROM Transaction\nSELECT apdex(duration, 0.5)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
-                        },
-                        {
-                            "prompt": "Write a query that correlates average duration with request method (GET/POST) over the last 6 hours.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET request.method\nLIMIT max\nSINCE 6 hours AGO"
-                        },
-                        {
-                            "prompt": "Write a query to find transactions with unusually high duration using a WHERE clause threshold of 2 seconds.",
-                            "answer": "FROM Transaction\nSELECT count(*)\nWHERE duration > 2\nFACET name\nLIMIT 20\nSINCE 1 hour AGO"
-                        }
-                    ]
-                },
-                {
-                    "level": 5,
-                    "difficulty": 500,
-                    "questions": [
-                        {
-                            "prompt": "A threshold for a slow application is 0.3 seconds on average. Write a query to show only apps whose average duration exceeds 0.3s over the last hour.",
-                            "answer": "FROM (FROM Transaction SELECT average(duration) AS avgDuration FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(avgDuration)\nWHERE avgDuration > 0.3\nLIMIT max"
-                        },
-                        {
-                            "prompt": "Write a nested query that returns apps whose 95th percentile duration is above 1 second in the last hour.",
-                            "answer": "FROM (FROM Transaction SELECT percentile(duration, 95) AS p95 FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(p95)\nWHERE p95 > 1\nLIMIT max"
-                        },
-                        {
-                            "prompt": "Write a query that shows the ratio of erroring transactions to total transactions per app and filters to only apps with >100 total transactions.",
-                            "answer": "FROM Transaction, TransactionError\nSELECT filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorRatio\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nHAVING filter(count(*), WHERE eventType() = 'Transaction') > 100"
-                        },
-                        {
-                            "prompt": "Write a query to identify the top 10 apps by throughput (rpm) using rate(count(*), 1 minute) over the last 30 minutes.",
-                            "answer": "FROM Transaction\nSELECT rate(count(*), 1 minute) AS rpm\nFACET appName\nLIMIT 10\nSINCE 30 minutes AGO"
-                        },
-                        {
-                            "prompt": "Write a query to compute average duration for each app and compare it with the same period one day ago.",
-                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nCOMPARE WITH 1 day AGO"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "name": "AWS",
             "questionLevels": [
                 {
@@ -331,6 +136,141 @@
             ]
         },
         {
+            "name": "New Relic",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What does APM stand for?",
+                            "answer": "Application Performance Monitoring."
+                        },
+                        {
+                            "prompt": "What is a 'service' in New Relic?",
+                            "answer": "An instrumented application/component reported as an entity (e.g., APM service) producing telemetry."
+                        },
+                        {
+                            "prompt": "Name one of the three pillars of observability.",
+                            "answer": "Metrics, logs, or traces."
+                        },
+                        {
+                            "prompt": "What is a dashboard used for in New Relic?",
+                            "answer": "To visualize and share charts/widgets from NRDB data."
+                        },
+                        {
+                            "prompt": "What is an alert condition used for?",
+                            "answer": "To detect an issue (based on a signal) and notify via an alert policy/workflow."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is NRDB?",
+                            "answer": "New Relic Database—the platform’s telemetry data store queried by NRQL."
+                        },
+                        {
+                            "prompt": "What does 'entity' mean in New Relic?",
+                            "answer": "A monitored thing (service, host, browser app, k8s cluster, etc.) with a unique identity."
+                        },
+                        {
+                            "prompt": "What is distributed tracing?",
+                            "answer": "Tracing requests end-to-end across services using spans/trace context."
+                        },
+                        {
+                            "prompt": "What is OpenTelemetry (OTel) commonly used for with New Relic?",
+                            "answer": "Vendor-neutral collection/export of traces/metrics/logs into New Relic."
+                        },
+                        {
+                            "prompt": "What is a SLI vs SLO?",
+                            "answer": "SLI is the metric; SLO is the target/threshold for that metric."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What is NerdGraph?",
+                            "answer": "New Relic’s GraphQL API for querying and managing data/configuration."
+                        },
+                        {
+                            "prompt": "What is a 'span'?",
+                            "answer": "A timed operation within a trace (a unit of work with attributes)."
+                        },
+                        {
+                            "prompt": "Why would you add 'custom attributes' to telemetry?",
+                            "answer": "To enable better filtering/faceting, correlation, and richer context in charts/alerts/traces."
+                        },
+                        {
+                            "prompt": "What does 'Golden Metrics' typically refer to in APM?",
+                            "answer": "Latency, traffic/throughput, errors, and saturation (or similar core health signals)."
+                        },
+                        {
+                            "prompt": "What is 'service map' used for?",
+                            "answer": "To visualize dependencies between services/entities and navigate to related telemetry."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What is the difference between logs in context and traces in context?",
+                            "answer": "Logs in context pivot from errors/requests to relevant logs; traces in context pivot to trace/span data for the same work."
+                        },
+                        {
+                            "prompt": "What is sampling in distributed tracing?",
+                            "answer": "Recording only a subset of traces/spans to control volume/cost while retaining visibility."
+                        },
+                        {
+                            "prompt": "What’s a practical way to correlate logs and traces?",
+                            "answer": "Include trace.id/span.id in logs (or use automatic correlation via agents/OTel) so logs can link to traces."
+                        },
+                        {
+                            "prompt": "What is an 'anomaly' alert vs a static threshold alert?",
+                            "answer": "Anomaly adapts to baseline behavior; static uses fixed thresholds."
+                        },
+                        {
+                            "prompt": "Why use tags/labels on entities?",
+                            "answer": "To organize, filter, and scope dashboards/alerts (e.g., env=prod, team=payments)."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What problem does 'high cardinality' cause in observability?",
+                            "answer": "Explodes metric/log/attribute dimensionality, increasing cost and reducing query/aggregation efficiency."
+                        },
+                        {
+                            "prompt": "What’s a safe way to add user identifiers to telemetry?",
+                            "answer": "Use hashed/pseudonymous IDs and avoid PII; apply data governance/attribute allowlists."
+                        },
+                        {
+                            "prompt": "What is an incident workflow trying to optimize?",
+                            "answer": "Fast detection, correct routing, clear ownership, and reduced mean time to acknowledge/resolve (MTTA/MTTR)."
+                        },
+                        {
+                            "prompt": "How would you validate an alert condition before rolling it out widely?",
+                            "answer": "Test against historical data, tune thresholds, use preview/testing, and stage rollout to avoid noise."
+                        },
+                        {
+                            "prompt": "What’s a good strategy for instrumenting a large system incrementally?",
+                            "answer": "Start with critical paths/services, add standard attributes, ensure trace propagation, then expand coverage iteratively."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "TECH GEOGRAPHY",
             "questionLevels": [
                 {
@@ -460,6 +400,141 @@
                         {
                             "prompt": "What is a post-incident review (PIR)?",
                             "answer": "A blameless analysis to learn from an incident and prevent recurrence."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "LET’S SPEAK NRQL",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "Construct a query that returns the average duration per application over the last hour.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write an NRQL query to count all transactions in the last 30 minutes.",
+                            "answer": "FROM Transaction\nSELECT count(*)\nSINCE 30 minutes AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show the top 10 applications by transaction count in the last day.",
+                            "answer": "FROM Transaction\nSELECT count(*)\nFACET appName\nLIMIT 10\nSINCE 1 day AGO"
+                        },
+                        {
+                            "prompt": "Write a query to return the latest transaction duration for each app.",
+                            "answer": "FROM Transaction\nSELECT latest(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to compute the average duration for a single app named 'MyApp' over the last hour.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 1 hour AGO"
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "The current total eventType limit is 250 per account over a given 24-hour period. Create a query that lists all event types in an account.",
+                            "answer": "SHOW EVENT TYPES\nSINCE 1 day AGO"
+                        },
+                        {
+                            "prompt": "Write a query to list the top 20 transaction names by average duration over the last 6 hours.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET name\nLIMIT 20\nSINCE 6 hours AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show error percentage for each application over the last hour (hint: filter()).",
+                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to compare the average duration this hour vs. one hour ago for a single app.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nWHERE appName = 'MyApp'\nSINCE 2 hours AGO\nCOMPARE WITH 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show the 95th percentile of duration by app over the last 3 hours.",
+                            "answer": "FROM Transaction\nSELECT percentile(duration, 95)\nFACET appName\nLIMIT max\nSINCE 3 hours AGO"
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "Create a query that calculates the number of transactions divided into 10 buckets based on duration (hint: buckets()).",
+                            "answer": "FROM Transaction\nSELECT count(*)\nFACET buckets(duration, 0, 10, 10)\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show average duration over time in 1-minute timeseries for the last hour.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nTIMESERIES 1 minute\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show the slowest (max) transaction duration per app in the last hour.",
+                            "answer": "FROM Transaction\nSELECT max(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query that returns unique users (uniqueCount) per app over the last day.",
+                            "answer": "FROM Transaction\nSELECT uniqueCount(user)\nFACET appName\nLIMIT max\nSINCE 1 day AGO"
+                        },
+                        {
+                            "prompt": "Write a query to show the top 5 endpoints by 99th percentile duration in the last 24 hours.",
+                            "answer": "FROM Transaction\nSELECT percentile(duration, 99)\nFACET name\nLIMIT 5\nSINCE 24 hours AGO"
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "Create a query that returns the percentage of TransactionError events relative to Transaction events over the last hour.",
+                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS 'errorPct'\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query to alert on apps where error percentage is above 2% (return appName and errorPct).",
+                            "answer": "FROM Transaction, TransactionError\nSELECT 100 * filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorPct\nFACET appName\nLIMIT max\nSINCE 10 minutes AGO\nHAVING errorPct > 2"
+                        },
+                        {
+                            "prompt": "Write a query to calculate Apdex by app (target 0.5s) over the last hour.",
+                            "answer": "FROM Transaction\nSELECT apdex(duration, 0.5)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO"
+                        },
+                        {
+                            "prompt": "Write a query that correlates average duration with request method (GET/POST) over the last 6 hours.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET request.method\nLIMIT max\nSINCE 6 hours AGO"
+                        },
+                        {
+                            "prompt": "Write a query to find transactions with unusually high duration using a WHERE clause threshold of 2 seconds.",
+                            "answer": "FROM Transaction\nSELECT count(*)\nWHERE duration > 2\nFACET name\nLIMIT 20\nSINCE 1 hour AGO"
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "A threshold for a slow application is 0.3 seconds on average. Write a query to show only apps whose average duration exceeds 0.3s over the last hour.",
+                            "answer": "FROM (FROM Transaction SELECT average(duration) AS avgDuration FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(avgDuration)\nWHERE avgDuration > 0.3\nLIMIT max"
+                        },
+                        {
+                            "prompt": "Write a nested query that returns apps whose 95th percentile duration is above 1 second in the last hour.",
+                            "answer": "FROM (FROM Transaction SELECT percentile(duration, 95) AS p95 FACET appName LIMIT max SINCE 1 hour AGO)\nSELECT latest(p95)\nWHERE p95 > 1\nLIMIT max"
+                        },
+                        {
+                            "prompt": "Write a query that shows the ratio of erroring transactions to total transactions per app and filters to only apps with >100 total transactions.",
+                            "answer": "FROM Transaction, TransactionError\nSELECT filter(count(*), WHERE eventType() = 'TransactionError') / filter(count(*), WHERE eventType() = 'Transaction') AS errorRatio\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nHAVING filter(count(*), WHERE eventType() = 'Transaction') > 100"
+                        },
+                        {
+                            "prompt": "Write a query to identify the top 10 apps by throughput (rpm) using rate(count(*), 1 minute) over the last 30 minutes.",
+                            "answer": "FROM Transaction\nSELECT rate(count(*), 1 minute) AS rpm\nFACET appName\nLIMIT 10\nSINCE 30 minutes AGO"
+                        },
+                        {
+                            "prompt": "Write a query to compute average duration for each app and compare it with the same period one day ago.",
+                            "answer": "FROM Transaction\nSELECT average(duration)\nFACET appName\nLIMIT max\nSINCE 1 hour AGO\nCOMPARE WITH 1 day AGO"
                         }
                     ]
                 }
