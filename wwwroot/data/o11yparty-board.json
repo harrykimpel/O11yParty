@@ -43,11 +43,11 @@
                         },
                         {
                             "prompt": "What AWS service would you use to manage containers without managing servers?",
-                            "answer": "ECS (or EKS with managed nodes/Fargate)."
+                            "answer": "ECS"
                         },
                         {
-                            "prompt": "What is the AWS service for centralized logging and metrics?",
-                            "answer": "CloudWatch"
+                            "prompt": "What is the serverless tool for orchestrating workflows?",
+                            "answer": "Step Functions"
                         },
                         {
                             "prompt": "What AWS service would you use for a managed message queue?",
@@ -87,7 +87,7 @@
                     "questions": [
                         {
                             "prompt": "What AWS service would you use for a relational database?",
-                            "answer": "RDS (Relational Database Service)"
+                            "answer": "RDS and Aurora"
                         },
                         {
                             "prompt": "Name one AWS service used for security.",
@@ -95,11 +95,11 @@
                         },
                         {
                             "prompt": "What AWS service helps protect against DDoS attacks?",
-                            "answer": "AWS Shield"
+                            "answer": "AWS Shield or WAF"
                         },
                         {
-                            "prompt": "What AWS service would you use for distributed tracing of requests?",
-                            "answer": "AWS X-Ray"
+                            "prompt": "What are the main types of EC2 instances based on cost",
+                            "answer": "On-Demand, Spot and Reserved"
                         },
                         {
                             "prompt": "What AWS service provides a managed firewall for web apps at the edge?",
@@ -112,8 +112,8 @@
                     "difficulty": 500,
                     "questions": [
                         {
-                            "prompt": "Name one AWS service used for monitoring and observability.",
-                            "answer": "CloudWatch, X-Ray, etc."
+                            "prompt": "Which Kinesis service is used to load data directly into S3 or Redshift?",
+                            "answer": "Firehose"
                         },
                         {
                             "prompt": "What AWS service would you use for infrastructure as code?",
