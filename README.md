@@ -1,6 +1,6 @@
 # O11yParty
 
-![O11yParty](./wwwroot/images/O11y-Party.png)
+![O11yParty](./Assets/O11yParty-start.png)
 
 This is a simple O11yParty-style game built with .NET 10 and ASP.NET Core Blazor.
 
