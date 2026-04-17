@@ -4,7 +4,7 @@
 @inject NewRelicBuzzService BuzzService
 @inject IJSRuntime JS
 @inject IConfiguration Configuration
-@inject NavigationManager NavigationManager
+@inject IWebHostEnvironment Environment
 @implements IDisposable
 
 <PageTitle>WTH O11yParty</PageTitle>
@@ -393,8 +393,25 @@
 
     private async Task LoadSourceCategoriesAsync()
     {
-        using var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
-        var boardJson = await http.GetStringAsync("data/o11yparty-board.json");
+        var boardPath = Path.Combine(Environment.WebRootPath, "data", "o11yparty-board.json");
+        if (!File.Exists(boardPath))
+        {
+            throw new InvalidOperationException($"Board JSON file was not found at '{boardPath}'.");
+        }
+
+        var boardJson = await File.ReadAllTextAsync(boardPath);
+        if (string.IsNullOrWhiteSpace(boardJson))
+        {
+            throw new InvalidOperationException($"Board JSON file was empty at '{boardPath}'.");
+        }
+
+        // Guard against accidentally loading an HTML file into JSON parsing.
+        if (boardJson.AsSpan().TrimStart().StartsWith("<", StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(
+                $"Expected JSON from '{boardPath}', but received HTML.");
+        }
+
         using var doc = System.Text.Json.JsonDocument.Parse(boardJson);
         var root = doc.RootElement;
         var categoriesElem = root.GetProperty("categories");
