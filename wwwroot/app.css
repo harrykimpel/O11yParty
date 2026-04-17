@@ -582,7 +582,7 @@ a {
     font-weight: 600;
 }
 
-.wth-badge.daily-double {
+.wth-badge.double-down {
     background: rgba(28, 231, 131, 0.22);
     color: var(--wth-gold);
 }
@@ -591,7 +591,7 @@ a {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.wth-daily-double {
+.wth-double-down {
     margin-top: 1rem;
     display: flex;
     gap: 0.75rem;

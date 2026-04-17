@@ -103,8 +103,8 @@
 
             <div class="wth-options">
                 <label class="wth-toggle">
-                    <input type="checkbox" @bind="_enableDailyDouble" />
-                    Daily Double
+                    <input type="checkbox" @bind="_enableDoubleDown" />
+                    Double Down
                 </label>
                 <label class="wth-toggle">
                     <input type="checkbox" @bind="_enableTimer" />
@@ -180,9 +180,9 @@
             <div class="wth-question-header">
                 <span class="wth-badge">@_currentQuestion?.CategoryName</span>
                 <span class="wth-badge">$@_currentQuestion?.Value</span>
-                @if (_currentQuestion?.IsDailyDouble == true)
+                @if (_currentQuestion?.IsDoubleDown == true)
                 {
-                    <span class="wth-badge daily-double">Daily Double</span>
+                    <span class="wth-badge double-down">Double Down</span>
                 }
                 @if (_enableTimer)
                 {
@@ -192,11 +192,11 @@
 
             <h2 class="wth-question-text">@GetPromptMarkup()</h2>
 
-            @if (_currentQuestion?.IsDailyDouble == true && _phase == GamePhase.Question)
+            @if (_currentQuestion?.IsDoubleDown == true && _phase == GamePhase.Question)
             {
-                <div class="wth-daily-double">
+                <div class="wth-double-down">
                     <label>Wager</label>
-                    <input class="wth-input small" type="number" min="100" max="@_maxWager" @bind="_dailyDoubleWager" />
+                    <input class="wth-input small" type="number" min="100" max="@_maxWager" @bind="_doubleDownWager" />
                     <span class="muted">Max @(_maxWager)</span>
                 </div>
             }
@@ -369,12 +369,12 @@
     private int _numberOfQuestions = 5;
     private O11yPartyQuestion? _currentQuestion;
     private bool _isLoaded;
-    private bool _enableDailyDouble = true;
+    private bool _enableDoubleDown = true;
     private bool _enableTimer = true;
     private bool _enableBuzzer = true;
     private int _questionSeconds = 30;
     private int _timeRemaining;
-    private int _dailyDoubleWager;
+    private int _doubleDownWager;
     private int _maxWager;
     private bool _buzzerLocked;
     private Team? _buzzedTeam;
@@ -584,12 +584,12 @@ q.Value);
         foreach (var question in _categories.SelectMany(c => c.Questions))
         {
             question.IsAnswered = false;
-            question.IsDailyDouble = false;
+            question.IsDoubleDown = false;
         }
 
-        if (_enableDailyDouble)
+        if (_enableDoubleDown)
         {
-            AssignDailyDoubles();
+            AssignDoubleDowns();
         }
 
         _phase = GamePhase.Board;
@@ -642,7 +642,10 @@ q.Value);
 
         _currentQuestion = question;
         _phase = GamePhase.Question;
-        _dailyDoubleWager = question.Value;
+        _maxWager = Math.Max(
+            _categories.SelectMany(c => c.Questions).Max(q => q.Value),
+            _teams.Max(t => t.Score));
+        _doubleDownWager = question.Value;
         _scoreApplied = false;
         ResetBuzzState();
         StartTimer();
@@ -702,8 +705,8 @@ q.Value);
             return 0;
         }
 
-        return _currentQuestion.IsDailyDouble
-        ? Math.Clamp(_dailyDoubleWager, 100, _maxWager)
+        return _currentQuestion.IsDoubleDown
+        ? Math.Clamp(_doubleDownWager, 100, _maxWager)
         : _currentQuestion.Value;
     }
 
@@ -952,7 +955,7 @@ q.Value);
         _timer = null;
     }
 
-    private void AssignDailyDoubles()
+    private void AssignDoubleDowns()
     {
         var allQuestions = _categories.SelectMany(c => c.Questions).ToList();
         if (allQuestions.Count == 0)
@@ -960,11 +963,11 @@ q.Value);
             return;
         }
 
-        var dailyDoubleCount = Math.Max(1, _categories.Count / 3);
+        var doubleDownCount = Math.Max(1, _categories.Count / 3);
         var random = Random.Shared;
-        foreach (var question in allQuestions.OrderBy(_ => random.Next()).Take(dailyDoubleCount))
+        foreach (var question in allQuestions.OrderBy(_ => random.Next()).Take(doubleDownCount))
         {
-            question.IsDailyDouble = true;
+            question.IsDoubleDown = true;
         }
     }
 
