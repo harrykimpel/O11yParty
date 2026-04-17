@@ -5,7 +5,7 @@ COPY O11yParty.csproj ./
 RUN dotnet restore O11yParty.csproj
 
 COPY . ./
-RUN dotnet publish O11yParty.csproj -c Release -o /app/publish /p:UseAppHost=false --no-restore
+RUN dotnet publish O11yParty.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
