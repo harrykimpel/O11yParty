@@ -118,6 +118,27 @@
                     Seconds per question
                     <input class="wth-input small" type="number" min="10" max="120" @bind="_questionSeconds" />
                 </label>
+                <label class="wth-toggle">
+                    Questions per category
+                    <input class="wth-input small" type="number" min="1" max="5"
+                           value="@_numberOfQuestions"
+                           @onchange="e => OnQuestionsChanged(e)" />
+                </label>
+            </div>
+
+            <div class="wth-category-picker">
+                <h3>Categories (@_selectedCategoryNames.Count selected)</h3>
+                <div class="wth-category-grid">
+                    @foreach (var cat in _sourceCategories)
+                    {
+                        var catName = cat.Name;
+                        <label class="wth-toggle">
+                            <input type="checkbox" checked="@_selectedCategoryNames.Contains(catName)"
+                                   @onchange="e => ToggleCategory(catName, (bool)(e.Value ?? false))" />
+                            @catName
+                        </label>
+                    }
+                </div>
             </div>
 
             <div class="wth-actions">
@@ -130,8 +151,8 @@
     else if (_phase == GamePhase.Board)
     {
         <section class="wth-board">
-            <div class="wth-board-grid" style="grid-template-columns: repeat(@_numberOfCategories, minmax(180px, 1fr));">
-                @foreach (var category in _categories.Take(_numberOfCategories))
+            <div class="wth-board-grid" style="grid-template-columns: repeat(@_categories.Count, minmax(180px, 1fr));">
+                @foreach (var category in _categories)
                 {
                     <div class="wth-category">
                         <div class="wth-category-title">@category.Name</div>
@@ -332,7 +353,7 @@
         get
         {
             var requiredLevels = Enumerable.Range(1, _numberOfQuestions).Select(i => i * 100).ToList();
-            return _categories.Take(_numberOfCategories).All(category =>
+            return _selectedCategoryNames.Count > 0 && _categories.All(category =>
                 requiredLevels.All(level =>
                     category.Questions.Any(q => q.Value == level)
                 )
@@ -343,6 +364,7 @@
     private readonly List<Team> _teams = new();
     private readonly List<O11yPartyCategory> _sourceCategories = new();
     private readonly List<O11yPartyCategory> _categories = new();
+    private readonly HashSet<string> _selectedCategoryNames = new();
     private int _numberOfCategories = 5;
     private int _numberOfQuestions = 5;
     private O11yPartyQuestion? _currentQuestion;
@@ -386,6 +408,14 @@
         }
 
         await LoadSourceCategoriesAsync();
+
+        // Select the first N categories by default
+        _selectedCategoryNames.Clear();
+        foreach (var cat in _sourceCategories.Take(_numberOfCategories))
+        {
+            _selectedCategoryNames.Add(cat.Name);
+        }
+
         RebuildBoardWithRandomQuestions();
 
         _isLoaded = true;
@@ -473,7 +503,7 @@
     {
         var requiredLevels = Enumerable.Range(1, _numberOfQuestions).Select(i => i * 100).ToList();
         _categories.Clear();
-        foreach (var sourceCategory in _sourceCategories.Take(_numberOfCategories))
+        foreach (var sourceCategory in _sourceCategories.Where(c => _selectedCategoryNames.Contains(c.Name)))
         {
             var catName = sourceCategory.Name;
             var questions = sourceCategory.Questions;
@@ -509,6 +539,26 @@
 
         _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q =>
 q.Value);
+    }
+
+    private void ToggleCategory(string name, bool selected)
+    {
+        if (selected)
+            _selectedCategoryNames.Add(name);
+        else
+            _selectedCategoryNames.Remove(name);
+
+        _numberOfCategories = _selectedCategoryNames.Count;
+        RebuildBoardWithRandomQuestions();
+    }
+
+    private void OnQuestionsChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var val) && val >= 1 && val <= 5)
+        {
+            _numberOfQuestions = val;
+            RebuildBoardWithRandomQuestions();
+        }
     }
 
     private void StartGame()

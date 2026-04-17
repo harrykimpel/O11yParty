@@ -440,6 +440,22 @@ a {
     margin-top: 1.5rem;
 }
 
+.wth-category-picker {
+    margin-top: 1.5rem;
+}
+
+.wth-category-picker h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.wth-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
 .wth-button {
     background: var(--wth-gold);
     color: #0b1811;
