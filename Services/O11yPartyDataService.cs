@@ -76,7 +76,7 @@ public sealed class O11yPartyDataService
                             Value = question.Value,
                             Prompt = question.Prompt,
                             Answer = question.Answer,
-                            IsDailyDouble = question.IsDailyDouble
+                            IsDoubleDown = question.IsDoubleDown
                         })
                         .ToList()
                 })

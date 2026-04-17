@@ -16,7 +16,7 @@ public sealed class O11yPartyQuestion
     public int Value { get; set; }
     public string Prompt { get; set; } = string.Empty;
     public string Answer { get; set; } = string.Empty;
-    public bool IsDailyDouble { get; set; }
+    public bool IsDoubleDown { get; set; }
 
     public string CategoryName { get; set; } = string.Empty;
     public bool IsAnswered { get; set; }

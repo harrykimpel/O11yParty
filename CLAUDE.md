@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-O11yParty is a Jeopardy-style trivia game built with C# / .NET 10 and ASP.NET Core Blazor (Interactive Server-side rendering). It's designed for team-building events with a focus on observability, cloud, and DevOps topics. Features include multi-team scoring, timers, daily doubles, and optional New Relic buzzer integration.
+O11yParty is a Jeopardy-style trivia game built with C# / .NET 10 and ASP.NET Core Blazor (Interactive Server-side rendering). It's designed for team-building events with a focus on observability, cloud, and DevOps topics. Features include multi-team scoring, timers, double downs, and optional New Relic buzzer integration.
 
 ## Commands
 
