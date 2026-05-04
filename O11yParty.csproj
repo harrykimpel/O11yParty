@@ -11,5 +11,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NewRelic.Agent" Version="10.51.0" />
+    <PackageReference Include="NewRelic.Agent.Api" Version="10.51.0" />
+  </ItemGroup>
 
 </Project>
