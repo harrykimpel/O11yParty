@@ -5,11 +5,27 @@
 @inject IJSRuntime JS
 @inject IConfiguration Configuration
 @inject IWebHostEnvironment Environment
+@inject NavigationManager Navigation
 @implements IDisposable
 
 <PageTitle>WTH O11yParty</PageTitle>
 
 <section class="wth-app">
+    @if (_activeChaos.Count > 0)
+    {
+        <div class="wth-chaos-banner" role="alert">
+            <strong>⚠ CHAOS MODE ACTIVE:</strong>
+            @string.Join(" · ", _activeChaos.Select(m => m.ToUpperInvariant()))
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(_chaosErrorMessage))
+    {
+        <div class="wth-chaos-error" role="status" aria-live="polite">
+            @_chaosErrorMessage
+        </div>
+    }
+
     @if (_showBuzzHighlight && !string.IsNullOrWhiteSpace(_buzzHighlightName))
     {
         <div class="wth-buzz-highlight" role="status" aria-live="assertive" aria-atomic="true">
@@ -388,8 +404,26 @@
     private string? _buzzHighlightName;
     private int _buzzHighlightVersion;
 
+    // Chaos / synthetic failure modes
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "chaos")]
+    public string? ChaosParam { get; set; }
+    private HashSet<string> _activeChaos = new(StringComparer.OrdinalIgnoreCase);
+    private List<byte[]> _leakedMemory = new();
+    private CancellationTokenSource? _chaosCancellation;
+    private string? _chaosErrorMessage;
+    private int _chaosErrorVersion;
+
     protected override async Task OnInitializedAsync()
     {
+        LoadChaosModes();
+
+        if (_activeChaos.Contains("slowload"))
+        {
+            Console.WriteLine("[CHAOS] slowload: injecting 4-second startup delay");
+            await Task.Delay(4000);
+        }
+
         // Read settings from configuration
         _numberOfCategories = Configuration.GetValue<int>("Board:NumberOfCategories", 5);
         _numberOfQuestions = Configuration.GetValue<int>("Board:NumberOfQuestions", 5);
@@ -418,9 +452,82 @@
 
         RebuildBoardWithRandomQuestions();
 
+        if (_activeChaos.Contains("memleak"))
+        {
+            _chaosCancellation = new CancellationTokenSource();
+            _ = RunMemoryLeakAsync(_chaosCancellation.Token);
+        }
+
         _isLoaded = true;
     }
 
+    protected override void OnParametersSet()
+    {
+        var hadMemLeakTask = _chaosCancellation is not null;
+        LoadChaosModes();
+
+        if (!_isLoaded)
+        {
+            return;
+        }
+
+        if (_activeChaos.Contains("memleak") && !hadMemLeakTask)
+        {
+            _chaosCancellation = new CancellationTokenSource();
+            _ = RunMemoryLeakAsync(_chaosCancellation.Token);
+            return;
+        }
+
+        if (!_activeChaos.Contains("memleak") && hadMemLeakTask)
+        {
+            _chaosCancellation?.Cancel();
+            _chaosCancellation?.Dispose();
+            _chaosCancellation = null;
+        }
+    }
+
+    private void LoadChaosModes()
+    {
+        _activeChaos.Clear();
+
+        var rawChaos = ChaosParam;
+        if (string.IsNullOrWhiteSpace(rawChaos))
+        {
+            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+            query.TryGetValue("chaos", out var chaosValues);
+            rawChaos = chaosValues.FirstOrDefault();
+        }
+
+        if (string.IsNullOrWhiteSpace(rawChaos))
+        {
+            return;
+        }
+
+        foreach (var mode in rawChaos.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            _activeChaos.Add(mode);
+        }
+    }
+
+    [NewRelic.Api.Agent.Transaction]
+    private async Task RunMemoryLeakAsync(CancellationToken cancellationToken)
+    {
+        Console.WriteLine("[CHAOS] memleak: starting memory leak task");
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(cancellationToken))
+            {
+                // Allocate ~1 MB per tick and hold a reference to prevent GC collection
+                _leakedMemory.Add(new byte[1024 * 1024]);
+                Console.WriteLine("[CHAOS] memleak: total leaked = {0} MB", _leakedMemory.Count);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    [NewRelic.Api.Agent.Transaction]
     private async Task LoadSourceCategoriesAsync()
     {
         var boardPath = Path.Combine(Environment.WebRootPath, "data", "o11yparty-board.json");
@@ -499,6 +606,7 @@
         }
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void RebuildBoardWithRandomQuestions()
     {
         var requiredLevels = Enumerable.Range(1, _numberOfQuestions).Select(i => i * 100).ToList();
@@ -541,6 +649,7 @@
 q.Value);
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void ToggleCategory(string name, bool selected)
     {
         if (selected)
@@ -552,6 +661,7 @@ q.Value);
         RebuildBoardWithRandomQuestions();
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void OnQuestionsChanged(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value?.ToString(), out var val) && val >= 1 && val <= 5)
@@ -561,6 +671,7 @@ q.Value);
         }
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void StartGame()
     {
         RebuildBoardWithRandomQuestions();
@@ -597,6 +708,7 @@ q.Value);
         ResetBuzzState();
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void ResetGame()
     {
         StopBuzzPolling();
@@ -606,6 +718,7 @@ q.Value);
         ResetBuzzState();
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void EndGame()
     {
         StopBuzzPolling();
@@ -633,11 +746,26 @@ q.Value);
         _teams[index].Name = value ?? string.Empty;
     }
 
-    private void SelectQuestion(O11yPartyQuestion question)
+    [NewRelic.Api.Agent.Transaction]
+    private async Task SelectQuestion(O11yPartyQuestion question)
     {
         if (question.IsAnswered)
         {
             return;
+        }
+
+        if (_activeChaos.Contains("errors") && Random.Shared.NextDouble() < 0.4)
+        {
+            Console.WriteLine("[CHAOS] errors: synthetic question load failure");
+            ShowChaosError("[CHAOS] Failed to load this question. Try selecting it again.");
+            return;
+        }
+
+        if (_activeChaos.Contains("latency"))
+        {
+            var delayMs = Random.Shared.Next(1500, 4000);
+            Console.WriteLine("[CHAOS] latency: injecting {0}ms delay", delayMs);
+            await Task.Delay(delayMs);
         }
 
         _currentQuestion = question;
@@ -650,6 +778,41 @@ q.Value);
         ResetBuzzState();
         StartTimer();
         StartBuzzPolling();
+    }
+
+    private void ShowChaosError(string message)
+    {
+        _chaosErrorMessage = message;
+        var currentVersion = ++_chaosErrorVersion;
+        _ = HideChaosErrorAfterDelayAsync(currentVersion);
+    }
+
+    private async Task HideChaosErrorAfterDelayAsync(int expectedVersion)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        if (expectedVersion != _chaosErrorVersion)
+        {
+            return;
+        }
+
+        await InvokeAsync(() =>
+        {
+            if (expectedVersion != _chaosErrorVersion)
+            {
+                return;
+            }
+
+            _chaosErrorMessage = null;
+            StateHasChanged();
+        });
     }
 
     private void RevealAnswer()
@@ -668,6 +831,7 @@ q.Value);
         ResetBuzzState();
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private void CompleteQuestion()
     {
         if (_currentQuestion is null)
@@ -690,6 +854,7 @@ q.Value);
         : GamePhase.Board;
     }
 
+    [NewRelic.Api.Agent.Transaction]
     private async void AdjustScore(Team team, int delta)
     {
         team.Score += delta;
@@ -920,7 +1085,9 @@ q.Value);
         }
 
         _timeRemaining = Math.Max(1, _questionSeconds);
-        _timer = new System.Timers.Timer(1000);
+        var timerIntervalMs = _activeChaos.Contains("timerdrift") ? 500 : 1000;
+        if (_activeChaos.Contains("timerdrift")) Console.WriteLine("[CHAOS] timerdrift: timer running at 2x speed");
+        _timer = new System.Timers.Timer(timerIntervalMs);
         _timer.Elapsed += async (_, _) =>
         {
             if (_phase != GamePhase.Question)
@@ -995,6 +1162,10 @@ q.Value);
     {
         StopBuzzPolling();
         StopTimer();
+        _chaosErrorVersion++;
+        _chaosCancellation?.Cancel();
+        _chaosCancellation?.Dispose();
+        _chaosCancellation = null;
     }
 
     private sealed class Team

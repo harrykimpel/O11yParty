@@ -61,6 +61,30 @@ To enable New Relic Browser monitoring for this application, follow these steps:
 - Use **Show Answer** to reveal the response.
 - Use the scoring buttons to award or deduct points.
 
+## Chaos / Synthetic Failure Modes
+
+O11yParty includes built-in synthetic failure modes useful for demonstrating observability tooling, practicing incident response, or running chaos engineering exercises during team-building sessions.
+
+Modes are activated by appending a `?chaos=` query parameter to the URL. Multiple modes can be combined with commas.
+
+| Mode | Behavior |
+|---|---|
+| `slowload` | Injects a 4-second artificial delay during app startup |
+| `errors` | Randomly fails ~40% of question tile clicks with a recoverable in-app error message |
+| `latency` | Adds a random 1.5–4 second delay before each question loads |
+| `memleak` | Background task allocates ~1 MB every 3 seconds, holding references to prevent garbage collection |
+| `timerdrift` | Question countdown timer ticks at 2× speed (500 ms instead of 1000 ms) |
+
+**Example URLs:**
+
+```
+/?chaos=slowload
+/?chaos=errors,latency
+/?chaos=slowload,memleak,timerdrift,errors,latency
+```
+
+When any chaos mode is active, a red banner is displayed at the top of the app confirming which modes are enabled. All synthetic failures are also logged to stdout with a `[CHAOS]` prefix, making them easy to spot in application logs or in a New Relic dashboard.
+
 ## Troubleshooting
 
 - If the HTTPS dev certificate is missing, run:
