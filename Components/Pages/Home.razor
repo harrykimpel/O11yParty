@@ -8,7 +8,7 @@
 @inject NavigationManager Navigation
 @implements IDisposable
 
-<PageTitle>WTH O11yParty</PageTitle>
+<PageTitle>O11yParty</PageTitle>
 
 <section class="wth-app">
     @if (_activeChaos.Count > 0)
@@ -36,11 +36,8 @@
         </div>
     }
 
-    <GameHeader Phase="_phase"
-                IsBoardValid="IsBoardValid"
-                NumberOfQuestions="_numberOfQuestions"
-                OnResetGame="ResetGame"
-                OnEndGame="EndGame" />
+    <GameHeader Phase="_phase" IsBoardValid="IsBoardValid" NumberOfQuestions="_numberOfQuestions"
+                OnResetGame="ResetGame" OnEndGame="EndGame" />
 
     <TeamScoreboard Teams="_teams" />
 
@@ -52,51 +49,27 @@
     }
     else if (_phase == GamePhase.Setup)
     {
-        <GameSetupPanel Teams="_teams"
-                        EnableDoubleDown="_enableDoubleDown"
-                        EnableDoubleDownChanged="v => _enableDoubleDown = v"
-                        EnableTimer="_enableTimer"
-                        EnableTimerChanged="v => _enableTimer = v"
-                        EnableBuzzer="_enableBuzzer"
-                        EnableBuzzerChanged="v => _enableBuzzer = v"
-                        QuestionSeconds="_questionSeconds"
-                        QuestionSecondsChanged="v => _questionSeconds = v"
-                        NumberOfQuestions="_numberOfQuestions"
-                        SourceCategories="_sourceCategories"
-                        SelectedCategoryNames="_selectedCategoryNames"
-                        IsBoardValid="IsBoardValid"
-                        OnTeamNameChanged="args => UpdateTeamName(args.Index, args.Value)"
-                        OnTeamRemoved="RemoveTeam"
-                        OnTeamAdded="AddTeam"
-                        OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
-                        OnCategoryToggled="args => ToggleCategory(args.Name, args.Selected)"
-                        OnStartGame="StartGame" />
+        <GameSetupPanel Teams="_teams" EnableDoubleDown="_enableDoubleDown"
+                        EnableDoubleDownChanged="v => _enableDoubleDown = v" EnableTimer="_enableTimer"
+                        EnableTimerChanged="v => _enableTimer = v" EnableBuzzer="_enableBuzzer"
+                        EnableBuzzerChanged="v => _enableBuzzer = v" QuestionSeconds="_questionSeconds"
+                        QuestionSecondsChanged="v => _questionSeconds = v" NumberOfQuestions="_numberOfQuestions"
+                        SourceCategories="_sourceCategories" SelectedCategoryNames="_selectedCategoryNames" IsBoardValid="IsBoardValid"
+                        OnTeamNameChanged="args => UpdateTeamName(args.Index, args.Value)" OnTeamRemoved="RemoveTeam"
+                        OnTeamAdded="AddTeam" OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
+                        OnCategoryToggled="args => ToggleCategory(args.Name, args.Selected)" OnStartGame="StartGame" />
     }
     else if (_phase == GamePhase.Board)
     {
-        <GameBoard Categories="_categories"
-                   NumberOfQuestions="_numberOfQuestions"
-                   OnQuestionSelected="SelectQuestion" />
+        <GameBoard Categories="_categories" NumberOfQuestions="_numberOfQuestions" OnQuestionSelected="SelectQuestion" />
     }
     else if (_phase is GamePhase.Question or GamePhase.Answer)
     {
-        <QuestionPanel Phase="_phase"
-                       CurrentQuestion="_currentQuestion"
-                       Teams="_teams"
-                       EnableTimer="_enableTimer"
-                       TimeRemaining="_timeRemaining"
-                       EnableBuzzer="_enableBuzzer"
-                       BuzzerConfigured="BuzzService.IsConfigured"
-                       BuzzerLocked="_buzzerLocked"
-                       BuzzedTeam="_buzzedTeam"
-                       RemoteBuzzedName="_remoteBuzzedName"
-                       MaxWager="_maxWager"
-                       OnBuzzIn="BuzzIn"
-                       OnBuzzReset="ResetBuzz"
-                       OnScoreAdjusted="e => AdjustScore(e.Team, e.Points)"
-                       OnRevealAnswer="RevealAnswer"
-                       OnReturnToBoard="ReturnToBoard"
-                       OnCompleteQuestion="HandleCompleteQuestion" />
+        <QuestionPanel Phase="_phase" CurrentQuestion="_currentQuestion" Teams="_teams" EnableTimer="_enableTimer"
+                       TimeRemaining="_timeRemaining" EnableBuzzer="_enableBuzzer" BuzzerConfigured="BuzzService.IsConfigured"
+                       BuzzerLocked="_buzzerLocked" BuzzedTeam="_buzzedTeam" RemoteBuzzedName="_remoteBuzzedName" MaxWager="_maxWager"
+                       OnBuzzIn="BuzzIn" OnBuzzReset="ResetBuzz" OnScoreAdjusted="e => AdjustScore(e.Team, e.Points)"
+                       OnRevealAnswer="RevealAnswer" OnReturnToBoard="ReturnToBoard" OnCompleteQuestion="HandleCompleteQuestion" />
     }
     else if (_phase == GamePhase.Winner)
     {
@@ -377,7 +350,8 @@
             });
         }
 
-        _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q => q.Value);
+        _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q =>
+q.Value);
     }
 
     [NewRelic.Api.Agent.Transaction]
