@@ -1,0 +1,165 @@
+<section class="wth-panel wth-question">
+    <div class="wth-question-header">
+        <span class="wth-badge">@CurrentQuestion?.CategoryName</span>
+        <span class="wth-badge">$@CurrentQuestion?.Value</span>
+        @if (CurrentQuestion?.IsDoubleDown == true)
+        {
+            <span class="wth-badge double-down">Double Down</span>
+        }
+        @if (EnableTimer)
+        {
+            <span class="wth-badge timer">@TimeRemaining s</span>
+        }
+    </div>
+
+    <h2 class="wth-question-text">@GetPromptMarkup()</h2>
+
+    @if (CurrentQuestion?.IsDoubleDown == true && Phase == GamePhase.Question)
+    {
+        <div class="wth-double-down">
+            <label>Wager</label>
+            <input class="wth-input small" type="number" min="100" max="@MaxWager" @bind="_doubleDownWager" />
+            <span class="muted">Max @MaxWager</span>
+        </div>
+    }
+
+    @if (EnableBuzzer && Phase == GamePhase.Question)
+    {
+        <div class="wth-buzzer">
+            <h3>Buzzer</h3>
+            @if (!BuzzerConfigured)
+            {
+                <p class="muted">Remote buzzer polling is disabled. Configure New Relic settings to enable it.</p>
+            }
+            <div class="wth-buzzer-grid">
+                @foreach (var team in Teams)
+                {
+                    <button class="wth-button small" disabled="@BuzzerLocked" @onclick="() => OnBuzzIn.InvokeAsync(team)">Buzz:
+                        @team.Name</button>
+                }
+            </div>
+
+            @if (BuzzedTeam is not null)
+            {
+                <p class="muted">Buzzed: @BuzzedTeam.Name</p>
+                <button class="wth-button ghost small" @onclick="OnBuzzReset">Reset Buzz</button>
+            }
+            else if (!string.IsNullOrWhiteSpace(RemoteBuzzedName))
+            {
+                <p class="muted">Buzzed: @RemoteBuzzedName</p>
+                <button class="wth-button ghost small" @onclick="OnBuzzReset">Reset Buzz</button>
+            }
+        </div>
+    }
+
+    @if (Phase == GamePhase.Answer)
+    {
+        <div class="wth-answer">
+            <h3>Answer</h3>
+            <p class="wth-answer-text">@GetAnswerMarkup()</p>
+        </div>
+
+        <div class="wth-score-actions">
+            <h3>Score this question</h3>
+            <p class="muted">Points: @GetQuestionPoints()</p>
+
+            @if (BuzzedTeam is not null)
+            {
+                <div class="wth-quick-score">
+                    <span>Buzzed team:</span>
+                    <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(BuzzedTeam!, GetQuestionPoints()))">Award
+                        @BuzzedTeam.Name</button>
+                    <button class="wth-button ghost small"
+                            @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(BuzzedTeam!, -GetQuestionPoints()))">Penalize @BuzzedTeam.Name</button>
+                </div>
+            }
+
+            <div class="wth-team-score-grid">
+                @foreach (var team in Teams)
+                {
+                    <div class="wth-team-score-row">
+                        <span>@team.Name</span>
+                        <div class="wth-team-score-buttons">
+                            <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, GetQuestionPoints()))">+
+                                @GetQuestionPoints()</button>
+                            <button class="wth-button ghost small"
+                                    @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, -GetQuestionPoints()))">- @GetQuestionPoints()</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="wth-actions">
+        @if (Phase == GamePhase.Question)
+        {
+            <button class="wth-button" @onclick="OnRevealAnswer">Show Answer</button>
+        }
+        <button class="wth-button ghost" @onclick="OnReturnToBoard">Back to Board</button>
+        <button class="wth-button" @onclick="() => OnCompleteQuestion.InvokeAsync(GetQuestionPoints())">Mark Answered</button>
+    </div>
+</section>
+
+@code {
+    [Parameter] public GamePhase Phase { get; set; }
+    [Parameter] public O11yPartyQuestion? CurrentQuestion { get; set; }
+    [Parameter] public IReadOnlyList<Team> Teams { get; set; } = Array.Empty<Team>();
+    [Parameter] public bool EnableTimer { get; set; }
+    [Parameter] public int TimeRemaining { get; set; }
+    [Parameter] public bool EnableBuzzer { get; set; }
+    [Parameter] public bool BuzzerConfigured { get; set; }
+    [Parameter] public bool BuzzerLocked { get; set; }
+    [Parameter] public Team? BuzzedTeam { get; set; }
+    [Parameter] public string? RemoteBuzzedName { get; set; }
+    [Parameter] public int MaxWager { get; set; }
+
+    [Parameter] public EventCallback<Team> OnBuzzIn { get; set; }
+    [Parameter] public EventCallback OnBuzzReset { get; set; }
+    [Parameter] public EventCallback<ScoreEvent> OnScoreAdjusted { get; set; }
+    [Parameter] public EventCallback OnRevealAnswer { get; set; }
+    [Parameter] public EventCallback OnReturnToBoard { get; set; }
+    [Parameter] public EventCallback<int> OnCompleteQuestion { get; set; }
+
+    private int _doubleDownWager;
+    private O11yPartyQuestion? _prevQuestion;
+
+    protected override void OnParametersSet()
+    {
+        if (CurrentQuestion != _prevQuestion)
+        {
+            _doubleDownWager = CurrentQuestion?.Value ?? 0;
+            _prevQuestion = CurrentQuestion;
+        }
+    }
+
+    private int GetQuestionPoints()
+    {
+        if (CurrentQuestion is null) return 0;
+        return CurrentQuestion.IsDoubleDown
+            ? Math.Clamp(_doubleDownWager, 100, MaxWager)
+            : CurrentQuestion.Value;
+    }
+
+    private MarkupString GetPromptMarkup() =>
+        FormatWithLineBreaks(CurrentQuestion?.Prompt ?? string.Empty);
+
+    private MarkupString GetAnswerMarkup() =>
+        FormatWithWhitespace(CurrentQuestion?.Answer ?? string.Empty);
+
+    private static MarkupString FormatWithLineBreaks(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return new MarkupString(string.Empty);
+        var encoded = System.Net.WebUtility.HtmlEncode(text);
+        encoded = encoded.Replace("\r\n", "\n").Replace("\n", "<br />");
+        return new MarkupString(encoded);
+    }
+
+    private static MarkupString FormatWithWhitespace(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return new MarkupString(string.Empty);
+        var encoded = System.Net.WebUtility.HtmlEncode(text);
+        encoded = encoded.Replace("\r\n", "\n").Replace("\t", "    ");
+        return new MarkupString(encoded);
+    }
+}
