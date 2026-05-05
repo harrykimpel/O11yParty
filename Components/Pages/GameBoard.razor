@@ -1,0 +1,29 @@
+<section class="wth-board">
+    <div class="wth-board-grid" style="grid-template-columns: repeat(@Categories.Count, minmax(180px, 1fr));">
+        @foreach (var category in Categories)
+        {
+            <div class="wth-category">
+                <div class="wth-category-title">@category.Name</div>
+                @foreach (var question in category.Questions.Take(NumberOfQuestions))
+                {
+                    <button class="wth-tile" disabled="@question.IsAnswered" @onclick="() => OnQuestionSelected.InvokeAsync(question)">
+                        @if (question.IsAnswered)
+                        {
+                            <span class="wth-tile-used">✓</span>
+                        }
+                        else
+                        {
+                            <span class="wth-tile-value">$@question.Value</span>
+                        }
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter] public IReadOnlyList<O11yPartyCategory> Categories { get; set; } = Array.Empty<O11yPartyCategory>();
+    [Parameter] public int NumberOfQuestions { get; set; }
+    [Parameter] public EventCallback<O11yPartyQuestion> OnQuestionSelected { get; set; }
+}

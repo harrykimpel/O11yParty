@@ -1,0 +1,49 @@
+<header class="wth-header-cosmic">
+    <div class="cosmic-bg">
+        <div class="cosmic-stars"></div>
+        <div class="cosmic-nebula"></div>
+        <div class="cosmic-flowers">
+            <div class="flower f1"></div>
+            <div class="flower f2"></div>
+            <div class="flower f3"></div>
+            <div class="flower f4"></div>
+            <div class="flower f5"></div>
+            <div class="flower f6"></div>
+            <div class="flower f7"></div>
+            <div class="flower f8"></div>
+            <div class="flower f9"></div>
+            <div class="flower f10"></div>
+            <div class="flower f11"></div>
+            <div class="flower f12"></div>
+        </div>
+        <div class="cosmic-glow"></div>
+    </div>
+    <div class="cosmic-content">
+        <h1 class="cosmic-title">O11y-Party</h1>
+        @if (Phase == GamePhase.Setup && !IsBoardValid)
+        {
+            <div class="muted"
+                 style="color: #ff4d4d; font-size: 1.15rem; font-weight: bold; margin: 0.5rem 0 0; text-align: center;">
+                Each selected category must have at least @NumberOfQuestions questions.
+            </div>
+        }
+        <div class="wth-controls">
+            @if (Phase is GamePhase.Board or GamePhase.Question or GamePhase.Answer)
+            {
+                <button class="wth-button ghost" @onclick="OnResetGame">New game</button>
+            }
+            @if (Phase is GamePhase.Board)
+            {
+                <button class="wth-button" @onclick="OnEndGame">Finish game</button>
+            }
+        </div>
+    </div>
+</header>
+
+@code {
+    [Parameter] public GamePhase Phase { get; set; }
+    [Parameter] public bool IsBoardValid { get; set; }
+    [Parameter] public int NumberOfQuestions { get; set; }
+    [Parameter] public EventCallback OnResetGame { get; set; }
+    [Parameter] public EventCallback OnEndGame { get; set; }
+}

@@ -1,0 +1,96 @@
+<section class="wth-panel">
+    <h2>Set up teams</h2>
+    <p class="muted">Add the team or candidate names, then start the game.</p>
+
+    <div class="wth-team-editor">
+        @for (var i = 0; i < Teams.Count; i++)
+        {
+            var teamIndex = i;
+            <div class="wth-team-row">
+                <input class="wth-input" value="@Teams[teamIndex].Name"
+                       @oninput="e => OnTeamNameChanged.InvokeAsync((teamIndex, e.Value?.ToString()))" />
+                <button class="wth-button ghost" @onclick="() => OnTeamRemoved.InvokeAsync(teamIndex)"
+                        disabled="@(Teams.Count <= 1)">Remove</button>
+            </div>
+        }
+    </div>
+
+    <div class="wth-options">
+        <label class="wth-toggle">
+            <input type="checkbox" checked="@EnableDoubleDown"
+                   @onchange="e => EnableDoubleDownChanged.InvokeAsync((bool)(e.Value ?? false))" />
+            Double Down
+        </label>
+        <label class="wth-toggle">
+            <input type="checkbox" checked="@EnableTimer"
+                   @onchange="e => EnableTimerChanged.InvokeAsync((bool)(e.Value ?? false))" />
+            Question Timer
+        </label>
+        <label class="wth-toggle">
+            <input type="checkbox" checked="@EnableBuzzer"
+                   @onchange="e => EnableBuzzerChanged.InvokeAsync((bool)(e.Value ?? false))" />
+            Buzzer Mode
+        </label>
+        <label class="wth-toggle">
+            Seconds per question
+            <input class="wth-input small" type="number" min="10" max="120" value="@QuestionSeconds"
+                   @onchange="e => QuestionSecondsChanged.InvokeAsync(int.TryParse(e.Value?.ToString(), out var s) ? s : QuestionSeconds)" />
+        </label>
+        <label class="wth-toggle">
+            Questions per category
+            <input class="wth-input small" type="number" min="1" max="5"
+                   value="@NumberOfQuestions"
+                   @onchange="e => HandleQuestionsChanged(e)" />
+        </label>
+    </div>
+
+    <div class="wth-category-picker">
+        <h3>Categories (@SelectedCategoryNames.Count selected)</h3>
+        <div class="wth-category-grid">
+            @foreach (var cat in SourceCategories)
+            {
+                var catName = cat.Name;
+                <label class="wth-toggle">
+                    <input type="checkbox" checked="@SelectedCategoryNames.Contains(catName)"
+                           @onchange="e => OnCategoryToggled.InvokeAsync((catName, (bool)(e.Value ?? false)))" />
+                    @catName
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="wth-actions">
+        <button class="wth-button ghost" @onclick="OnTeamAdded">Add Team</button>
+        <button class="wth-button" @onclick="OnStartGame"
+                disabled="@(!Teams.Any(t => !string.IsNullOrWhiteSpace(t.Name)) || !IsBoardValid)">Start Game</button>
+    </div>
+</section>
+
+@code {
+    [Parameter] public List<Team> Teams { get; set; } = new();
+    [Parameter] public bool EnableDoubleDown { get; set; }
+    [Parameter] public EventCallback<bool> EnableDoubleDownChanged { get; set; }
+    [Parameter] public bool EnableTimer { get; set; }
+    [Parameter] public EventCallback<bool> EnableTimerChanged { get; set; }
+    [Parameter] public bool EnableBuzzer { get; set; }
+    [Parameter] public EventCallback<bool> EnableBuzzerChanged { get; set; }
+    [Parameter] public int QuestionSeconds { get; set; }
+    [Parameter] public EventCallback<int> QuestionSecondsChanged { get; set; }
+    [Parameter] public int NumberOfQuestions { get; set; }
+    [Parameter] public List<O11yPartyCategory> SourceCategories { get; set; } = new();
+    [Parameter] public HashSet<string> SelectedCategoryNames { get; set; } = new();
+    [Parameter] public bool IsBoardValid { get; set; }
+
+    [Parameter] public EventCallback<(int Index, string? Value)> OnTeamNameChanged { get; set; }
+    [Parameter] public EventCallback<int> OnTeamRemoved { get; set; }
+    [Parameter] public EventCallback OnTeamAdded { get; set; }
+    [Parameter] public EventCallback<int> OnNumberOfQuestionsChanged { get; set; }
+    [Parameter] public EventCallback<(string Name, bool Selected)> OnCategoryToggled { get; set; }
+    [Parameter] public EventCallback OnStartGame { get; set; }
+
+    private void HandleQuestionsChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var val) && val >= 1 && val <= 5)
+            OnNumberOfQuestionsChanged.InvokeAsync(val);
+    }
+}

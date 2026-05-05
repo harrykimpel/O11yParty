@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @rendermode InteractiveServer
 @inject O11yPartyDataService DataService
 @inject NewRelicBuzzService BuzzService
@@ -36,60 +36,13 @@
         </div>
     }
 
-    <header class="wth-header-cosmic">
-        <div class="cosmic-bg">
-            <div class="cosmic-stars"></div>
-            <div class="cosmic-nebula"></div>
-            <div class="cosmic-flowers">
-                <div class="flower f1"></div>
-                <div class="flower f2"></div>
-                <div class="flower f3"></div>
-                <div class="flower f4"></div>
-                <div class="flower f5"></div>
-                <div class="flower f6"></div>
-                <div class="flower f7"></div>
-                <div class="flower f8"></div>
-                <div class="flower f9"></div>
-                <div class="flower f10"></div>
-                <div class="flower f11"></div>
-                <div class="flower f12"></div>
-            </div>
-            <div class="cosmic-glow"></div>
-        </div>
-        <div class="cosmic-content">
-            <h1 class="cosmic-title">O11y-Party</h1>
-            @if (_phase == GamePhase.Setup && !IsBoardValid)
-            {
-                <div class="muted"
-                     style="color: #ff4d4d; font-size: 1.15rem; font-weight: bold; margin: 0.5rem 0 0; text-align: center;">
-                    Each selected category must have at least @_numberOfQuestions questions.
-                </div>
-            }
-            <div class="wth-controls">
-                @if (_phase is GamePhase.Board or GamePhase.Question or GamePhase.Answer)
-                {
-                    <button class="wth-button ghost" @onclick="ResetGame">New game</button>
-                }
-                @if (_phase is GamePhase.Board)
-                {
-                    <button class="wth-button" @onclick="EndGame">Finish game</button>
-                }
-            </div>
-        </div>
-    </header>
+    <GameHeader Phase="_phase"
+                IsBoardValid="IsBoardValid"
+                NumberOfQuestions="_numberOfQuestions"
+                OnResetGame="ResetGame"
+                OnEndGame="EndGame" />
 
-    <section class="wth-scoreboard">
-        <h2>Teams</h2>
-        <div class="wth-team-grid">
-            @foreach (var team in _teams)
-            {
-                <div class="wth-team-card">
-                    <span class="team-name">@team.Name</span>
-                    <span class="team-score">@team.Score</span>
-                </div>
-            }
-        </div>
-    </section>
+    <TeamScoreboard Teams="_teams" />
 
     @if (!_isLoaded)
     {
@@ -99,271 +52,59 @@
     }
     else if (_phase == GamePhase.Setup)
     {
-        <section class="wth-panel">
-            <h2>Set up teams</h2>
-            <!-- Board validation message is now shown in the header for prominence -->
-            <p class="muted">Add the team or candidate names, then start the game.</p>
-
-            <div class="wth-team-editor">
-                @for (var i = 0; i < _teams.Count; i++)
-                {
-                    var teamIndex = i;
-                    <div class="wth-team-row">
-                        <input class="wth-input" value="@_teams[teamIndex].Name"
-                               @oninput="e => UpdateTeamName(teamIndex, e.Value?.ToString())" />
-                        <button class="wth-button ghost" @onclick="() => RemoveTeam(teamIndex)"
-                                disabled="@(_teams.Count <= 1)">Remove</button>
-                    </div>
-                }
-            </div>
-
-            <div class="wth-options">
-                <label class="wth-toggle">
-                    <input type="checkbox" @bind="_enableDoubleDown" />
-                    Double Down
-                </label>
-                <label class="wth-toggle">
-                    <input type="checkbox" @bind="_enableTimer" />
-                    Question Timer
-                </label>
-                <label class="wth-toggle">
-                    <input type="checkbox" @bind="_enableBuzzer" />
-                    Buzzer Mode
-                </label>
-                <label class="wth-toggle">
-                    Seconds per question
-                    <input class="wth-input small" type="number" min="10" max="120" @bind="_questionSeconds" />
-                </label>
-                <label class="wth-toggle">
-                    Questions per category
-                    <input class="wth-input small" type="number" min="1" max="5"
-                           value="@_numberOfQuestions"
-                           @onchange="e => OnQuestionsChanged(e)" />
-                </label>
-            </div>
-
-            <div class="wth-category-picker">
-                <h3>Categories (@_selectedCategoryNames.Count selected)</h3>
-                <div class="wth-category-grid">
-                    @foreach (var cat in _sourceCategories)
-                    {
-                        var catName = cat.Name;
-                        <label class="wth-toggle">
-                            <input type="checkbox" checked="@_selectedCategoryNames.Contains(catName)"
-                                   @onchange="e => ToggleCategory(catName, (bool)(e.Value ?? false))" />
-                            @catName
-                        </label>
-                    }
-                </div>
-            </div>
-
-            <div class="wth-actions">
-                <button class="wth-button ghost" @onclick="AddTeam">Add Team</button>
-                <button class="wth-button" @onclick="StartGame"
-                        disabled="@(!_teams.Any(t => !string.IsNullOrWhiteSpace(t.Name)) || !IsBoardValid)">Start Game</button>
-            </div>
-        </section>
+        <GameSetupPanel Teams="_teams"
+                        EnableDoubleDown="_enableDoubleDown"
+                        EnableDoubleDownChanged="v => _enableDoubleDown = v"
+                        EnableTimer="_enableTimer"
+                        EnableTimerChanged="v => _enableTimer = v"
+                        EnableBuzzer="_enableBuzzer"
+                        EnableBuzzerChanged="v => _enableBuzzer = v"
+                        QuestionSeconds="_questionSeconds"
+                        QuestionSecondsChanged="v => _questionSeconds = v"
+                        NumberOfQuestions="_numberOfQuestions"
+                        SourceCategories="_sourceCategories"
+                        SelectedCategoryNames="_selectedCategoryNames"
+                        IsBoardValid="IsBoardValid"
+                        OnTeamNameChanged="args => UpdateTeamName(args.Index, args.Value)"
+                        OnTeamRemoved="RemoveTeam"
+                        OnTeamAdded="AddTeam"
+                        OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
+                        OnCategoryToggled="args => ToggleCategory(args.Name, args.Selected)"
+                        OnStartGame="StartGame" />
     }
     else if (_phase == GamePhase.Board)
     {
-        <section class="wth-board">
-            <div class="wth-board-grid" style="grid-template-columns: repeat(@_categories.Count, minmax(180px, 1fr));">
-                @foreach (var category in _categories)
-                {
-                    <div class="wth-category">
-                        <div class="wth-category-title">@category.Name</div>
-                        @foreach (var question in category.Questions.Take(_numberOfQuestions))
-                        {
-                            <button class="wth-tile" disabled="@question.IsAnswered" @onclick="() => SelectQuestion(question)">
-                                @if (question.IsAnswered)
-                                {
-                                    <span class="wth-tile-used">✓</span>
-                                }
-                                else
-                                {
-                                    <span class="wth-tile-value">$@question.Value</span>
-                                }
-                            </button>
-                        }
-                    </div>
-                }
-            </div>
-        </section>
+        <GameBoard Categories="_categories"
+                   NumberOfQuestions="_numberOfQuestions"
+                   OnQuestionSelected="SelectQuestion" />
     }
     else if (_phase is GamePhase.Question or GamePhase.Answer)
     {
-        <section class="wth-panel wth-question">
-            <div class="wth-question-header">
-                <span class="wth-badge">@_currentQuestion?.CategoryName</span>
-                <span class="wth-badge">$@_currentQuestion?.Value</span>
-                @if (_currentQuestion?.IsDoubleDown == true)
-                {
-                    <span class="wth-badge double-down">Double Down</span>
-                }
-                @if (_enableTimer)
-                {
-                    <span class="wth-badge timer">@_timeRemaining s</span>
-                }
-            </div>
-
-            <h2 class="wth-question-text">@GetPromptMarkup()</h2>
-
-            @if (_currentQuestion?.IsDoubleDown == true && _phase == GamePhase.Question)
-            {
-                <div class="wth-double-down">
-                    <label>Wager</label>
-                    <input class="wth-input small" type="number" min="100" max="@_maxWager" @bind="_doubleDownWager" />
-                    <span class="muted">Max @(_maxWager)</span>
-                </div>
-            }
-
-            @if (_enableBuzzer && _phase == GamePhase.Question)
-            {
-                <div class="wth-buzzer">
-                    <h3>Buzzer</h3>
-                    @if (!BuzzService.IsConfigured)
-                    {
-                        <p class="muted">Remote buzzer polling is disabled. Configure New Relic settings to enable it.</p>
-                    }
-                    <div class="wth-buzzer-grid">
-                        @foreach (var team in _teams)
-                        {
-                            <button class="wth-button small" disabled="@_buzzerLocked" @onclick="() => BuzzIn(team)">Buzz:
-                                @team.Name</button>
-                            }
-                        </div>
-
-                        @if (_buzzedTeam is not null)
-                        {
-                            <p class="muted">Buzzed: @_buzzedTeam.Name</p>
-                            <button class="wth-button ghost small" @onclick="ResetBuzz">Reset Buzz</button>
-                        }
-                        else if (!string.IsNullOrWhiteSpace(_remoteBuzzedName))
-                        {
-                            <p class="muted">Buzzed: @_remoteBuzzedName</p>
-                            <button class="wth-button ghost small" @onclick="ResetBuzz">Reset Buzz</button>
-                        }
-                    </div>
-                }
-
-                @if (_phase == GamePhase.Answer)
-                {
-                    <div class="wth-answer">
-                        <h3>Answer</h3>
-                        <p class="wth-answer-text">@GetAnswerMarkup()</p>
-                    </div>
-
-                    <div class="wth-score-actions">
-                        <h3>Score this question</h3>
-                        <p class="muted">Points: @GetQuestionPoints()</p>
-
-                        @if (_buzzedTeam is not null)
-                        {
-                            <div class="wth-quick-score">
-                                <span>Buzzed team:</span>
-                                <button class="wth-button small" @onclick="() => AdjustScore(_buzzedTeam!, GetQuestionPoints())">Award
-                                    @_buzzedTeam.Name</button>
-                                    <button class="wth-button ghost small"
-                                            @onclick="() => AdjustScore(_buzzedTeam!, -GetQuestionPoints())">Penalize @_buzzedTeam.Name</button>
-                                </div>
-                            }
-
-                            <div class="wth-team-score-grid">
-                                @foreach (var team in _teams)
-                                {
-                                    <div class="wth-team-score-row">
-                                        <span>@team.Name</span>
-                                        <div class="wth-team-score-buttons">
-                                            <button class="wth-button small" @onclick="() => AdjustScore(team, GetQuestionPoints())">+
-                                                @GetQuestionPoints()</button>
-                                                <button class="wth-button ghost small"
-                                                        @onclick="() => AdjustScore(team, -GetQuestionPoints())">- @GetQuestionPoints()</button>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-
-                        <div class="wth-actions">
-                            @if (_phase == GamePhase.Question)
-                            {
-                                <button class="wth-button" @onclick="RevealAnswer">Show Answer</button>
-                            }
-                            <button class="wth-button ghost" @onclick="ReturnToBoard">Back to Board</button>
-                            <button class="wth-button" @onclick="CompleteQuestion">Mark Answered</button>
-                        </div>
-                    </section>
-                }
-                else if (_phase == GamePhase.Winner)
-                {
-                    var rankedTeams = _teams
-                        .OrderByDescending(t => t.Score)
-                        .ThenBy(t => t.Name)
-                        .ToList();
-                    var podiumTeams = rankedTeams.Take(3).ToList();
-                    var remainingTeams = rankedTeams.Skip(3).ToList();
-
-                    <section class="wth-panel wth-winner">
-                        <h2>Leaderboard</h2>
-
-                        <div class="wth-winner-top">
-                            <div class="wth-podium-grid">
-                                @for (var i = 0; i < podiumTeams.Count; i++)
-                                {
-                                    var team = podiumTeams[i];
-                                    <article class="wth-podium-card @GetPodiumClass(i)">
-                                        <span class="podium-medal">@GetMedalLabel(i)</span>
-                                        <span class="podium-rank">#@(i + 1)</span>
-                                        <span class="podium-name">@team.Name</span>
-                                        <span class="podium-score">@team.Score pts</span>
-                                    </article>
-                                }
-                            </div>
-
-                            <aside class="wth-winner-video-panel" aria-label="Celebration video">
-                                <video class="wth-winner-video" src="https://cdn.kimpel.com/ANI-Astronaut-in-field-of-flowers_crop.mp4"
-                                       autoplay loop muted playsinline>
-                                </video>
-                            </aside>
-                        </div>
-
-                        @if (remainingTeams.Count > 0)
-                        {
-                            <div class="wth-lower-ranks">
-                                <h3>4th Place And Below</h3>
-                                <table class="wth-rank-table" aria-label="Teams ranked fourth place and below">
-                                    <thead>
-                                        <tr>
-                                            <th>Place</th>
-                                            <th>Team</th>
-                                            <th>Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (var i = 0; i < remainingTeams.Count; i++)
-                                        {
-                                            var team = remainingTeams[i];
-                                            <tr>
-                                                <td>@(i + 4)</td>
-                                                <td>@team.Name</td>
-                                                <td>@team.Score</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-
-                        <div class="wth-actions">
-                            <button class="wth-button" @onclick="ResetGame">Play Again</button>
-                        </div>
-                    </section>
-                }
-            </section>
+        <QuestionPanel Phase="_phase"
+                       CurrentQuestion="_currentQuestion"
+                       Teams="_teams"
+                       EnableTimer="_enableTimer"
+                       TimeRemaining="_timeRemaining"
+                       EnableBuzzer="_enableBuzzer"
+                       BuzzerConfigured="BuzzService.IsConfigured"
+                       BuzzerLocked="_buzzerLocked"
+                       BuzzedTeam="_buzzedTeam"
+                       RemoteBuzzedName="_remoteBuzzedName"
+                       MaxWager="_maxWager"
+                       OnBuzzIn="BuzzIn"
+                       OnBuzzReset="ResetBuzz"
+                       OnScoreAdjusted="e => AdjustScore(e.Team, e.Points)"
+                       OnRevealAnswer="RevealAnswer"
+                       OnReturnToBoard="ReturnToBoard"
+                       OnCompleteQuestion="HandleCompleteQuestion" />
+    }
+    else if (_phase == GamePhase.Winner)
+    {
+        <WinnerLeaderboard Teams="_teams" OnPlayAgain="ResetGame" />
+    }
+</section>
 
 @code {
-    // Returns true if all selected categories have at least one question for each required level (e.g., 100, 200, ...)
     private bool IsBoardValid
     {
         get
@@ -376,6 +117,7 @@
             );
         }
     }
+
     private GamePhase _phase = GamePhase.Setup;
     private readonly List<Team> _teams = new();
     private readonly List<O11yPartyCategory> _sourceCategories = new();
@@ -390,7 +132,6 @@
     private bool _enableBuzzer = true;
     private int _questionSeconds = 30;
     private int _timeRemaining;
-    private int _doubleDownWager;
     private int _maxWager;
     private bool _buzzerLocked;
     private Team? _buzzedTeam;
@@ -424,7 +165,6 @@
             await Task.Delay(4000);
         }
 
-        // Read settings from configuration
         _numberOfCategories = Configuration.GetValue<int>("Board:NumberOfCategories", 5);
         _numberOfQuestions = Configuration.GetValue<int>("Board:NumberOfQuestions", 5);
 
@@ -443,7 +183,6 @@
 
         await LoadSourceCategoriesAsync();
 
-        // Select the first N categories by default
         _selectedCategoryNames.Clear();
         foreach (var cat in _sourceCategories.Take(_numberOfCategories))
         {
@@ -519,7 +258,6 @@
         {
             while (await timer.WaitForNextTickAsync(cancellationToken))
             {
-                // Allocate ~1 MB per tick and hold a reference to prevent GC collection
                 _leakedMemory.Add(new byte[1024 * 1024]);
                 Console.WriteLine("[CHAOS] memleak: total leaked = {0} MB", _leakedMemory.Count);
             }
@@ -542,7 +280,6 @@
             throw new InvalidOperationException($"Board JSON file was empty at '{boardPath}'.");
         }
 
-        // Guard against accidentally loading an HTML file into JSON parsing.
         if (boardJson.AsSpan().TrimStart().StartsWith("<", StringComparison.Ordinal))
         {
             throw new InvalidOperationException(
@@ -616,16 +353,11 @@
             var catName = sourceCategory.Name;
             var questions = sourceCategory.Questions;
 
-            // Only keep one question per required level (if available)
             var questionsForLevels = requiredLevels
                 .Select(level =>
                 {
                     var matchingQuestions = questions.Where(q => q.Value == level).ToList();
-                    if (matchingQuestions.Count == 0)
-                    {
-                        return null;
-                    }
-
+                    if (matchingQuestions.Count == 0) return null;
                     var selected = matchingQuestions[Random.Shared.Next(matchingQuestions.Count)];
                     return new O11yPartyQuestion
                     {
@@ -637,16 +369,15 @@
                 })
                 .OfType<O11yPartyQuestion>()
                 .ToList();
-            var limitedCategory = new O11yPartyCategory
+
+            _categories.Add(new O11yPartyCategory
             {
                 Name = catName,
                 Questions = questionsForLevels!
-            };
-            _categories.Add(limitedCategory);
+            });
         }
 
-        _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q =>
-q.Value);
+        _maxWager = _categories.SelectMany(c => c.Questions).DefaultIfEmpty(new O11yPartyQuestion { Value = 500 }).Max(q => q.Value);
     }
 
     [NewRelic.Api.Agent.Transaction]
@@ -661,14 +392,10 @@ q.Value);
         RebuildBoardWithRandomQuestions();
     }
 
-    [NewRelic.Api.Agent.Transaction]
-    private void OnQuestionsChanged(ChangeEventArgs e)
+    private void HandleNumberOfQuestionsChanged(int val)
     {
-        if (int.TryParse(e.Value?.ToString(), out var val) && val >= 1 && val <= 5)
-        {
-            _numberOfQuestions = val;
-            RebuildBoardWithRandomQuestions();
-        }
+        _numberOfQuestions = val;
+        RebuildBoardWithRandomQuestions();
     }
 
     [NewRelic.Api.Agent.Transaction]
@@ -676,15 +403,8 @@ q.Value);
     {
         RebuildBoardWithRandomQuestions();
 
-        if (_teams.All(t => string.IsNullOrWhiteSpace(t.Name)))
-        {
-            return;
-        }
-        if (!IsBoardValid)
-        {
-            // Optionally, show a message or just return
-            return;
-        }
+        if (_teams.All(t => string.IsNullOrWhiteSpace(t.Name))) return;
+        if (!IsBoardValid) return;
 
         foreach (var team in _teams)
         {
@@ -698,10 +418,7 @@ q.Value);
             question.IsDoubleDown = false;
         }
 
-        if (_enableDoubleDown)
-        {
-            AssignDoubleDowns();
-        }
+        if (_enableDoubleDown) AssignDoubleDowns();
 
         _phase = GamePhase.Board;
         _currentQuestion = null;
@@ -733,11 +450,7 @@ q.Value);
 
     private void RemoveTeam(int index)
     {
-        if (_teams.Count <= 1)
-        {
-            return;
-        }
-
+        if (_teams.Count <= 1) return;
         _teams.RemoveAt(index);
     }
 
@@ -749,10 +462,7 @@ q.Value);
     [NewRelic.Api.Agent.Transaction]
     private async Task SelectQuestion(O11yPartyQuestion question)
     {
-        if (question.IsAnswered)
-        {
-            return;
-        }
+        if (question.IsAnswered) return;
 
         if (_activeChaos.Contains("errors") && Random.Shared.NextDouble() < 0.4)
         {
@@ -773,7 +483,6 @@ q.Value);
         _maxWager = Math.Max(
             _categories.SelectMany(c => c.Questions).Max(q => q.Value),
             _teams.Max(t => t.Score));
-        _doubleDownWager = question.Value;
         _scoreApplied = false;
         ResetBuzzState();
         StartTimer();
@@ -789,27 +498,14 @@ q.Value);
 
     private async Task HideChaosErrorAfterDelayAsync(int expectedVersion)
     {
-        try
-        {
-            await Task.Delay(TimeSpan.FromSeconds(3));
-        }
-        catch (TaskCanceledException)
-        {
-            return;
-        }
+        try { await Task.Delay(TimeSpan.FromSeconds(3)); }
+        catch (TaskCanceledException) { return; }
 
-        if (expectedVersion != _chaosErrorVersion)
-        {
-            return;
-        }
+        if (expectedVersion != _chaosErrorVersion) return;
 
         await InvokeAsync(() =>
         {
-            if (expectedVersion != _chaosErrorVersion)
-            {
-                return;
-            }
-
+            if (expectedVersion != _chaosErrorVersion) return;
             _chaosErrorMessage = null;
             StateHasChanged();
         });
@@ -832,16 +528,13 @@ q.Value);
     }
 
     [NewRelic.Api.Agent.Transaction]
-    private void CompleteQuestion()
+    private void HandleCompleteQuestion(int questionPoints)
     {
-        if (_currentQuestion is null)
-        {
-            return;
-        }
+        if (_currentQuestion is null) return;
 
         if (!_scoreApplied && _buzzedTeam is not null)
         {
-            AdjustScore(_buzzedTeam, GetQuestionPoints());
+            AdjustScore(_buzzedTeam, questionPoints);
         }
 
         StopBuzzPolling();
@@ -850,8 +543,8 @@ q.Value);
         _currentQuestion = null;
         ResetBuzzState();
         _phase = _categories.SelectMany(c => c.Questions).All(q => q.IsAnswered)
-        ? GamePhase.Winner
-        : GamePhase.Board;
+            ? GamePhase.Winner
+            : GamePhase.Board;
     }
 
     [NewRelic.Api.Agent.Transaction]
@@ -859,67 +552,12 @@ q.Value);
     {
         team.Score += delta;
         _scoreApplied = true;
-
         await JS.InvokeAsync<string>("RecordTeamScore", team.Name, team.Score);
-    }
-
-    private int GetQuestionPoints()
-    {
-        if (_currentQuestion is null)
-        {
-            return 0;
-        }
-
-        return _currentQuestion.IsDoubleDown
-        ? Math.Clamp(_doubleDownWager, 100, _maxWager)
-        : _currentQuestion.Value;
-    }
-
-    private MarkupString GetPromptMarkup()
-    {
-        var prompt = _currentQuestion?.Prompt ?? string.Empty;
-        return FormatWithLineBreaks(prompt);
-    }
-
-    private MarkupString GetAnswerMarkup()
-    {
-        var answer = _currentQuestion?.Answer ?? string.Empty;
-        return FormatWithWhitespace(answer);
-    }
-
-    private static MarkupString FormatWithWhitespace(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            return new MarkupString(string.Empty);
-        }
-
-        var encoded = System.Net.WebUtility.HtmlEncode(text);
-        encoded = encoded.Replace("\r\n", "\n");
-        encoded = encoded.Replace("\t", "    ");
-        return new MarkupString(encoded);
-    }
-
-    private static MarkupString FormatWithLineBreaks(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            return new MarkupString(string.Empty);
-        }
-
-        var encoded = System.Net.WebUtility.HtmlEncode(text);
-        encoded = encoded.Replace("\r\n", "\n");
-        encoded = encoded.Replace("\n", "<br />");
-        return new MarkupString(encoded);
     }
 
     private void BuzzIn(Team team)
     {
-        if (_buzzerLocked)
-        {
-            return;
-        }
-
+        if (_buzzerLocked) return;
         _buzzedTeam = team;
         _buzzerLocked = true;
         StopTimer();
@@ -937,11 +575,7 @@ q.Value);
 
     private void ShowBuzzHighlight(string teamName)
     {
-        if (string.IsNullOrWhiteSpace(teamName))
-        {
-            return;
-        }
-
+        if (string.IsNullOrWhiteSpace(teamName)) return;
         _buzzHighlightName = teamName;
         _showBuzzHighlight = true;
         var currentVersion = ++_buzzHighlightVersion;
@@ -950,27 +584,14 @@ q.Value);
 
     private async Task HideBuzzHighlightAfterDelayAsync(int expectedVersion)
     {
-        try
-        {
-            await Task.Delay(TimeSpan.FromSeconds(5));
-        }
-        catch (TaskCanceledException)
-        {
-            return;
-        }
+        try { await Task.Delay(TimeSpan.FromSeconds(5)); }
+        catch (TaskCanceledException) { return; }
 
-        if (expectedVersion != _buzzHighlightVersion)
-        {
-            return;
-        }
+        if (expectedVersion != _buzzHighlightVersion) return;
 
         await InvokeAsync(() =>
         {
-            if (expectedVersion != _buzzHighlightVersion)
-            {
-                return;
-            }
-
+            if (expectedVersion != _buzzHighlightVersion) return;
             _showBuzzHighlight = false;
             StateHasChanged();
         });
@@ -994,12 +615,7 @@ q.Value);
     private void StartBuzzPolling()
     {
         StopBuzzPolling();
-
-        if (!_enableBuzzer || !BuzzService.IsConfigured)
-        {
-            return;
-        }
-
+        if (!_enableBuzzer || !BuzzService.IsConfigured) return;
         _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         _lastHandledBuzzUnixMs = _questionStartedUnixMs;
         _buzzPollingCancellation = new CancellationTokenSource();
@@ -1008,11 +624,7 @@ q.Value);
 
     private void StopBuzzPolling()
     {
-        if (_buzzPollingCancellation is null)
-        {
-            return;
-        }
-
+        if (_buzzPollingCancellation is null) return;
         _buzzPollingCancellation.Cancel();
         _buzzPollingCancellation.Dispose();
         _buzzPollingCancellation = null;
@@ -1021,44 +633,29 @@ q.Value);
     private async Task PollRemoteBuzzAsync(CancellationToken cancellationToken)
     {
         using var pollTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
-
         try
         {
             while (await pollTimer.WaitForNextTickAsync(cancellationToken))
             {
-                if (_phase != GamePhase.Question || _buzzerLocked)
-                {
-                    continue;
-                }
+                if (_phase != GamePhase.Question || _buzzerLocked) continue;
 
                 var buzz = await BuzzService.GetLatestBuzzAsync(cancellationToken);
-                if (buzz is null)
-                {
-                    continue;
-                }
+                if (buzz is null) continue;
 
                 if (buzz.TimestampUnixMs <= _lastHandledBuzzUnixMs || buzz.TimestampUnixMs < _questionStartedUnixMs)
-                {
                     continue;
-                }
 
                 _lastHandledBuzzUnixMs = buzz.TimestampUnixMs;
                 Console.WriteLine("Handling remote buzz: Name={0}, Timestamp={1}", buzz.Name, buzz.TimestampUnixMs);
                 await InvokeAsync(() => HandleRemoteBuzz(buzz.Name));
             }
         }
-        catch (OperationCanceledException)
-        {
-            // Ignore cancellation when changing phases.
-        }
+        catch (OperationCanceledException) { }
     }
 
     private void HandleRemoteBuzz(string participantName)
     {
-        if (_buzzerLocked || string.IsNullOrWhiteSpace(participantName))
-        {
-            return;
-        }
+        if (_buzzerLocked || string.IsNullOrWhiteSpace(participantName)) return;
 
         var normalizedName = participantName.Trim();
         var matchingTeam = _teams.FirstOrDefault(team =>
@@ -1078,11 +675,7 @@ q.Value);
     private void StartTimer()
     {
         StopTimer();
-
-        if (!_enableTimer || _phase != GamePhase.Question)
-        {
-            return;
-        }
+        if (!_enableTimer || _phase != GamePhase.Question) return;
 
         _timeRemaining = Math.Max(1, _questionSeconds);
         var timerIntervalMs = _activeChaos.Contains("timerdrift") ? 500 : 1000;
@@ -1090,11 +683,7 @@ q.Value);
         _timer = new System.Timers.Timer(timerIntervalMs);
         _timer.Elapsed += async (_, _) =>
         {
-            if (_phase != GamePhase.Question)
-            {
-                return;
-            }
-
+            if (_phase != GamePhase.Question) return;
             _timeRemaining--;
             if (_timeRemaining <= 0)
             {
@@ -1103,7 +692,6 @@ q.Value);
                 _phase = GamePhase.Answer;
                 _buzzerLocked = true;
             }
-
             await InvokeAsync(StateHasChanged);
         };
         _timer.AutoReset = true;
@@ -1112,11 +700,7 @@ q.Value);
 
     private void StopTimer()
     {
-        if (_timer is null)
-        {
-            return;
-        }
-
+        if (_timer is null) return;
         _timer.Stop();
         _timer.Dispose();
         _timer = null;
@@ -1125,37 +709,12 @@ q.Value);
     private void AssignDoubleDowns()
     {
         var allQuestions = _categories.SelectMany(c => c.Questions).ToList();
-        if (allQuestions.Count == 0)
-        {
-            return;
-        }
-
+        if (allQuestions.Count == 0) return;
         var doubleDownCount = Math.Max(1, _categories.Count / 3);
-        var random = Random.Shared;
-        foreach (var question in allQuestions.OrderBy(_ => random.Next()).Take(doubleDownCount))
+        foreach (var question in allQuestions.OrderBy(_ => Random.Shared.Next()).Take(doubleDownCount))
         {
             question.IsDoubleDown = true;
         }
-    }
-
-    private static string GetMedalLabel(int podiumIndex)
-    {
-        return podiumIndex switch
-        {
-            0 => "🥇 Gold",
-            1 => "🥈 Silver",
-            _ => "🥉 Bronze"
-        };
-    }
-
-    private static string GetPodiumClass(int podiumIndex)
-    {
-        return podiumIndex switch
-        {
-            0 => "podium-gold",
-            1 => "podium-silver",
-            _ => "podium-bronze"
-        };
     }
 
     public void Dispose()
@@ -1166,21 +725,5 @@ q.Value);
         _chaosCancellation?.Cancel();
         _chaosCancellation?.Dispose();
         _chaosCancellation = null;
-    }
-
-    private sealed class Team
-    {
-        public Team(string name) => Name = name;
-        public string Name { get; set; }
-        public int Score { get; set; }
-    }
-
-    private enum GamePhase
-    {
-        Setup,
-        Board,
-        Question,
-        Answer,
-        Winner
     }
 }
