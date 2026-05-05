@@ -7,6 +7,7 @@
 @inject IWebHostEnvironment Environment
 @inject NavigationManager Navigation
 @implements IDisposable
+@inject ILogger<Home> Logger
 
 <PageTitle>WTH O11yParty</PageTitle>
 
@@ -420,7 +421,7 @@
 
         if (_activeChaos.Contains("slowload"))
         {
-            Console.WriteLine("[CHAOS] slowload: injecting 4-second startup delay");
+            Logger.LogWarning("[CHAOS] slowload: injecting 4-second startup delay");
             await Task.Delay(4000);
         }
 
@@ -513,7 +514,7 @@
     [NewRelic.Api.Agent.Transaction]
     private async Task RunMemoryLeakAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("[CHAOS] memleak: starting memory leak task");
+        Logger.LogWarning("[CHAOS] memleak: starting memory leak task");
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
         try
         {
@@ -521,7 +522,7 @@
             {
                 // Allocate ~1 MB per tick and hold a reference to prevent GC collection
                 _leakedMemory.Add(new byte[1024 * 1024]);
-                Console.WriteLine("[CHAOS] memleak: total leaked = {0} MB", _leakedMemory.Count);
+                Logger.LogWarning("[CHAOS] memleak: total leaked = {0} MB", _leakedMemory.Count);
             }
         }
         catch (OperationCanceledException) { }
@@ -756,15 +757,16 @@ q.Value);
 
         if (_activeChaos.Contains("errors") && Random.Shared.NextDouble() < 0.4)
         {
-            Console.WriteLine("[CHAOS] errors: synthetic question load failure");
+            Logger.LogError("[CHAOS] errors: synthetic question load failure");
             ShowChaosError("[CHAOS] Failed to load this question. Try selecting it again.");
+            NewRelic.Api.Agent.NewRelic.NoticeError(new Exception("Synthetic question load failure"));
             return;
         }
 
         if (_activeChaos.Contains("latency"))
         {
             var delayMs = Random.Shared.Next(1500, 4000);
-            Console.WriteLine("[CHAOS] latency: injecting {0}ms delay", delayMs);
+            Logger.LogWarning("[CHAOS] latency: injecting {0}ms delay", delayMs);
             await Task.Delay(delayMs);
         }
 
@@ -1043,7 +1045,7 @@ q.Value);
                 }
 
                 _lastHandledBuzzUnixMs = buzz.TimestampUnixMs;
-                Console.WriteLine("Handling remote buzz: Name={0}, Timestamp={1}", buzz.Name, buzz.TimestampUnixMs);
+                Logger.LogInformation("Handling remote buzz: Name={0}, Timestamp={1}", buzz.Name, buzz.TimestampUnixMs);
                 await InvokeAsync(() => HandleRemoteBuzz(buzz.Name));
             }
         }
@@ -1072,7 +1074,7 @@ q.Value);
             return;
         }
 
-        Console.WriteLine("Ignoring remote buzz from unknown team: {0}", normalizedName);
+        Logger.LogInformation("Ignoring remote buzz from unknown team: {0}", normalizedName);
     }
 
     private void StartTimer()
@@ -1086,7 +1088,7 @@ q.Value);
 
         _timeRemaining = Math.Max(1, _questionSeconds);
         var timerIntervalMs = _activeChaos.Contains("timerdrift") ? 500 : 1000;
-        if (_activeChaos.Contains("timerdrift")) Console.WriteLine("[CHAOS] timerdrift: timer running at 2x speed");
+        if (_activeChaos.Contains("timerdrift")) Logger.LogInformation("[CHAOS] timerdrift: timer running at 2x speed");
         _timer = new System.Timers.Timer(timerIntervalMs);
         _timer.Elapsed += async (_, _) =>
         {
