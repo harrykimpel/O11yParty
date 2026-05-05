@@ -1,0 +1,83 @@
+@{
+    var rankedTeams = Teams
+        .OrderByDescending(t => t.Score)
+        .ThenBy(t => t.Name)
+        .ToList();
+    var podiumTeams = rankedTeams.Take(3).ToList();
+    var remainingTeams = rankedTeams.Skip(3).ToList();
+}
+
+<section class="wth-panel wth-winner">
+    <h2>Leaderboard</h2>
+
+    <div class="wth-winner-top">
+        <div class="wth-podium-grid">
+            @for (var i = 0; i < podiumTeams.Count; i++)
+            {
+                var team = podiumTeams[i];
+                <article class="wth-podium-card @GetPodiumClass(i)">
+                    <span class="podium-medal">@GetMedalLabel(i)</span>
+                    <span class="podium-rank">#@(i + 1)</span>
+                    <span class="podium-name">@team.Name</span>
+                    <span class="podium-score">@team.Score pts</span>
+                </article>
+            }
+        </div>
+
+        <aside class="wth-winner-video-panel" aria-label="Celebration video">
+            <video class="wth-winner-video" src="https://cdn.kimpel.com/ANI-Astronaut-in-field-of-flowers_crop.mp4"
+                   autoplay loop muted playsinline>
+            </video>
+        </aside>
+    </div>
+
+    @if (remainingTeams.Count > 0)
+    {
+        <div class="wth-lower-ranks">
+            <h3>4th Place And Below</h3>
+            <table class="wth-rank-table" aria-label="Teams ranked fourth place and below">
+                <thead>
+                    <tr>
+                        <th>Place</th>
+                        <th>Team</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < remainingTeams.Count; i++)
+                    {
+                        var team = remainingTeams[i];
+                        <tr>
+                            <td>@(i + 4)</td>
+                            <td>@team.Name</td>
+                            <td>@team.Score</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="wth-actions">
+        <button class="wth-button" @onclick="OnPlayAgain">Play Again</button>
+    </div>
+</section>
+
+@code {
+    [Parameter] public IReadOnlyList<Team> Teams { get; set; } = Array.Empty<Team>();
+    [Parameter] public EventCallback OnPlayAgain { get; set; }
+
+    private static string GetMedalLabel(int podiumIndex) => podiumIndex switch
+    {
+        0 => "🥇 Gold",
+        1 => "🥈 Silver",
+        _ => "🥉 Bronze"
+    };
+
+    private static string GetPodiumClass(int podiumIndex) => podiumIndex switch
+    {
+        0 => "podium-gold",
+        1 => "podium-silver",
+        _ => "podium-bronze"
+    };
+}
