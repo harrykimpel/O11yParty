@@ -2,18 +2,21 @@
     <h2>Set up teams</h2>
     <p class="muted">Add the team or candidate names, then start the game.</p>
 
-    <div class="wth-team-editor">
-        @for (var i = 0; i < Teams.Count; i++)
-        {
-            var teamIndex = i;
-            <div class="wth-team-row">
-                <input class="wth-input" value="@Teams[teamIndex].Name"
-                       @oninput="e => OnTeamNameChanged.InvokeAsync((teamIndex, e.Value?.ToString()))" />
-                <button class="wth-button ghost" @onclick="() => OnTeamRemoved.InvokeAsync(teamIndex)"
-                        disabled="@(Teams.Count <= 1)">Remove</button>
-            </div>
-        }
-    </div>
+    <details class="wth-collapse" open>
+        <summary><h3>Team list (@Teams.Count)</h3></summary>
+        <div class="wth-team-editor">
+            @for (var i = 0; i < Teams.Count; i++)
+            {
+                var teamIndex = i;
+                <div class="wth-team-row">
+                    <input class="wth-input" value="@Teams[teamIndex].Name"
+                           @oninput="e => OnTeamNameChanged.InvokeAsync((teamIndex, e.Value?.ToString()))" />
+                    <button class="wth-button ghost" @onclick="() => OnTeamRemoved.InvokeAsync(teamIndex)"
+                            disabled="@(Teams.Count <= 1)">Remove</button>
+                </div>
+            }
+        </div>
+    </details>
 
     <div class="wth-options">
         <label class="wth-toggle">
