@@ -1,5 +1,7 @@
 # O11yParty
 
+> **Note:** This project works in concert with the companion buzzer app at <https://github.com/harrykimpel/O11yParty-Buzzer>.
+
 ![O11yParty](./Assets/O11yParty-start.png)
 
 This is a simple O11yParty-style game built with .NET 10 and ASP.NET Core Blazor.
