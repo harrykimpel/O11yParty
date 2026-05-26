@@ -31,13 +31,16 @@
             {
                 <p class="muted">Remote buzzer polling is disabled. Configure New Relic settings to enable it.</p>
             }
-            <div class="wth-buzzer-grid">
-                @foreach (var team in Teams)
-                {
-                    <button class="wth-button small" disabled="@BuzzerLocked" @onclick="() => OnBuzzIn.InvokeAsync(team)">Buzz:
-                        @team.Name</button>
-                }
-            </div>
+            <details class="wth-collapse" open>
+                <summary><span class="wth-collapse-label">Buzz buttons (@Teams.Count)</span></summary>
+                <div class="wth-buzzer-grid">
+                    @foreach (var team in Teams)
+                    {
+                        <button class="wth-button small" disabled="@BuzzerLocked" @onclick="() => OnBuzzIn.InvokeAsync(team)">Buzz:
+                            @team.Name</button>
+                    }
+                </div>
+            </details>
 
             @if (BuzzedTeam is not null)
             {
@@ -74,20 +77,23 @@
                 </div>
             }
 
-            <div class="wth-team-score-grid">
-                @foreach (var team in Teams)
-                {
-                    <div class="wth-team-score-row">
-                        <span>@team.Name</span>
-                        <div class="wth-team-score-buttons">
-                            <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, GetQuestionPoints()))">+
-                                @GetQuestionPoints()</button>
-                            <button class="wth-button ghost small"
-                                    @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, -GetQuestionPoints()))">- @GetQuestionPoints()</button>
+            <details class="wth-collapse" open>
+                <summary><span class="wth-collapse-label">All teams (@Teams.Count)</span></summary>
+                <div class="wth-team-score-grid">
+                    @foreach (var team in Teams)
+                    {
+                        <div class="wth-team-score-row">
+                            <span>@team.Name</span>
+                            <div class="wth-team-score-buttons">
+                                <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, GetQuestionPoints()))">+
+                                    @GetQuestionPoints()</button>
+                                <button class="wth-button ghost small"
+                                        @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, -GetQuestionPoints()))">- @GetQuestionPoints()</button>
+                            </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            </details>
         </div>
     }
 

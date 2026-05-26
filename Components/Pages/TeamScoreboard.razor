@@ -1,14 +1,18 @@
 <section class="wth-scoreboard">
-    <h2>Teams</h2>
-    <div class="wth-team-grid">
-        @foreach (var team in Teams)
-        {
-            <div class="wth-team-card">
-                <span class="team-name">@team.Name</span>
-                <span class="team-score">@team.Score</span>
-            </div>
-        }
-    </div>
+    <details class="wth-collapse" open>
+        <summary>
+            <h2>Teams (@Teams.Count)</h2>
+        </summary>
+        <div class="wth-team-grid">
+            @foreach (var team in Teams.OrderByDescending(t => t.Score).ThenBy(t => t.Name))
+            {
+                <div class="wth-team-card">
+                    <span class="team-name">@team.Name</span>
+                    <span class="team-score">@team.Score</span>
+                </div>
+            }
+        </div>
+    </details>
 </section>
 
 @code {

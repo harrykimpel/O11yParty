@@ -398,6 +398,46 @@ a {
     color: var(--wth-gold);
 }
 
+.wth-collapse > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    user-select: none;
+}
+
+.wth-collapse > summary::-webkit-details-marker {
+    display: none;
+}
+
+.wth-collapse > summary::before {
+    content: "▸";
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--wth-silver);
+    transition: transform 120ms ease;
+}
+
+.wth-collapse[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.wth-collapse > summary > h2,
+.wth-collapse > summary > h3 {
+    margin: 0;
+    display: inline-block;
+}
+
+.wth-collapse-label {
+    font-weight: 600;
+    color: var(--wth-silver);
+}
+
+.wth-collapse > summary + * {
+    margin-top: 1rem;
+}
+
 .wth-panel {
     background: var(--wth-card);
     border-radius: 20px;
