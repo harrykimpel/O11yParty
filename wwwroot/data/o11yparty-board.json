@@ -136,6 +136,141 @@
             ]
         },
         {
+            "name": "Azure",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What company develops the Azure cloud platform?",
+                            "answer": "Microsoft"
+                        },
+                        {
+                            "prompt": "What Azure service provides scalable object storage?",
+                            "answer": "Azure Blob Storage"
+                        },
+                        {
+                            "prompt": "What Azure service runs serverless functions?",
+                            "answer": "Azure Functions"
+                        },
+                        {
+                            "prompt": "What is an Azure Resource Group?",
+                            "answer": "A logical container that holds related Azure resources for a solution."
+                        },
+                        {
+                            "prompt": "What Azure service hosts virtual machines?",
+                            "answer": "Azure Virtual Machines (Azure VMs)"
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What Azure service provides managed Kubernetes?",
+                            "answer": "Azure Kubernetes Service (AKS)"
+                        },
+                        {
+                            "prompt": "Name one Azure service for managed relational databases.",
+                            "answer": "Azure SQL Database (or Azure Database for PostgreSQL/MySQL)."
+                        },
+                        {
+                            "prompt": "What Azure service provides identity and access management?",
+                            "answer": "Microsoft Entra ID (formerly Azure Active Directory)"
+                        },
+                        {
+                            "prompt": "What Azure service is used to deploy web apps with built-in scaling?",
+                            "answer": "Azure App Service"
+                        },
+                        {
+                            "prompt": "What Azure service provides global content delivery?",
+                            "answer": "Azure Front Door or Azure CDN"
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What Azure service provides a globally distributed multi-model NoSQL database?",
+                            "answer": "Azure Cosmos DB"
+                        },
+                        {
+                            "prompt": "What Azure service centralizes secrets, keys, and certificates?",
+                            "answer": "Azure Key Vault"
+                        },
+                        {
+                            "prompt": "What Azure service provides event-driven, serverless event routing?",
+                            "answer": "Azure Event Grid"
+                        },
+                        {
+                            "prompt": "What Azure service provides a managed message broker for queues and topics?",
+                            "answer": "Azure Service Bus"
+                        },
+                        {
+                            "prompt": "What Azure service streams large volumes of telemetry data?",
+                            "answer": "Azure Event Hubs"
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What Azure service provides infrastructure as code natively?",
+                            "answer": "Azure Resource Manager (ARM) templates or Bicep"
+                        },
+                        {
+                            "prompt": "What Azure service provides a managed data warehouse?",
+                            "answer": "Azure Synapse Analytics"
+                        },
+                        {
+                            "prompt": "What Azure service is used to monitor applications and infrastructure end-to-end?",
+                            "answer": "Azure Monitor (with Application Insights and Log Analytics)"
+                        },
+                        {
+                            "prompt": "What Azure service provides a managed firewall with threat intelligence?",
+                            "answer": "Azure Firewall"
+                        },
+                        {
+                            "prompt": "What Azure construct lets you isolate workloads at the network level?",
+                            "answer": "Azure Virtual Network (VNet) with subnets and NSGs"
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "How can you grant an Azure VM access to a storage account without secrets?",
+                            "answer": "Use a Managed Identity assigned to the VM with an RBAC role on the storage account."
+                        },
+                        {
+                            "prompt": "What pattern uses Azure Front Door + Traffic Manager for multi-region resilience?",
+                            "answer": "Active-active or active-passive multi-region routing with health-probe-based failover."
+                        },
+                        {
+                            "prompt": "What Azure service safely runs failure injection experiments on cloud workloads?",
+                            "answer": "Azure Chaos Studio"
+                        },
+                        {
+                            "prompt": "What Azure governance feature enforces standards like 'no public IPs' across subscriptions?",
+                            "answer": "Azure Policy (often combined with Management Groups)"
+                        },
+                        {
+                            "prompt": "What is the recommended approach to organize multiple Azure environments and apply policies at scale?",
+                            "answer": "Use a Management Group hierarchy with subscriptions per environment/workload and Azure Policy assignments."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "New Relic",
             "questionLevels": [
                 {
@@ -265,6 +400,141 @@
                         {
                             "prompt": "What’s a good strategy for instrumenting a large system incrementally?",
                             "answer": "Start with critical paths/services, add standard attributes, ensure trace propagation, then expand coverage iteratively."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "PagerDuty",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is PagerDuty primarily used for?",
+                            "answer": "Incident response and on-call alerting/management."
+                        },
+                        {
+                            "prompt": "What is an on-call schedule in PagerDuty?",
+                            "answer": "A rotation defining who is responsible for responding to incidents at a given time."
+                        },
+                        {
+                            "prompt": "What is an incident in PagerDuty?",
+                            "answer": "An actionable event that needs response, typically created from an alert or integration."
+                        },
+                        {
+                            "prompt": "What is a service in PagerDuty?",
+                            "answer": "A logical entity (like an application or component) that incidents are attached to."
+                        },
+                        {
+                            "prompt": "Name one way PagerDuty notifies on-call responders.",
+                            "answer": "Push notification, SMS, phone call, or email."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is an escalation policy?",
+                            "answer": "Rules for who gets paged next if the first responder doesn't acknowledge in time."
+                        },
+                        {
+                            "prompt": "What does it mean to 'acknowledge' an incident?",
+                            "answer": "To indicate you're actively responding, pausing further escalation."
+                        },
+                        {
+                            "prompt": "What is a notification rule in PagerDuty?",
+                            "answer": "A user's personal setting for how/when they get notified about incidents."
+                        },
+                        {
+                            "prompt": "What is the purpose of an integration key (routing key)?",
+                            "answer": "It identifies which PagerDuty service an incoming event maps to."
+                        },
+                        {
+                            "prompt": "Name one common monitoring tool that integrates with PagerDuty.",
+                            "answer": "New Relic."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What is event deduplication in PagerDuty?",
+                            "answer": "Collapsing repeated events with the same dedup_key into a single incident."
+                        },
+                        {
+                            "prompt": "What is the difference between Events API v2 'trigger' and 'resolve'?",
+                            "answer": "Trigger creates/updates an incident; resolve closes the matching incident by dedup_key."
+                        },
+                        {
+                            "prompt": "What is a response play?",
+                            "answer": "A predefined set of actions (responders, conferences, status updates) launched during an incident."
+                        },
+                        {
+                            "prompt": "What is incident urgency (high vs low) used for?",
+                            "answer": "It determines whether responders are paged immediately or notified through low-urgency rules."
+                        },
+                        {
+                            "prompt": "What is an event rule (Event Orchestration) used for?",
+                            "answer": "To route, suppress, or transform incoming events before they create incidents."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What is the purpose of business services in PagerDuty?",
+                            "answer": "To map technical services to customer-facing offerings for impact analysis and reporting."
+                        },
+                        {
+                            "prompt": "What is service dependency mapping used for?",
+                            "answer": "Understanding which services affect each other so impact can be assessed during incidents."
+                        },
+                        {
+                            "prompt": "Name one PagerDuty feature that reduces alert noise.",
+                            "answer": "Intelligent Alert Grouping, Auto-Pause Incident Notifications, or Event Orchestration suppression rules."
+                        },
+                        {
+                            "prompt": "What is a postmortem in PagerDuty (Incident Workflows)?",
+                            "answer": "A structured document and process for reviewing major incidents and capturing follow-ups."
+                        },
+                        {
+                            "prompt": "What metric does PagerDuty surface to track responder load?",
+                            "answer": "Incidents per service/responder, MTTA, MTTR, and time on-call."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "How does PagerDuty's Global Event Orchestration differ from a Service Orchestration?",
+                            "answer": "Global rules apply across all events before routing; service orchestrations apply to events already routed to a specific service."
+                        },
+                        {
+                            "prompt": "What is the recommended way to manage PagerDuty configuration as code?",
+                            "answer": "Use the official Terraform provider (or API) to version control schedules, services, and policies."
+                        },
+                        {
+                            "prompt": "What is AIOps Intelligent Alert Grouping based on?",
+                            "answer": "Machine-learned similarity across alert content and timing to group related alerts into one incident."
+                        },
+                        {
+                            "prompt": "What is a status dashboard / status page integration used for?",
+                            "answer": "Communicating incident impact to customers automatically as PagerDuty incidents progress."
+                        },
+                        {
+                            "prompt": "What advanced practice keeps on-call sustainable using PagerDuty analytics?",
+                            "answer": "Reviewing operational reports (incident frequency, off-hours pages, top-noisy services) and tuning alerts/rotations regularly."
                         }
                     ]
                 }
@@ -1123,7 +1393,7 @@
                         },
                         {
                             "prompt": "Name one popular log aggregation tool.",
-                            "answer": "Elasticsearch/OpenSearch, Splunk, Datadog, or New Relic Logs."
+                            "answer": "New Relic Logs."
                         },
                         {
                             "prompt": "What is a log pipeline?",
