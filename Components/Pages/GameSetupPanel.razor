@@ -18,6 +18,18 @@
         </div>
     </details>
 
+    <details class="wth-collapse">
+        <summary><h3>Paste team list</h3></summary>
+        <div class="wth-paste-teams">
+            <p class="muted">One team per line (or comma-separated). Replaces the current list — overrides the teams loaded from <code>teams.json</code> at startup.</p>
+            <textarea class="wth-input wth-paste-input" rows="6"
+                      placeholder="Team Rocket&#10;Team Azure&#10;Team DevRel"
+                      @bind="_pasteText" @bind:event="oninput"></textarea>
+            <button class="wth-button ghost" type="button" @onclick="ApplyPaste"
+                    disabled="@string.IsNullOrWhiteSpace(_pasteText)">Replace team list</button>
+        </div>
+    </details>
+
     <div class="wth-options">
         <label class="wth-toggle">
             <input type="checkbox" checked="@EnableDoubleDown"
@@ -89,11 +101,20 @@
     [Parameter] public EventCallback OnTeamAdded { get; set; }
     [Parameter] public EventCallback<int> OnNumberOfQuestionsChanged { get; set; }
     [Parameter] public EventCallback<(string Name, bool Selected)> OnCategoryToggled { get; set; }
+    [Parameter] public EventCallback<string> OnTeamsPasted { get; set; }
     [Parameter] public EventCallback OnStartGame { get; set; }
+
+    private string _pasteText = string.Empty;
 
     private void HandleQuestionsChanged(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value?.ToString(), out var val) && val >= 1 && val <= 5)
             OnNumberOfQuestionsChanged.InvokeAsync(val);
+    }
+
+    private async Task ApplyPaste()
+    {
+        await OnTeamsPasted.InvokeAsync(_pasteText);
+        _pasteText = string.Empty;
     }
 }
