@@ -68,7 +68,7 @@
     {
         <QuestionPanel Phase="_phase" CurrentQuestion="_currentQuestion" Teams="_teams" EnableTimer="_enableTimer"
                        TimeRemaining="_timeRemaining" EnableBuzzer="_enableBuzzer" BuzzerConfigured="BuzzService.IsConfigured"
-                       BuzzerLocked="_buzzerLocked" BuzzedTeam="_buzzedTeam" RemoteBuzzedName="_remoteBuzzedName" MaxWager="_maxWager"
+                       BuzzerLocked="_buzzerLocked" BuzzedTeam="_buzzedTeam" RemoteBuzzedName="@_remoteBuzzedName" MaxWager="_maxWager"
                        OnBuzzIn="BuzzIn" OnBuzzReset="ResetBuzz" OnScoreAdjusted="e => AdjustScore(e.Team, e.Points)"
                        OnRevealAnswer="RevealAnswer" OnReturnToBoard="ReturnToBoard" OnCompleteQuestion="HandleCompleteQuestion" />
     }
