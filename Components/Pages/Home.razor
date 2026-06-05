@@ -40,7 +40,7 @@
     <GameHeader Phase="_phase" IsBoardValid="IsBoardValid" NumberOfQuestions="_numberOfQuestions"
                 OnResetGame="ResetGame" OnEndGame="EndGame" />
 
-    <TeamScoreboard Teams="_teams" />
+    <TeamScoreboard Teams="_teams" StartCollapsed="_phase is GamePhase.Answer or GamePhase.Winner" />
 
     @if (!_isLoaded)
     {
