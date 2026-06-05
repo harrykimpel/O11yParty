@@ -3,6 +3,6 @@
 
 // Record the team name and score as custom attributes in New Relic for better insights into user interactions and game performance
 function RecordTeamScore(team, score) {
-    //newrelic.setCustomAttribute('O11yPartyTeam', team);
-    //newrelic.setCustomAttribute('O11yPartyTeamScore', score);
+    newrelic.setCustomAttribute('O11yPartyTeam', team);
+    newrelic.setCustomAttribute('O11yPartyTeamScore', score);
 }

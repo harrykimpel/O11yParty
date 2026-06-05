@@ -1,5 +1,5 @@
 <section class="wth-scoreboard">
-    <details class="wth-collapse" open>
+    <details class="wth-collapse" open="@(!StartCollapsed)">
         <summary>
             <h2>Teams (@Teams.Count)</h2>
         </summary>
@@ -17,4 +17,7 @@
 
 @code {
     [Parameter] public IReadOnlyList<Team> Teams { get; set; } = Array.Empty<Team>();
+
+    /// <summary>When true, the scoreboard renders collapsed by default (e.g. on the winner board).</summary>
+    [Parameter] public bool StartCollapsed { get; set; }
 }
