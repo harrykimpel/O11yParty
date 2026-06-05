@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace O11yParty.Services;
 
@@ -14,6 +15,7 @@ public sealed class NewRelicBuzzService
     private readonly int _accountId;
     private readonly string _eventType;
     private readonly string _nameAttribute;
+    private readonly bool _normalizeReBuzzSuffix;
 
     public NewRelicBuzzService(HttpClient httpClient, IConfiguration configuration, ILogger<NewRelicBuzzService> logger)
     {
@@ -24,7 +26,19 @@ public sealed class NewRelicBuzzService
         _accountId = int.TryParse(configuration["NewRelic:AccountId"], out var accountId) ? accountId : 0;
         _eventType = SanitizeIdentifier(configuration["NewRelic:BuzzEventType"], "O11yPartyBuzz");
         _nameAttribute = SanitizeIdentifier(configuration["NewRelic:BuzzNameAttribute"], "teamName");
+        // Test aid: the load-test harness sends a distinct teamName per re-buzz
+        // (e.g. "LOADTEST-postfix-1-r8"). When enabled, collapse a trailing "-r<n>"
+        // back to the base name so re-buzzes map onto the listed team. Off by default
+        // — real team names are unaffected.
+        _normalizeReBuzzSuffix = configuration.GetValue("NewRelic:NormalizeReBuzzSuffix", false);
     }
+
+    // Matches a trailing "-r" + digits (the harness's re-buzz suffix).
+    private static readonly Regex ReBuzzSuffixRegex =
+        new(@"-r\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    private string NormalizeBuzzName(string name)
+        => _normalizeReBuzzSuffix ? ReBuzzSuffixRegex.Replace(name, string.Empty) : name;
 
     public bool IsConfigured => _accountId > 0 && !string.IsNullOrWhiteSpace(_apiKey);
 
@@ -98,8 +112,9 @@ public sealed class NewRelicBuzzService
                 {
                     return null;
                 }
-                _O11yParty.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", buzzedName, timestampUnixMs);
-                return new BuzzEvent(buzzedName.Trim(), timestampUnixMs);
+                var normalizedName = NormalizeBuzzName(buzzedName.Trim());
+                _O11yParty.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", normalizedName, timestampUnixMs);
+                return new BuzzEvent(normalizedName, timestampUnixMs);
             }
             catch (OperationCanceledException)
             {

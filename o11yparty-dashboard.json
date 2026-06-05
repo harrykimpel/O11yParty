@@ -1,0 +1,88 @@
+{
+    "name": "O11y-Party",
+    "description": null,
+    "permissions": "PUBLIC_READ_WRITE",
+    "pages": [
+        {
+            "name": "O11y-Party",
+            "description": null,
+            "widgets": [
+                {
+                    "title": null,
+                    "layout": {
+                        "column": 1,
+                        "row": 1,
+                        "width": 12,
+                        "height": 2
+                    },
+                    "linkedEntityGuids": null,
+                    "visualization": {
+                        "id": "viz.markdown"
+                    },
+                    "rawConfiguration": {
+                        "text": "![](https://cdn.kimpel.com/o11y-party.png)"
+                    }
+                },
+                {
+                    "title": "Team Score",
+                    "layout": {
+                        "column": 1,
+                        "row": 3,
+                        "width": 12,
+                        "height": 5
+                    },
+                    "linkedEntityGuids": null,
+                    "visualization": {
+                        "id": "viz.bar"
+                    },
+                    "rawConfiguration": {
+                        "facet": {
+                            "showOtherSeries": false
+                        },
+                        "nrqlQueries": [
+                            {
+                                "accountIds": [
+                                    NR_ACCOUNT_ID
+                                ],
+                                "query": "SELECT latest(O11yPartyTeamScore) FROM `UserAction` SINCE today facet O11yPartyTeam limit max"
+                            }
+                        ],
+                        "platformOptions": {
+                            "ignoreTimeRange": false
+                        }
+                    }
+                },
+                {
+                    "title": null,
+                    "layout": {
+                        "column": 1,
+                        "row": 8,
+                        "width": 12,
+                        "height": 3
+                    },
+                    "linkedEntityGuids": null,
+                    "visualization": {
+                        "id": "viz.table"
+                    },
+                    "rawConfiguration": {
+                        "facet": {
+                            "showOtherSeries": false
+                        },
+                        "nrqlQueries": [
+                            {
+                                "accountIds": [
+                                    NR_ACCOUNT_ID
+                                ],
+                                "query": "FROM O11yPartyLeadCapture select firstName, lastName, country limit max"
+                            }
+                        ],
+                        "platformOptions": {
+                            "ignoreTimeRange": false
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variables": []
+}
