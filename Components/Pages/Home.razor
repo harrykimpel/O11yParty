@@ -48,7 +48,7 @@
     <GameHeader Phase="_phase" IsBoardValid="IsBoardValid" NumberOfQuestions="_numberOfQuestions"
                 OnResetGame="ResetGame" OnEndGame="EndGame" />
 
-    <TeamScoreboard Teams="_teams" StartCollapsed="true" />
+    <TeamScoreboard Teams="_teams" StartCollapsed="true" OnScoreSet="args => SetScore(args.Team, args.Score)" />
 
     @if (!_isLoaded)
     {
@@ -587,17 +587,37 @@ q.Value);
 
         var verb = delta >= 0 ? "Awarded" : "Removed";
         var preposition = delta >= 0 ? "to" : "from";
-        _lastScoreMessage = $"{verb} {Math.Abs(delta)} {preposition} {team.Name} — now {team.Score} pts";
+        ShowScoreToast($"{verb} {Math.Abs(delta)} {preposition} {team.Name} — now {team.Score} pts");
+
+        _ = ReenableScoreButtonAsync(key);
+        await RecordTeamScoreAsync(team);
+    }
+
+    // Manual scoreboard edit: set a team's score to an absolute value (no cooldown —
+    // it's a deliberate correction, not a repeatable +/- click).
+    [NewRelic.Api.Agent.Transaction]
+    private async void SetScore(Team team, int newScore)
+    {
+        team.Score = newScore;
+        _scoreApplied = true;
+        ShowScoreToast($"Set {team.Name} to {newScore} pts");
+        await RecordTeamScoreAsync(team);
+    }
+
+    private void ShowScoreToast(string message)
+    {
+        _lastScoreMessage = message;
         _showScoreToast = true;
         var toastVersion = ++_scoreToastVersion;
         StateHasChanged();
-
-        _ = ReenableScoreButtonAsync(key);
         _ = HideScoreToastAfterDelayAsync(toastVersion);
+    }
 
-        // Telemetry only — must never fault the circuit. The New Relic browser helper
-        // throws "newrelic is not defined" when the browser agent isn't loaded (e.g.
-        // local dev); swallow it so scoring + the re-enable render keep working.
+    // Telemetry only — must never fault the circuit. The New Relic browser helper
+    // throws "newrelic is not defined" when the browser agent isn't loaded (e.g.
+    // local dev); swallow it so scoring keeps working.
+    private async Task RecordTeamScoreAsync(Team team)
+    {
         try
         {
             await JS.InvokeAsync<string>("RecordTeamScore", team.Name, team.Score);

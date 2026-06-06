@@ -398,6 +398,28 @@ a {
     color: var(--wth-gold);
 }
 
+/* Editable score: looks like the score but signals it can be clicked + typed to
+   set a team's total directly (font-size + gold colour inherited from .team-score). */
+.team-score-input {
+    width: 6ch;
+    text-align: right;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+    padding: 0.1rem 0.45rem;
+}
+
+.team-score-input:hover {
+    border-color: rgba(28, 231, 131, 0.55);
+}
+
+.team-score-input:focus {
+    outline: none;
+    border-color: var(--wth-gold);
+    background: rgba(28, 231, 131, 0.12);
+}
+
 .wth-collapse > summary {
     list-style: none;
     cursor: pointer;
