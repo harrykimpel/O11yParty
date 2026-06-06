@@ -6,9 +6,12 @@
         <div class="wth-team-grid">
             @foreach (var team in Teams.OrderByDescending(t => t.Score).ThenBy(t => t.Name))
             {
-                <div class="wth-team-card">
+                var scoreTeam = team;
+                <div class="wth-team-card" @key="scoreTeam">
                     <span class="team-name">@team.Name</span>
-                    <span class="team-score">@team.Score</span>
+                    <input class="team-score team-score-input" type="number" inputmode="numeric"
+                           aria-label="@($"Score for {team.Name} — edit to set manually")"
+                           value="@team.Score" @onchange="e => SetScore(scoreTeam, e.Value?.ToString())" />
                 </div>
             }
         </div>
@@ -20,4 +23,17 @@
 
     /// <summary>When true, the scoreboard renders collapsed by default (e.g. on the winner board).</summary>
     [Parameter] public bool StartCollapsed { get; set; }
+
+    /// <summary>Raised when the host edits a team's score directly to an absolute value.</summary>
+    [Parameter] public EventCallback<(Team Team, int Score)> OnScoreSet { get; set; }
+
+    private async Task SetScore(Team team, string? raw)
+    {
+        // Absolute set: the host types the team's new total. Ignore non-numeric input
+        // (the field re-renders back to the real score on the next render).
+        if (int.TryParse(raw, out var newScore) && newScore != team.Score)
+        {
+            await OnScoreSet.InvokeAsync((team, newScore));
+        }
+    }
 }
