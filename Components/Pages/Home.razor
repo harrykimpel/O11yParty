@@ -37,6 +37,14 @@
         </div>
     }
 
+    @if (_showScoreToast && !string.IsNullOrWhiteSpace(_lastScoreMessage))
+    {
+        <div class="wth-score-toast" role="status" aria-live="polite" aria-atomic="true">
+            <span class="score-toast-icon">✓</span>
+            <span class="score-toast-text">@_lastScoreMessage</span>
+        </div>
+    }
+
     <GameHeader Phase="_phase" IsBoardValid="IsBoardValid" NumberOfQuestions="_numberOfQuestions"
                 OnResetGame="ResetGame" OnEndGame="EndGame" />
 
@@ -70,6 +78,7 @@
         <QuestionPanel Phase="_phase" CurrentQuestion="_currentQuestion" Teams="_teams" EnableTimer="_enableTimer"
                        TimeRemaining="_timeRemaining" EnableBuzzer="_enableBuzzer" BuzzerConfigured="BuzzService.IsConfigured"
                        BuzzerLocked="_buzzerLocked" BuzzedTeam="_buzzedTeam" RemoteBuzzedName="@_remoteBuzzedName" MaxWager="_maxWager"
+                       IsScoreCoolingDown="IsScoreCoolingDown"
                        OnBuzzIn="BuzzIn" OnBuzzReset="ResetBuzz" OnScoreAdjusted="e => AdjustScore(e.Team, e.Points)"
                        OnRevealAnswer="RevealAnswer" OnReturnToBoard="ReturnToBoard" OnCompleteQuestion="HandleCompleteQuestion" />
     }
@@ -482,6 +491,8 @@ q.Value);
 
         _currentQuestion = question;
         _phase = GamePhase.Question;
+        _lastScoreMessage = null; // clear any confirmation from the previous question
+        _showScoreToast = false;
         _maxWager = Math.Max(
             _categories.SelectMany(c => c.Questions).Max(q => q.Value),
             _teams.Max(t => t.Score));
@@ -549,12 +560,79 @@ q.Value);
             : GamePhase.Board;
     }
 
+    // After a score button is clicked it's briefly disabled and a confirmation is
+    // shown, so the host gets clear feedback the click registered and can't
+    // accidentally double-apply points. State lives here (not in QuestionPanel) so the
+    // background re-enable render reliably flushes to the client and cascades down.
+    private const int ScoreButtonCooldownSeconds = 5;
+    private const int ScoreToastSeconds = 3;
+    private readonly HashSet<string> _scoreCooldownKeys = new();
+    private string? _lastScoreMessage;
+    private bool _showScoreToast;
+    private int _scoreToastVersion;
+
+    private static string ScoreCooldownKey(Team team, int points) => $"{team.Name}|{points}";
+
+    private bool IsScoreCoolingDown(Team team, int points) => _scoreCooldownKeys.Contains(ScoreCooldownKey(team, points));
+
     [NewRelic.Api.Agent.Transaction]
     private async void AdjustScore(Team team, int delta)
     {
+        var key = ScoreCooldownKey(team, delta);
+        if (_scoreCooldownKeys.Contains(key)) return; // ignore rapid repeat clicks
+        _scoreCooldownKeys.Add(key);
+
         team.Score += delta;
         _scoreApplied = true;
-        await JS.InvokeAsync<string>("RecordTeamScore", team.Name, team.Score);
+
+        var verb = delta >= 0 ? "Awarded" : "Removed";
+        var preposition = delta >= 0 ? "to" : "from";
+        _lastScoreMessage = $"{verb} {Math.Abs(delta)} {preposition} {team.Name} — now {team.Score} pts";
+        _showScoreToast = true;
+        var toastVersion = ++_scoreToastVersion;
+        StateHasChanged();
+
+        _ = ReenableScoreButtonAsync(key);
+        _ = HideScoreToastAfterDelayAsync(toastVersion);
+
+        // Telemetry only — must never fault the circuit. The New Relic browser helper
+        // throws "newrelic is not defined" when the browser agent isn't loaded (e.g.
+        // local dev); swallow it so scoring + the re-enable render keep working.
+        try
+        {
+            await JS.InvokeAsync<string>("RecordTeamScore", team.Name, team.Score);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "RecordTeamScore JS interop failed; continuing");
+        }
+    }
+
+    private async Task ReenableScoreButtonAsync(string key)
+    {
+        try { await Task.Delay(TimeSpan.FromSeconds(ScoreButtonCooldownSeconds)); }
+        finally
+        {
+            await InvokeAsync(() =>
+            {
+                _scoreCooldownKeys.Remove(key);
+                StateHasChanged();
+            });
+        }
+    }
+
+    private async Task HideScoreToastAfterDelayAsync(int expectedVersion)
+    {
+        try { await Task.Delay(TimeSpan.FromSeconds(ScoreToastSeconds)); }
+        catch (TaskCanceledException) { return; }
+
+        await InvokeAsync(() =>
+        {
+            // Only hide if no newer toast replaced this one in the meantime.
+            if (expectedVersion != _scoreToastVersion) return;
+            _showScoreToast = false;
+            StateHasChanged();
+        });
     }
 
     private void BuzzIn(Team team)

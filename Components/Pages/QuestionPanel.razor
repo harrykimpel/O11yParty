@@ -70,9 +70,9 @@
             {
                 <div class="wth-quick-score">
                     <span>Buzzed team:</span>
-                    <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(BuzzedTeam!, GetQuestionPoints()))">Award
-                        @BuzzedTeam.Name</button>
-                    <button class="wth-button ghost small"
+                    <button class="wth-button small" disabled="@CoolingDown(BuzzedTeam!, GetQuestionPoints())"
+                            @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(BuzzedTeam!, GetQuestionPoints()))">Award @BuzzedTeam.Name</button>
+                    <button class="wth-button ghost small" disabled="@CoolingDown(BuzzedTeam!, -GetQuestionPoints())"
                             @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(BuzzedTeam!, -GetQuestionPoints()))">Penalize @BuzzedTeam.Name</button>
                 </div>
             }
@@ -82,13 +82,14 @@
                 <div class="wth-team-score-grid">
                     @foreach (var team in Teams)
                     {
+                        var scoreTeam = team;
                         <div class="wth-team-score-row">
-                            <span>@team.Name</span>
+                            <span>@scoreTeam.Name</span>
                             <div class="wth-team-score-buttons">
-                                <button class="wth-button small" @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, GetQuestionPoints()))">+
-                                    @GetQuestionPoints()</button>
-                                <button class="wth-button ghost small"
-                                        @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(team, -GetQuestionPoints()))">- @GetQuestionPoints()</button>
+                                <button class="wth-button small" disabled="@CoolingDown(scoreTeam, GetQuestionPoints())"
+                                        @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(scoreTeam, GetQuestionPoints()))">+ @GetQuestionPoints()</button>
+                                <button class="wth-button ghost small" disabled="@CoolingDown(scoreTeam, -GetQuestionPoints())"
+                                        @onclick="() => OnScoreAdjusted.InvokeAsync(new ScoreEvent(scoreTeam, -GetQuestionPoints()))">- @GetQuestionPoints()</button>
                             </div>
                         </div>
                     }
@@ -127,6 +128,10 @@
     [Parameter] public EventCallback OnReturnToBoard { get; set; }
     [Parameter] public EventCallback<int> OnCompleteQuestion { get; set; }
 
+    // Score-button cooldown + last-action confirmation are owned by the parent
+    // (Home) so the background re-enable render reliably flushes to the client.
+    [Parameter] public Func<Team, int, bool>? IsScoreCoolingDown { get; set; }
+
     private int _doubleDownWager;
     private O11yPartyQuestion? _prevQuestion;
 
@@ -138,6 +143,8 @@
             _prevQuestion = CurrentQuestion;
         }
     }
+
+    private bool CoolingDown(Team team, int points) => IsScoreCoolingDown?.Invoke(team, points) ?? false;
 
     private int GetQuestionPoints()
     {
