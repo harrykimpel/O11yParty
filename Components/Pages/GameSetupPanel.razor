@@ -74,6 +74,27 @@
         </div>
     </div>
 
+    <details class="wth-collapse">
+        <summary><h3>Import questions (TSV)</h3></summary>
+        <div class="wth-import-questions">
+            <p class="muted">
+                Paste <strong>tab-separated</strong> rows — build them in Google Sheets / Excel, select the range and copy.
+                Columns: <code>Category</code>, <code>Value</code>, <code>Prompt</code>, <code>Answer</code>, <code>DoubleDown</code> (optional).
+                A header row is optional. This <strong>adds to</strong> the current board: questions for an existing category name are appended, otherwise a new category is created and selected.
+                Use values <code>100, 200, 300…</code> so they land on the board's point tiers.
+            </p>
+            <textarea class="wth-input wth-paste-input" rows="7"
+                      placeholder="Category&#9;Value&#9;Prompt&#9;Answer&#9;DoubleDown&#10;Networking&#9;100&#9;What does DNS stand for?&#9;Domain Name System&#10;Networking&#9;200&#9;Default HTTPS port?&#9;443&#9;true"
+                      @bind="_questionsTsv" @bind:event="oninput"></textarea>
+            <button class="wth-button ghost" type="button" @onclick="ApplyImport"
+                    disabled="@string.IsNullOrWhiteSpace(_questionsTsv)">Add to board</button>
+            @if (!string.IsNullOrWhiteSpace(ImportMessage))
+            {
+                <p class="wth-import-result" role="status" aria-live="polite">@ImportMessage</p>
+            }
+        </div>
+    </details>
+
     <div class="wth-actions">
         <button class="wth-button ghost" @onclick="OnTeamAdded">Add Team</button>
         <button class="wth-button" @onclick="OnStartGame"
@@ -102,9 +123,12 @@
     [Parameter] public EventCallback<int> OnNumberOfQuestionsChanged { get; set; }
     [Parameter] public EventCallback<(string Name, bool Selected)> OnCategoryToggled { get; set; }
     [Parameter] public EventCallback<string> OnTeamsPasted { get; set; }
+    [Parameter] public EventCallback<string> OnQuestionsImported { get; set; }
+    [Parameter] public string? ImportMessage { get; set; }
     [Parameter] public EventCallback OnStartGame { get; set; }
 
     private string _pasteText = string.Empty;
+    private string _questionsTsv = string.Empty;
 
     private void HandleQuestionsChanged(ChangeEventArgs e)
     {
@@ -116,5 +140,14 @@
     {
         await OnTeamsPasted.InvokeAsync(_pasteText);
         _pasteText = string.Empty;
+    }
+
+    private async Task ApplyImport()
+    {
+        // Clear the box after handing it off so a second click can't double-add the
+        // same rows; the result summary tells the host what happened.
+        var tsv = _questionsTsv;
+        _questionsTsv = string.Empty;
+        await OnQuestionsImported.InvokeAsync(tsv);
     }
 }
