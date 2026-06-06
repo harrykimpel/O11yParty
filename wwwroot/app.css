@@ -68,12 +68,15 @@ a {
     border-radius: 0.4rem;
 }
 
-/* In-flow banner between the header and the question — NOT a centered overlay, so
-   it never covers the question text while it's being read. */
+/* Overlay (floats on top — no layout shift) pinned just below the O11y-Party header
+   (.wth-header-cosmic is 200px tall), so it sits high on the screen without covering
+   either the banner above it or the question text below it. */
 .wth-buzz-highlight {
-    display: flex;
-    justify-content: center;
-    margin: 0.25rem 0 1.25rem;
+    position: fixed;
+    top: 212px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1200;
     pointer-events: none;
     animation: buzz-pop 240ms ease-out;
 }
@@ -106,12 +109,12 @@ a {
 
 @keyframes buzz-pop {
     from {
-        transform: translateY(-8px) scale(0.97);
+        transform: translate(-50%, -8px) scale(0.97);
         opacity: 0;
     }
 
     to {
-        transform: none;
+        transform: translateX(-50%) scale(1);
         opacity: 1;
     }
 }
