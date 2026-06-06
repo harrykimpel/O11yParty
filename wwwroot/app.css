@@ -68,12 +68,12 @@ a {
     border-radius: 0.4rem;
 }
 
+/* In-flow banner between the header and the question — NOT a centered overlay, so
+   it never covers the question text while it's being read. */
 .wth-buzz-highlight {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1200;
+    display: flex;
+    justify-content: center;
+    margin: 0.25rem 0 1.25rem;
     pointer-events: none;
     animation: buzz-pop 240ms ease-out;
 }
@@ -106,12 +106,12 @@ a {
 
 @keyframes buzz-pop {
     from {
-        transform: translate(-50%, calc(-50% - 10px)) scale(0.96);
+        transform: translateY(-8px) scale(0.97);
         opacity: 0;
     }
 
     to {
-        transform: translate(-50%, -50%) scale(1);
+        transform: none;
         opacity: 1;
     }
 }
@@ -956,10 +956,6 @@ a {
 
     .wth-winner-video {
         min-height: 200px;
-    }
-
-    .wth-buzz-highlight {
-        width: min(92vw, 620px);
     }
 
     .wth-buzz-highlight-card {
