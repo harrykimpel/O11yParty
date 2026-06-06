@@ -701,27 +701,26 @@ a {
     margin-top: 1.5rem;
 }
 
-/* Small auto-dismissing toast confirming a score change — a compact sibling of
-   .wth-buzz-highlight, pinned to the bottom-center so it doesn't cover the score
-   buttons the host is clicking. */
+/* Small auto-dismissing toast confirming a score change — a compact, centered
+   sibling of .wth-buzz-highlight. */
 .wth-score-toast {
     position: fixed;
-    bottom: 2rem;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 1100;
     pointer-events: none;
     display: flex;
     align-items: center;
     gap: 0.55rem;
     max-width: min(92vw, 460px);
-    padding: 0.7rem 1.1rem;
+    padding: 0.8rem 1.25rem;
     border-radius: 12px;
     font-weight: 700;
     color: #082014;
     background: linear-gradient(140deg, rgba(28, 231, 131, 0.97), rgba(110, 255, 179, 0.95));
     border: 2px solid rgba(10, 22, 15, 0.45);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
     animation: score-toast-pop 200ms ease-out;
 }
 
@@ -732,11 +731,11 @@ a {
 
 @keyframes score-toast-pop {
     from {
-        transform: translate(-50%, 12px);
+        transform: translate(-50%, calc(-50% + 12px));
         opacity: 0;
     }
     to {
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         opacity: 1;
     }
 }
