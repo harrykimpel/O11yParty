@@ -1,0 +1,11 @@
+Category	Value	Prompt	Answer	DoubleDown
+Pets	100	What sound does a cat make?	Meow	false
+Pets	100	What do you call a baby dog?	A puppy	false
+Pets	200	Which pet bird is famous for mimicking human speech?	A parrot	false
+Pets	200	What small orange fish is a classic first pet, often won at fairs?	A goldfish	false
+Pets	300	What is the fastest domestic dog breed?	The Greyhound	false
+Pets	300	What pet rodent is known for stuffing food in its cheek pouches?	A hamster	false
+Pets	400	What is a female cat called?	A queen	false
+Pets	400	Which tall, slender dog breed is often called a gentle giant?	The Great Dane	true
+Pets	500	Roughly how old was Creme Puff, the oldest known pet cat?	About 38 years	true
+Pets	500	What is the name for a young goat sometimes kept as a pet?	A kid	false

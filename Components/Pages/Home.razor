@@ -67,6 +67,7 @@
                         OnTeamNameChanged="args => UpdateTeamName(args.Index, args.Value)" OnTeamRemoved="RemoveTeam"
                         OnTeamAdded="AddTeam" OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
                         OnCategoryToggled="args => ToggleCategory(args.Name, args.Selected)" OnTeamsPasted="ReplaceTeams"
+                        OnQuestionsImported="ImportQuestions" ImportMessage="@_importMessage"
                         OnStartGame="StartGame" />
     }
     else if (_phase == GamePhase.Board)
@@ -456,6 +457,104 @@ q.Value);
         {
             _teams.Add(new Team(name));
         }
+    }
+
+    private string? _importMessage;
+
+    /// <summary>
+    /// Extends the board from pasted TSV (cols: Category, Value, Prompt, Answer, [DoubleDown]).
+    /// Questions for an existing category name are appended; a new category is created and
+    /// auto-selected. Reports a summary + any skipped rows via <see cref="_importMessage"/>.
+    /// </summary>
+    [NewRelic.Api.Agent.Transaction]
+    private void ImportQuestions(string? tsv)
+    {
+        if (string.IsNullOrWhiteSpace(tsv))
+        {
+            _importMessage = "Nothing to import.";
+            return;
+        }
+
+        var lines = tsv.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
+        var existingBefore = new HashSet<string>(_sourceCategories.Select(c => c.Name), StringComparer.OrdinalIgnoreCase);
+        var createdCats = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var touchedCats = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var nonTierValues = new SortedSet<int>();
+        int added = 0, skipped = 0;
+        var errors = new List<string>();
+
+        for (var i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i];
+            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            var cols = line.Split('\t');
+            // Skip an optional header row (first non-empty line whose Value column isn't numeric).
+            if (i == 0 && cols.Length >= 2 && !int.TryParse(cols[1].Trim(), out _)) continue;
+
+            if (cols.Length < 4)
+            {
+                skipped++;
+                if (errors.Count < 5) errors.Add($"line {i + 1}: expected 4+ tab-separated columns");
+                continue;
+            }
+
+            var category = cols[0].Trim();
+            var prompt = cols[2].Trim();
+            var answer = cols[3].Trim();
+            var doubleDown = cols.Length >= 5 && IsTruthy(cols[4]);
+
+            if (category.Length == 0 || prompt.Length == 0 || answer.Length == 0 || !int.TryParse(cols[1].Trim(), out var value) || value <= 0)
+            {
+                skipped++;
+                if (errors.Count < 5) errors.Add($"line {i + 1}: needs Category, positive Value, Prompt, Answer");
+                continue;
+            }
+
+            if (value % 100 != 0) nonTierValues.Add(value);
+
+            var cat = _sourceCategories.FirstOrDefault(c => string.Equals(c.Name, category, StringComparison.OrdinalIgnoreCase));
+            if (cat is null)
+            {
+                cat = new O11yPartyCategory { Name = category };
+                _sourceCategories.Add(cat);
+                createdCats.Add(category);
+            }
+
+            cat.Questions.Add(new O11yPartyQuestion
+            {
+                Value = value,
+                Prompt = prompt,
+                Answer = answer,
+                IsDoubleDown = doubleDown,
+                CategoryName = cat.Name
+            });
+            touchedCats.Add(cat.Name);
+            added++;
+        }
+
+        // Auto-select newly created categories so they're immediately in play.
+        foreach (var name in createdCats) _selectedCategoryNames.Add(name);
+        _numberOfCategories = _selectedCategoryNames.Count;
+        RebuildBoardWithRandomQuestions();
+
+        if (added == 0)
+        {
+            _importMessage = $"No questions added — skipped {skipped} row(s)." + (errors.Count > 0 ? " " + string.Join("; ", errors) : "");
+            return;
+        }
+
+        var extended = touchedCats.Count - createdCats.Count;
+        var msg = $"Added {added} question(s): {createdCats.Count} new categor{(createdCats.Count == 1 ? "y" : "ies")}, {extended} extended.";
+        if (skipped > 0) msg += $" Skipped {skipped} row(s).";
+        if (nonTierValues.Count > 0) msg += $" Note: values {string.Join(", ", nonTierValues)} aren't multiples of 100, so they won't appear on the board's point tiers.";
+        _importMessage = msg;
+    }
+
+    private static bool IsTruthy(string? s)
+    {
+        s = s?.Trim().ToLowerInvariant();
+        return s is "true" or "yes" or "y" or "1" or "x" or "✓" or "dd";
     }
 
     private void RemoveTeam(int index)
