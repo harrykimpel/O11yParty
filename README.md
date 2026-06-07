@@ -37,6 +37,26 @@ To enable New Relic Browser monitoring for this application, follow these steps:
 6. Uncomment the lines in the `RecordTeamScore` function to enable recording team names and scores as custom attributes in New Relic for better insights into user interactions and game performance.
 7. Save the file.
 
+## (optional) Buzzer Integration (New Relic)
+
+The game can show which team buzzed in live, by polling New Relic for buzz events published by
+the companion [O11yParty-Buzzer](https://github.com/harrykimpel/O11yParty-Buzzer) app. When a
+new buzz is detected during a question, the team is highlighted and locked in. This is optional —
+the game runs fine without it.
+
+Configure under the `NewRelic` section of `appsettings.json` (or via `NewRelic__*` env vars):
+
+| Key | Default | Notes |
+|-----|---------|-------|
+| `AccountId` | _(required)_ | New Relic account ID to query |
+| `UserApiKey` | _(required)_ | New Relic User API key (NerdGraph/NRQL) |
+| `BuzzEventType` | `O11yPartyBuzz` | Custom event type the buzzer writes |
+| `BuzzNameAttribute` | `teamName` | Event attribute holding the team name |
+| `NormalizeReBuzzSuffix` | `false` | When `true`, strips a trailing `-r<n>` from the polled team name so load-test re-buzz names map back to the base team. Leave off for normal play. |
+
+A buzz only highlights a team that exists in the current team list (case-insensitive match), so
+the buzzer's team names should match the names on the scoreboard.
+
 ## Running the Game
 
 1. Run the app:
@@ -49,19 +69,34 @@ To enable New Relic Browser monitoring for this application, follow these steps:
 
 ## Customizing the Game
 
-- Questions and answers live in [wwwroot/data/O11yParty-board.json](wwwroot/data/O11yParty-board.json).
+You can change the content by editing the data files **or** directly in the Setup screen at runtime:
 
-  - Prompts are the on-screen clues.
-  - Answers are the responses players should phrase as a question.
+- **Board content** lives in [wwwroot/data/O11yParty-board.json](wwwroot/data/O11yParty-board.json).
+  - Prompts are the on-screen clues; answers are the responses.
+  - The board is **tier-based**: each category provides questions at point levels (100, 200, …),
+    and one is picked at random per tier when the board is built.
+- **Initial team names** live in [wwwroot/data/teams.json](wwwroot/data/teams.json).
 
-- Initial team names live in [wwwroot/data/teams.json](wwwroot/data/teams.json).
+### In the Setup screen (no redeploy needed)
+
+- **Paste team list** — paste names (one per line or comma-separated) to override the teams
+  loaded from `teams.json` for this session.
+- **Import questions (TSV)** — paste tab-separated rows (`Category`, `Value`, `Prompt`, `Answer`,
+  `DoubleDown`) — e.g. copy a range straight from Google Sheets/Excel. This **adds to** the
+  current board: questions for an existing category name are appended; a new category name is
+  created and auto-selected. Use values `100, 200, 300…` so they land on the board's point tiers.
+  A sample file is included at [wwwroot/data/pets.tsv](wwwroot/data/pets.tsv).
 
 ## Game Controls
 
 - Use **New Game** to reset teams and the board.
 - Select a tile to reveal the clue.
 - Use **Show Answer** to reveal the response.
-- Use the scoring buttons to award or deduct points.
+- **Scoring:** award/deduct with the per-question buttons, or **click a team's score in the
+  scoreboard and type a new total** to correct it directly. Each change shows a brief
+  confirmation, and the per-question buttons are disabled for a few seconds after a click so
+  points aren't double-applied by accident.
+- When a team buzzes in, a banner appears just below the header (it doesn't cover the question).
 
 ## Chaos / Synthetic Failure Modes
 
