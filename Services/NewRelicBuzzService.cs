@@ -42,14 +42,21 @@ public sealed class NewRelicBuzzService
 
     public bool IsConfigured => _accountId > 0 && !string.IsNullOrWhiteSpace(_apiKey);
 
-    public async Task<BuzzEvent?> GetLatestBuzzAsync(CancellationToken cancellationToken = default)
+    /// <summary>
+    /// Returns the FIRST buzz since <paramref name="sinceUnixMs"/> (the moment the current
+    /// question opened) — i.e. the team that buzzed in first. Uses earliest() anchored to the
+    /// question-start epoch so the winner is decided server-side and is stable across polls,
+    /// rather than latest() over a rolling window (which would pick the most recent buzz).
+    /// </summary>
+    public async Task<BuzzEvent?> GetFirstBuzzSinceAsync(long sinceUnixMs, CancellationToken cancellationToken = default)
     {
         if (!IsConfigured)
         {
             return null;
         }
 
-        var nrql = $"FROM {_eventType} SELECT latest({_nameAttribute}) AS buzzedName, latest(timestamp) AS buzzedTimestamp SINCE 15 MINUTES AGO";
+        // NRQL SINCE accepts a Unix epoch in milliseconds.
+        var nrql = $"FROM {_eventType} SELECT earliest({_nameAttribute}) AS buzzedName, earliest(timestamp) AS buzzedTimestamp SINCE {sinceUnixMs}";
         var payload = new
         {
             query = GraphQlQuery,
@@ -113,7 +120,7 @@ public sealed class NewRelicBuzzService
                     return null;
                 }
                 var normalizedName = NormalizeBuzzName(buzzedName.Trim());
-                _O11yParty.LogInformation("Latest buzz event: Name={BuzzedName}, Timestamp={Timestamp}", normalizedName, timestampUnixMs);
+                _O11yParty.LogInformation("First buzz since question start: Name={BuzzedName}, Timestamp={Timestamp}", normalizedName, timestampUnixMs);
                 return new BuzzEvent(normalizedName, timestampUnixMs);
             }
             catch (OperationCanceledException)

@@ -838,7 +838,9 @@ q.Value);
             {
                 if (_phase != GamePhase.Question || _buzzerLocked) continue;
 
-                var buzz = await BuzzService.GetLatestBuzzAsync(cancellationToken);
+                // Ask New Relic for the FIRST buzz since this question opened (server-side
+                // earliest() SINCE the question-start epoch), so the first team to buzz wins.
+                var buzz = await BuzzService.GetFirstBuzzSinceAsync(_questionStartedUnixMs, cancellationToken);
                 if (buzz is null) continue;
 
                 if (buzz.TimestampUnixMs <= _lastHandledBuzzUnixMs || buzz.TimestampUnixMs < _questionStartedUnixMs)
