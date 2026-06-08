@@ -4,7 +4,7 @@
     "permissions": "PUBLIC_READ_WRITE",
     "pages": [
         {
-            "name": "O11y-Party",
+            "name": "WTH Jeopardy",
             "description": null,
             "widgets": [
                 {
@@ -12,7 +12,7 @@
                     "layout": {
                         "column": 1,
                         "row": 1,
-                        "width": 12,
+                        "width": 6,
                         "height": 2
                     },
                     "linkedEntityGuids": null,
@@ -26,9 +26,9 @@
                 {
                     "title": "Team Score",
                     "layout": {
-                        "column": 1,
-                        "row": 3,
-                        "width": 12,
+                        "column": 7,
+                        "row": 1,
+                        "width": 6,
                         "height": 5
                     },
                     "linkedEntityGuids": null,
@@ -53,10 +53,47 @@
                     }
                 },
                 {
+                    "title": "Team Score",
+                    "layout": {
+                        "column": 1,
+                        "row": 3,
+                        "width": 6,
+                        "height": 3
+                    },
+                    "linkedEntityGuids": null,
+                    "visualization": {
+                        "id": "viz.pie"
+                    },
+                    "rawConfiguration": {
+                        "chartStyles": {
+                            "gradient": {
+                                "enabled": false
+                            }
+                        },
+                        "facet": {
+                            "showOtherSeries": true
+                        },
+                        "legend": {
+                            "enabled": true
+                        },
+                        "nrqlQueries": [
+                            {
+                                "accountIds": [
+                                    NR_ACCOUNT_ID
+                                ],
+                                "query": "FROM O11yPartyBuzz SELECT count(*) SINCE today facet teamName limit max"
+                            }
+                        ],
+                        "platformOptions": {
+                            "ignoreTimeRange": false
+                        }
+                    }
+                },
+                {
                     "title": null,
                     "layout": {
                         "column": 1,
-                        "row": 8,
+                        "row": 6,
                         "width": 12,
                         "height": 3
                     },
@@ -73,7 +110,7 @@
                                 "accountIds": [
                                     NR_ACCOUNT_ID
                                 ],
-                                "query": "FROM O11yPartyLeadCapture select firstName, lastName, country limit max"
+                                "query": "FROM O11yPartyLeadCapture select firstName, lastName, country limit max SINCE today "
                             }
                         ],
                         "platformOptions": {
