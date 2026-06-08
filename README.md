@@ -47,7 +47,7 @@ the game runs fine without it.
 Configure under the `NewRelic` section of `appsettings.json` (or via `NewRelic__*` env vars):
 
 | Key | Default | Notes |
-|-----|---------|-------|
+| ----- | --------- | ------- |
 | `AccountId` | _(required)_ | New Relic account ID to query |
 | `UserApiKey` | _(required)_ | New Relic User API key (NerdGraph/NRQL) |
 | `BuzzEventType` | `O11yPartyBuzz` | Custom event type the buzzer writes |
@@ -56,6 +56,19 @@ Configure under the `NewRelic` section of `appsettings.json` (or via `NewRelic__
 
 A buzz only highlights a team that exists in the current team list (case-insensitive match), so
 the buzzer's team names should match the names on the scoreboard.
+
+## (optional) Sample New Relic Dashboard
+
+A ready-made dashboard is included at [o11yparty-dashboard.json](o11yparty-dashboard.json). It
+visualizes the data the game and buzzer send to New Relic:
+
+- **Team Score** — current score per team (from the browser `RecordTeamScore` custom data, faceted by team).
+- **Buzzes by team** — buzz counts from the buzzer's `O11yPartyBuzz` events.
+- **Lead captures** — names and country from the buzzer's `O11yPartyLeadCapture` events.
+
+To use it, in New Relic go to **Dashboards → Import dashboard**, paste the contents of
+`o11yparty-dashboard.json`, and choose your account. If you customized any event/attribute names
+(`EventType`, `BuzzEventType`, `BuzzNameAttribute`, …), update the matching NRQL in the widgets.
 
 ## Running the Game
 
@@ -105,7 +118,7 @@ O11yParty includes built-in synthetic failure modes useful for demonstrating obs
 Modes are activated by appending a `?chaos=` query parameter to the URL. Multiple modes can be combined with commas.
 
 | Mode | Behavior |
-|---|---|
+| --- | --- |
 | `slowload` | Injects a 4-second artificial delay during app startup |
 | `errors` | Randomly fails ~40% of question tile clicks with a recoverable in-app error message |
 | `latency` | Adds a random 1.5–4 second delay before each question loads |
@@ -114,7 +127,7 @@ Modes are activated by appending a `?chaos=` query parameter to the URL. Multipl
 
 **Example URLs:**
 
-```
+```plain
 /?chaos=slowload
 /?chaos=errors,latency
 /?chaos=slowload,memleak,timerdrift,errors,latency
