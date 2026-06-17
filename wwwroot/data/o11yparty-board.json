@@ -541,6 +541,157 @@
             ]
         },
         {
+            "name": "Rackspace",
+            "questionLevels": [
+                {
+                    "level": 1,
+                    "difficulty": 100,
+                    "questions": [
+                        {
+                            "prompt": "What is a Managed Service (or Managed Service Provider / MSP)?",
+                            "answer": "In this partnership, New Relic provides the data platform, while Rackspace provides this service model, acting as a seamless extension of your engineering team."
+                        },
+                        {
+                            "prompt": "What is the Fanatical Experience (or Fanatical Support)?",
+                            "answer": "Rackspace's core brand promise is this trademarked commitment to obsessive, expert, always-on customer service."
+                        },
+                        {
+                            "prompt": "What is multicloud?",
+                            "answer": "Rackspace positions itself as a leading end-to-end services company for this approach of running workloads across more than one cloud—AWS, Azure, and Google."
+                        },
+                        {
+                            "prompt": "What are managed services (Rackspace's role in the partnership)?",
+                            "answer": "In the Rackspace–New Relic story, New Relic supplies the observability data platform while Rackspace supplies these—the human expertise that runs and optimizes the environment."
+                        },
+                        {
+                            "prompt": "What is San Antonio, Texas?",
+                            "answer": "Rackspace was founded in, and still headquarters in, this Texas city."
+                        },
+                        {
+                            "prompt": "What are Rackers?",
+                            "answer": "Rackspace's people—the ones who deliver the Fanatical Experience—proudly call themselves this."
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "difficulty": 200,
+                    "questions": [
+                        {
+                            "prompt": "What is Digital Customer Experience?",
+                            "answer": "By pairing Rackspace’s proactive management with New Relic’s telemetry, joint customers ensure a flawless “DCX”—a three-letter acronym for this vital business priority."
+                        },
+                        {
+                            "prompt": "What is Rackspace Elastic Engineering?",
+                            "answer": "Rackspace delivers ongoing cloud expertise through pods of certified engineers who act as an extension of your team in this subscription-style service."
+                        },
+                        {
+                            "prompt": "What are the public cloud hyperscalers (AWS, Microsoft Azure, and Google Cloud)?",
+                            "answer": "Rackspace holds top-tier partner status and offers managed services across these three leading public clouds."
+                        },
+                        {
+                            "prompt": "What is observability (or full-stack monitoring)?",
+                            "answer": "By running New Relic on a customer's behalf, Rackspace turns this capability—seeing the full health of apps and infrastructure—into a managed outcome."
+                        },
+                        {
+                            "prompt": "What is OpenStack?",
+                            "answer": "Rackspace co-founded this open-source cloud platform in 2010 and still offers private cloud built on it."
+                        },
+                        {
+                            "prompt": "What is faster incident response (lower MTTR)?",
+                            "answer": "Pairing New Relic's telemetry with Rackspace's 24x7 experts targets this outcome—detecting and resolving problems before they hit customers."
+                        }
+                    ]
+                },
+                {
+                    "level": 3,
+                    "difficulty": 300,
+                    "questions": [
+                        {
+                            "prompt": "What is an Open Ecosystem (or Open Cloud)?",
+                            "answer": "Our partnership champions this “unlocked” approach to cloud architecture, giving customers the flexibility to use the best tools without being tied to a single vendor."
+                        },
+                        {
+                            "prompt": "What is Rackspace Private Cloud?",
+                            "answer": "For workloads that aren't a fit for public cloud, Rackspace offers this managed, dedicated-infrastructure option built on OpenStack or VMware."
+                        },
+                        {
+                            "prompt": "What is application modernization (or cloud-native services)?",
+                            "answer": "Beyond keeping the lights on, Rackspace helps customers re-architect legacy apps into containers and microservices through these services."
+                        },
+                        {
+                            "prompt": "What is a single pane of glass?",
+                            "answer": "A key joint value prop: Rackspace operates New Relic to give customers this unified view of health across their whole multicloud estate."
+                        },
+                        {
+                            "prompt": "What is proactive (or 24x7) monitoring and operations?",
+                            "answer": "Rather than waiting for outages, Rackspace uses New Relic dashboards and alerts to deliver this always-on operational practice."
+                        },
+                        {
+                            "prompt": "What is data, analytics, and AI/ML services?",
+                            "answer": "Rackspace's portfolio now extends well beyond hosting into this fast-growing practice area, helping customers build modern data platforms and AI solutions."
+                        }
+                    ]
+                },
+                {
+                    "level": 4,
+                    "difficulty": 400,
+                    "questions": [
+                        {
+                            "prompt": "What are Public Cloud Costs (or Cloud Spend)?",
+                            "answer": "Rackspace utilizes New Relic’s observability data to right-size environments, an exercise that studies show can optimize this metric by up to 50%."
+                        },
+                        {
+                            "prompt": "What is managed security (or Rackspace SOC / detection and response)?",
+                            "answer": "Rackspace pairs observability data with this service area—threat detection, response, and compliance run by its security operations experts."
+                        },
+                        {
+                            "prompt": "What is being an extension of your team (co-managed operations)?",
+                            "answer": "The Rackspace–New Relic message centers on this model: customers keep visibility and control while Rackspace experts share the operational load."
+                        },
+                        {
+                            "prompt": "What is FinOps (or cloud cost optimization)?",
+                            "answer": "Rackspace uses New Relic's usage and performance data to right-size environments, the heart of this cloud-spend discipline."
+                        },
+                        {
+                            "prompt": "What is Rackspace Technology (ticker RXT)?",
+                            "answer": "After going private and re-listing on the Nasdaq in 2020, this is the company's current name and stock symbol."
+                        },
+                        {
+                            "prompt": "What is Fanatical Support for AWS (FAWS)?",
+                            "answer": "Rackspace extended its signature service promise to Amazon's cloud under this named managed-hyperscaler offering."
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "difficulty": 500,
+                    "questions": [
+                        {
+                            "prompt": "What is Rackspace Spot?",
+                            "answer": "Rackspace launched this open-market platform where customers bid in live auctions for spare Kubernetes cloud-server capacity."
+                        },
+                        {
+                            "prompt": "What are Service Blocks?",
+                            "answer": "Rackspace lets customers compose a managed-services engagement from these modular, mix-and-match building blocks."
+                        },
+                        {
+                            "prompt": "What is a New Relic technology/observability partner?",
+                            "answer": "In the joint go-to-market, Rackspace fills this role—reselling and operating New Relic as part of its managed-services delivery."
+                        },
+                        {
+                            "prompt": "What is Graham Weston?",
+                            "answer": "This early investor became Rackspace's co-founder and long-serving chairman, shaping its service-first culture."
+                        },
+                        {
+                            "prompt": "What is co-founding OpenStack with NASA?",
+                            "answer": "This 2010 milestone—Rackspace teaming with a U.S. space agency—made it a pioneer of open-source cloud."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Tech Geography",
             "questionLevels": [
                 {
