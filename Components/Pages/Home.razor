@@ -253,7 +253,8 @@
     [NewRelic.Api.Agent.Transaction]
     private async Task LoadSourceCategoriesAsync()
     {
-        var boardPath = Path.Combine(Environment.WebRootPath, "data", "o11yparty-board.json");
+        var webRoot = Environment.WebRootPath ?? Path.Combine(Environment.ContentRootPath, "wwwroot");
+        var boardPath = Path.Combine(webRoot, "data", "o11yparty-board.json");
         if (!File.Exists(boardPath))
         {
             throw new InvalidOperationException($"Board JSON file was not found at '{boardPath}'.");

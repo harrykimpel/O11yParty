@@ -21,7 +21,7 @@ public sealed class O11yPartyDataService
             return CloneBoard(_cachedBoard);
         }
 
-        var boardPath = Path.Combine(_environment.WebRootPath, "data", "o11yparty-board.json");
+        var boardPath = Path.Combine(ResolveWebRoot(), "data", "o11yparty-board.json");
         if (!File.Exists(boardPath))
         {
             _cachedBoard = BuildFallbackBoard();
@@ -45,7 +45,7 @@ public sealed class O11yPartyDataService
             return _cachedTeams.ToList();
         }
 
-        var teamsPath = Path.Combine(_environment.WebRootPath, "data", "teams.json");
+        var teamsPath = Path.Combine(ResolveWebRoot(), "data", "teams.json");
         if (!File.Exists(teamsPath))
         {
             _cachedTeams = BuildFallbackTeams();
@@ -61,6 +61,13 @@ public sealed class O11yPartyDataService
         _cachedTeams = payload?.Teams?.Where(t => !string.IsNullOrWhiteSpace(t)).ToList() ?? BuildFallbackTeams();
         return _cachedTeams.ToList();
     }
+
+    // WebRootPath is null when no physical wwwroot directory sits next to the app
+    // (static assets are served from the build manifest by MapStaticAssets, so the
+    // app still runs). Fall back to ContentRootPath/wwwroot so the data-file lookup
+    // degrades to the graceful fallback board/teams instead of throwing.
+    private string ResolveWebRoot()
+        => _environment.WebRootPath ?? Path.Combine(_environment.ContentRootPath, "wwwroot");
 
     private static O11yPartyBoard CloneBoard(O11yPartyBoard board)
     {
