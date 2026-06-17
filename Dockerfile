@@ -1,16 +1,17 @@
-# Run the SDK natively on the build host's arch ($BUILDPLATFORM) and
-# cross-compile for the target arch ($TARGETARCH). This avoids running the
-# x64 SDK under QEMU emulation (which crashes MSBuild) when building an
-# amd64 image from an arm64 Mac.
+# Run the SDK natively on the build host's arch ($BUILDPLATFORM) so MSBuild is
+# never emulated under QEMU (which crashes it). This is a framework-dependent
+# app launched via `dotnet O11yParty.dll`, so the published output is portable
+# IL — do NOT pass `-a`/RID: a RID-specific publish drops the Blazor
+# `wwwroot/_framework/*` static assets, which 404s blazor.web.js at runtime and
+# kills interactivity. The portable output runs on the amd64 runtime image below.
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG TARGETARCH
 WORKDIR /src
 
 COPY O11yParty.csproj ./
-RUN dotnet restore O11yParty.csproj -a $TARGETARCH
+RUN dotnet restore O11yParty.csproj
 
 COPY . ./
-RUN dotnet publish O11yParty.csproj -c Release -a $TARGETARCH -o /app/publish --no-restore
+RUN dotnet publish O11yParty.csproj -c Release -o /app/publish
 COPY newrelic.config /app/publish/newrelic/newrelic.config
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
