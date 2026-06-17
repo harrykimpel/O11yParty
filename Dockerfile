@@ -1,11 +1,16 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+# Run the SDK natively on the build host's arch ($BUILDPLATFORM) and
+# cross-compile for the target arch ($TARGETARCH). This avoids running the
+# x64 SDK under QEMU emulation (which crashes MSBuild) when building an
+# amd64 image from an arm64 Mac.
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG TARGETARCH
 WORKDIR /src
 
 COPY O11yParty.csproj ./
-RUN dotnet restore O11yParty.csproj
+RUN dotnet restore O11yParty.csproj -a $TARGETARCH
 
 COPY . ./
-RUN dotnet publish O11yParty.csproj -c Release -o /app/publish
+RUN dotnet publish O11yParty.csproj -c Release -a $TARGETARCH -o /app/publish --no-restore
 COPY newrelic.config /app/publish/newrelic/newrelic.config
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
