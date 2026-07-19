@@ -1,12 +1,16 @@
-# Used by the Elastic Beanstalk Docker (AL2023) platform to build the game image and pin the
-# host port to 8080, so the nginx override in .platform/nginx/conf.d/elasticbeanstalk/ proxies
-# to a deterministic port. Ignored by local `dotnet run`; only docker/EB consume it.
+# Elastic Beanstalk Docker platform deployment for the game.
+#
+# IMPORTANT: when a docker-compose.yml is present, EB runs Docker Compose directly and does NOT
+# start its nginx reverse proxy. Traffic hits the instance on port 80, so the container MUST
+# publish host port 80. Kestrel (ASPNETCORE_URLS=http://+:8080 in the Dockerfile) handles the
+# SignalR WebSocket natively — no nginx, no proxy WebSocket config needed.
+#
+# Ignored by local `dotnet run`; only docker/EB consume it.
 services:
   web:
     build: .
     ports:
-      - "8080:8080"
+      - "80:8080"   # host:container — host 80 is what EB exposes publicly
     environment:
-      # Real values are injected by `eb setenv` (environment properties) — these are placeholders.
       - ASPNETCORE_ENVIRONMENT=Production
     restart: unless-stopped
