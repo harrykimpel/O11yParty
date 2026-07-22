@@ -483,12 +483,6 @@ q.Value);
 
     private string? _importMessage;
 
-    /// <summary>
-    /// Extends the board from pasted TSV (cols: Category, Value, Prompt, Answer, [DoubleDown]).
-    /// Questions for an existing category name are appended; a new category is created and
-    /// auto-selected. Reports a summary + any skipped rows via <see cref="_importMessage"/>.
-    /// </summary>
-    [NewRelic.Api.Agent.Transaction]
     private void ImportQuestions(string? tsv)
     {
     {
