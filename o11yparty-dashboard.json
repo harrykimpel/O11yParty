@@ -42,7 +42,7 @@
                         "nrqlQueries": [
                             {
                                 "accountIds": [
-                                    NR_ACCOUNT_ID
+                                    0
                                 ],
                                 "query": "SELECT latest(O11yPartyTeamScore) FROM `UserAction` SINCE today facet O11yPartyTeam limit max"
                             }
@@ -79,7 +79,7 @@
                         "nrqlQueries": [
                             {
                                 "accountIds": [
-                                    NR_ACCOUNT_ID
+                                    0
                                 ],
                                 "query": "FROM O11yPartyBuzz SELECT count(*) SINCE today facet teamName limit max"
                             }
@@ -108,7 +108,7 @@
                         "nrqlQueries": [
                             {
                                 "accountIds": [
-                                    NR_ACCOUNT_ID
+                                    0
                                 ],
                                 "query": "FROM O11yPartyLeadCapture select firstName, lastName, country limit max SINCE today "
                             }

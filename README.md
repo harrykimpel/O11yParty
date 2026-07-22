@@ -34,8 +34,7 @@ To enable New Relic Browser monitoring for this application, follow these steps:
 3. Copy the New Relic Browser monitoring script provided by New Relic.
 4. Open the file [wwwroot/newrelic.js](wwwroot/newrelic.js) in a text editor.
 5. Paste the New Relic Browser monitoring script into the file, replacing the placeholder comment.
-6. Uncomment the lines in the `RecordTeamScore` function to enable recording team names and scores as custom attributes in New Relic for better insights into user interactions and game performance.
-7. Save the file.
+6. Save the file. The `RecordTeamScore` function already records team names and scores as custom attributes in New Relic for better insights into user interactions and game performance.
 
 ## (optional) Buzzer Integration (New Relic)
 
@@ -67,8 +66,10 @@ visualizes the data the game and buzzer send to New Relic:
 - **Lead captures** — names and country from the buzzer's `O11yPartyLeadCapture` events.
 
 To use it, in New Relic go to **Dashboards → Import dashboard**, paste the contents of
-`o11yparty-dashboard.json`, and choose your account. If you customized any event/attribute names
-(`EventType`, `BuzzEventType`, `BuzzNameAttribute`, …), update the matching NRQL in the widgets.
+`o11yparty-dashboard.json`, and choose your account. The file ships with `accountIds` set to `0`
+as a placeholder — replace every `0` in `accountIds` with your real New Relic account ID before
+importing. If you customized any event/attribute names (`EventType`, `BuzzEventType`,
+`BuzzNameAttribute`, …), update the matching NRQL in the widgets.
 
 ## Running the Game
 
@@ -84,7 +85,7 @@ To use it, in New Relic go to **Dashboards → Import dashboard**, paste the con
 
 You can change the content by editing the data files **or** directly in the Setup screen at runtime:
 
-- **Board content** lives in [wwwroot/data/O11yParty-board.json](wwwroot/data/O11yParty-board.json).
+- **Board content** lives in [wwwroot/data/o11yparty-board.json](wwwroot/data/o11yparty-board.json).
   - Prompts are the on-screen clues; answers are the responses.
   - The board is **tier-based**: each category provides questions at point levels (100, 200, …),
     and one is picked at random per tier when the board is built.
