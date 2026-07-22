@@ -36,12 +36,32 @@ To enable New Relic Browser monitoring for this application, follow these steps:
 5. Paste the New Relic Browser monitoring script into the file, replacing the placeholder comment.
 6. Save the file. The `RecordTeamScore` function already records team names and scores as custom attributes in New Relic for better insights into user interactions and game performance.
 
-## (optional) Buzzer Integration (New Relic)
+## (optional) Buzzer Integration
 
-The game can show which team buzzed in live, by polling New Relic for buzz events published by
-the companion [O11yParty-Buzzer](https://github.com/harrykimpel/O11yParty-Buzzer) app. When a
-new buzz is detected during a question, the team is highlighted and locked in. This is optional —
-the game runs fine without it.
+The game can show which team buzzed in live, via the companion
+[O11yParty-Buzzer](https://github.com/harrykimpel/O11yParty-Buzzer) app. When a new buzz is
+detected during a question, the team is highlighted and locked in. This is optional — the game
+runs fine without it. There are two transports:
+
+### SignalR push (default)
+
+The buzzer connects directly to this app's `/hubs/buzz` SignalR hub and pushes buzz events —
+lower latency than polling, and it's what runs by default (`NewRelic:UseLegacyBuzzPolling` is
+`false` unless set).
+
+Configure via the `BuzzHub` section of `appsettings.json` (or the `BuzzHub__SharedSecret` env var):
+
+| Key | Default | Notes |
+| ----- | --------- | ------- |
+| `SharedSecret` | _(required outside Development)_ | Token the buzzer must present (as `?access_token=<token>` on the WebSocket URL, or `Authorization: Bearer <token>`) to connect to the hub. Must match the buzzer's configured secret. Left blank, the hub fails **open** (accepts unauthenticated connections, Development only) or fails **closed** (rejects all connections) in every other environment. |
+
+In Docker/Elastic Beanstalk compose mode, EB does not auto-inject environment properties into the
+container — `BuzzHub__SharedSecret` must be passed through explicitly (see `docker-compose.yml`).
+
+### Legacy New Relic polling
+
+Set `NewRelic:UseLegacyBuzzPolling` to `true` to instead poll New Relic for buzz events published
+by the buzzer as custom events.
 
 Configure under the `NewRelic` section of `appsettings.json` (or via `NewRelic__*` env vars):
 
@@ -53,8 +73,10 @@ Configure under the `NewRelic` section of `appsettings.json` (or via `NewRelic__
 | `BuzzNameAttribute` | `teamName` | Event attribute holding the team name |
 | `NormalizeReBuzzSuffix` | `false` | When `true`, strips a trailing `-r<n>` from the polled team name so load-test re-buzz names map back to the base team. Leave off for normal play. |
 
+### Team name matching
+
 A buzz only highlights a team that exists in the current team list (case-insensitive match), so
-the buzzer's team names should match the names on the scoreboard.
+the buzzer's team names should match the names on the scoreboard. This applies to both transports.
 
 ## (optional) Sample New Relic Dashboard
 
