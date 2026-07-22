@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using O11yParty.Components;
-using O11yParty.Hubs;
 using O11yParty.Services;
 using System.Net;
 
@@ -15,9 +14,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
-        builder.Services.AddSignalR();
         builder.Services.AddSingleton<O11yPartyDataService>();
-        builder.Services.AddSingleton<IBuzzNotifier, BuzzNotifier>();
         builder.Services.AddHttpClient<NewRelicBuzzService>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(5);
@@ -58,7 +55,6 @@ public class Program
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
-        app.MapHub<BuzzHub>("/hubs/buzz");
 
         app.Run();
     }

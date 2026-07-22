@@ -2,7 +2,6 @@
 @rendermode InteractiveServer
 @inject O11yPartyDataService DataService
 @inject NewRelicBuzzService BuzzService
-@inject IBuzzNotifier BuzzNotifier
 @inject IJSRuntime JS
 @inject IConfiguration Configuration
 @inject IWebHostEnvironment Environment
@@ -131,20 +130,6 @@
     private string? _buzzHighlightName;
     private int _buzzHighlightVersion;
 
-    // Transport selection: when false (default) use IBuzzNotifier (SignalR push);
-    // when true use the legacy NewRelicBuzzService polling path.
-    private bool _useLegacyBuzzPolling;
-
-    // Timestamp-authoritative buzz selection (SignalR push path only).
-    // SignalR delivers buzzes in arrival order, which network jitter can reorder. To award the
-    // team that actually buzzed first, the first buzz opens a short collection window; every buzz
-    // that lands within it is gathered, then the lowest server-stamped buzzedAtUtcMs wins.
-    // The legacy NR path is unaffected — NRQL earliest() already resolves the winner server-side.
-    private const int BuzzWindowMs = 400;
-    private readonly List<(Team Team, long Ts)> _buzzCandidates = new();
-    private bool _collectingBuzzes;
-    private int _buzzRoundId;
-
     // Chaos / synthetic failure modes
     [Parameter]
     [SupplyParameterFromQuery(Name = "chaos")]
@@ -167,12 +152,6 @@
 
         _numberOfCategories = Configuration.GetValue<int>("Board:NumberOfCategories", 5);
         _numberOfQuestions = Configuration.GetValue<int>("Board:NumberOfQuestions", 5);
-        _useLegacyBuzzPolling = Configuration.GetValue<bool>("NewRelic:UseLegacyBuzzPolling", false);
-
-        if (!_useLegacyBuzzPolling)
-        {
-            BuzzNotifier.BuzzReceived += OnBuzzNotification;
-        }
 
         var teamNames = await DataService.GetTeamsAsync();
         _teams.Clear();
@@ -436,7 +415,7 @@ q.Value);
     [NewRelic.Api.Agent.Transaction]
     private void ResetGame()
     {
-        CloseBuzzWindow();
+        StopBuzzPolling();
         StopTimer();
         _phase = GamePhase.Setup;
         _currentQuestion = null;
@@ -446,7 +425,7 @@ q.Value);
     [NewRelic.Api.Agent.Transaction]
     private void EndGame()
     {
-        CloseBuzzWindow();
+        StopBuzzPolling();
         StopTimer();
         _phase = GamePhase.Winner;
     }
@@ -462,35 +441,6 @@ q.Value);
     /// Trims, drops blanks, de-dupes (case-insensitive), and caps the count.
     /// </summary>
     private void ReplaceTeams(string? raw)
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return;
-
-        var names = raw
-            .Split(new[] { '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(n => !string.IsNullOrWhiteSpace(n))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Take(500)
-            .ToList();
-
-        if (names.Count == 0) return;
-
-        _teams.Clear();
-        foreach (var name in names)
-        {
-            _teams.Add(new Team(name));
-        }
-    }
-
-    private string? _importMessage;
-
-    /// <summary>
-    /// Extends the board from pasted TSV (cols: Category, Value, Prompt, Answer, [DoubleDown]).
-    /// Questions for an existing category name are appended; a new category is created and
-    /// auto-selected. Reports a summary + any skipped rows via <see cref="_importMessage"/>.
-    /// </summary>
-    [NewRelic.Api.Agent.Transaction]
-    private void ImportQuestions(string? tsv)
-    {
     {
         if (string.IsNullOrWhiteSpace(raw)) return;
 
@@ -649,29 +599,7 @@ q.Value);
         _scoreApplied = false;
         ResetBuzzState();
         StartTimer();
-        OpenBuzzWindow();
-    }
-
-    private void ShowChaosError(string message)
-    {
-        _chaosErrorMessage = message;
-        var currentVersion = ++_chaosErrorVersion;
-        _ = HideChaosErrorAfterDelayAsync(currentVersion);
-    }
-
-    private async Task HideChaosErrorAfterDelayAsync(int expectedVersion)
-    {
-        try { await Task.Delay(TimeSpan.FromSeconds(3)); }
-        catch (TaskCanceledException) { return; }
-
-        if (expectedVersion != _chaosErrorVersion) return;
-
-        await InvokeAsync(() =>
-        {
-            if (expectedVersion != _chaosErrorVersion) return;
-            _chaosErrorMessage = null;
-            StateHasChanged();
-        });
+        StartBuzzPolling();
     }
 
     private void ShowChaosError(string message)
@@ -698,14 +626,14 @@ q.Value);
 
     private void RevealAnswer()
     {
-        CloseBuzzWindow();
+        StopBuzzPolling();
         StopTimer();
         _phase = GamePhase.Answer;
     }
 
     private void ReturnToBoard()
     {
-        CloseBuzzWindow();
+        StopBuzzPolling();
         StopTimer();
         _phase = GamePhase.Board;
         _currentQuestion = null;
@@ -722,7 +650,7 @@ q.Value);
             AdjustScore(_buzzedTeam, questionPoints);
         }
 
-        CloseBuzzWindow();
+        StopBuzzPolling();
         StopTimer();
         _currentQuestion.IsAnswered = true;
         _currentQuestion = null;
@@ -879,15 +807,8 @@ q.Value);
     private void ResetBuzz()
     {
         ResetBuzzState();
-        // Re-open the buzz window (sets _questionStartedUnixMs; restarts legacy polling if applicable).
-        // On the SignalR path _questionStartedUnixMs is updated so late buzzes from before the
-        // reset are ignored by the OnBuzzNotification filter.
-        OpenBuzzWindow();
-        // _lastHandledBuzzUnixMs is only used by the legacy polling path.
-        if (_useLegacyBuzzPolling)
-        {
-            _lastHandledBuzzUnixMs = _questionStartedUnixMs;
-        }
+        _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        _lastHandledBuzzUnixMs = _questionStartedUnixMs;
         StartTimer();
     }
 
@@ -895,7 +816,6 @@ q.Value);
     {
         StopBuzzPolling();
         if (!_enableBuzzer || !BuzzService.IsConfigured) return;
-        // _questionStartedUnixMs is set by OpenBuzzWindow before StartBuzzPolling is called.
         _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         _lastHandledBuzzUnixMs = _questionStartedUnixMs;
         _buzzPollingCancellation = new CancellationTokenSource();
@@ -954,120 +874,6 @@ q.Value);
         Logger.LogInformation("Ignoring remote buzz from unknown team: {0}", normalizedName);
     }
 
-    /// <summary>
-    /// Subscription handler for the SignalR push path (IBuzzNotifier).
-    /// Called from a thread-pool thread; marshals onto the Blazor circuit via InvokeAsync.
-    /// </summary>
-    private void OnBuzzNotification(BuzzNotification notification)
-    {
-        // Filter: only act during an open, unlocked question, and only for buzzes
-        // timestamped at or after the question opened.
-        if (_phase != GamePhase.Question || _buzzerLocked || notification.BuzzedAtUtcMs < _questionStartedUnixMs)
-            return;
-
-        // _lastHandledBuzzUnixMs is not used on the SignalR path — the collection window plus
-        // _buzzerLocked decide the winner. Marshal onto the circuit thread, where all buzz-window
-        // state is mutated single-threaded.
-        _ = InvokeAsync(() => CollectBuzzAsync(notification.Name, notification.BuzzedAtUtcMs));
-    }
-
-    /// <summary>
-    /// SignalR push path: gather buzzes for a short window, then award the team whose buzz has the
-    /// lowest server-stamped timestamp (the team that actually buzzed first, regardless of the order
-    /// the buzzes arrived over the network). Runs on the Blazor circuit thread.
-    /// </summary>
-    private async Task CollectBuzzAsync(string participantName, long buzzedAtUtcMs)
-    {
-        if (_buzzerLocked) return;
-
-        var normalizedName = participantName.Trim();
-        var matchingTeam = _teams.FirstOrDefault(team =>
-            string.Equals(team.Name, normalizedName, StringComparison.OrdinalIgnoreCase));
-        if (matchingTeam is null)
-        {
-            Logger.LogInformation("Ignoring remote buzz from unknown team: {0}", normalizedName);
-            return;
-        }
-        StopTimer();
-        if (!_enableTimer || _phase != GamePhase.Question) return;
-
-        _buzzCandidates.Add((matchingTeam, buzzedAtUtcMs));
-        Logger.LogInformation("Buzz candidate collected: Team={0}, BuzzedAtUtcMs={1}", matchingTeam.Name, buzzedAtUtcMs);
-
-        // A window is already open — this buzz simply joined it.
-        if (_collectingBuzzes) return;
-
-        _collectingBuzzes = true;
-        var round = _buzzRoundId;
-
-        await Task.Delay(BuzzWindowMs);
-
-        // Abort if the round changed (reset / new question), the buzzer locked some other way
-        // (e.g. timer expiry), or we left the Question phase while the window was open.
-        if (round != _buzzRoundId || _buzzerLocked || _phase != GamePhase.Question)
-        {
-            return;
-        }
-
-        _collectingBuzzes = false;
-        if (_buzzCandidates.Count == 0) return;
-
-        // Lowest timestamp wins. OrderBy is stable, so ties fall back to arrival order.
-        var winner = _buzzCandidates.OrderBy(c => c.Ts).First();
-        _buzzCandidates.Clear();
-
-        Logger.LogInformation("Buzz window closed: winner Team={0}, BuzzedAtUtcMs={1}", winner.Team.Name, winner.Ts);
-        _remoteBuzzedName = winner.Team.Name;
-        BuzzIn(winner.Team);
-        StateHasChanged();
-    }
-
-    /// <summary>
-    /// Opens the buzz window for the current question.
-    /// Always sets _questionStartedUnixMs regardless of transport.
-    /// Routes to legacy polling or notifier subscription based on _useLegacyBuzzPolling.
-    /// </summary>
-    private void OpenBuzzWindow()
-    {
-        _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        ResetBuzzCollection();
-
-        if (_useLegacyBuzzPolling)
-        {
-            StartBuzzPolling();
-        }
-        // On the SignalR path _questionStartedUnixMs is already set above and the
-        // OnBuzzNotification subscription is already live — nothing more to do.
-    }
-
-    /// <summary>
-    /// Closes the buzz window for the current question.
-    /// Routes to legacy polling teardown or is a no-op on the SignalR path.
-    /// </summary>
-    private void CloseBuzzWindow()
-    {
-        ResetBuzzCollection();
-
-        if (_useLegacyBuzzPolling)
-        {
-            StopBuzzPolling();
-        }
-        // On the SignalR path the subscription stays live (it filters by phase + lock),
-        // so there is nothing to tear down here.
-    }
-
-    /// <summary>
-    /// Invalidates any in-flight buzz collection window and clears gathered candidates.
-    /// Bumping the round id makes a pending CollectBuzzAsync continuation bail instead of
-    /// awarding a stale winner after a reset / new question.
-    /// </summary>
-    private void ResetBuzzCollection()
-    {
-        _buzzRoundId++;
-        _collectingBuzzes = false;
-        _buzzCandidates.Clear();
-    }
-
     private void StartTimer()
     {
         StopTimer();
@@ -1115,10 +921,6 @@ q.Value);
 
     public void Dispose()
     {
-        if (!_useLegacyBuzzPolling)
-        {
-            BuzzNotifier.BuzzReceived -= OnBuzzNotification;
-        }
         StopBuzzPolling();
         StopTimer();
         _chaosErrorVersion++;

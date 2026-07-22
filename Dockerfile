@@ -29,10 +29,6 @@ ENV ASPNETCORE_ENVIRONMENT=Production
 ENV NewRelic__AccountId= \
     NewRelic__UserApiKey=
 
-# Buzz hub (SignalR) — shared secret authenticating the buzzer's inbound connection.
-# REQUIRED in production (hub fails closed without it); must match the buzzer. Inject at runtime.
-ENV BuzzHub__SharedSecret=
-
 # New Relic APM — set NEW_RELIC_LICENSE_KEY at runtime to enable instrumentation
 ENV NEW_RELIC_LICENSE_KEY=
 
