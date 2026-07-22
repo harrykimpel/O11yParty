@@ -72,8 +72,14 @@ public sealed class BuzzHub : Hub
             return Task.CompletedTask;
         }
 
-        var notification = new BuzzNotification(teamName.Trim(), buzzedAtUtcMs);
-        _logger.LogInformation("BuzzHub: Buzz received — Team={TeamName}, BuzzedAtUtcMs={BuzzedAtUtcMs}", notification.Name, notification.BuzzedAtUtcMs);
+        // Arbitration must use a timestamp the client can't control — otherwise a
+        // misbehaving buzzer could claim an earlier buzzedAtUtcMs and always win.
+        // The client-provided value is only kept for latency diagnostics.
+        var serverBuzzedAtUtcMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var notification = new BuzzNotification(teamName.Trim(), serverBuzzedAtUtcMs, buzzedAtUtcMs);
+        _logger.LogInformation(
+            "BuzzHub: Buzz received — Team={TeamName}, ServerBuzzedAtUtcMs={ServerBuzzedAtUtcMs}, ClientBuzzedAtUtcMs={ClientBuzzedAtUtcMs}",
+            notification.Name, notification.BuzzedAtUtcMs, notification.ClientBuzzedAtUtcMs);
         _notifier.Publish(notification);
         return Task.CompletedTask;
     }

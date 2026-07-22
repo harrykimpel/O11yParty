@@ -491,35 +491,6 @@ q.Value);
     [NewRelic.Api.Agent.Transaction]
     private void ImportQuestions(string? tsv)
     {
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return;
-
-        var names = raw
-            .Split(new[] { '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(n => !string.IsNullOrWhiteSpace(n))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Take(500)
-            .ToList();
-
-        if (names.Count == 0) return;
-
-        _teams.Clear();
-        foreach (var name in names)
-        {
-            _teams.Add(new Team(name));
-        }
-    }
-
-    private string? _importMessage;
-
-    /// <summary>
-    /// Extends the board from pasted TSV (cols: Category, Value, Prompt, Answer, [DoubleDown]).
-    /// Questions for an existing category name are appended; a new category is created and
-    /// auto-selected. Reports a summary + any skipped rows via <see cref="_importMessage"/>.
-    /// </summary>
-    [NewRelic.Api.Agent.Transaction]
-    private void ImportQuestions(string? tsv)
-    {
         if (string.IsNullOrWhiteSpace(tsv))
         {
             _importMessage = "Nothing to import.";
@@ -674,28 +645,6 @@ q.Value);
         });
     }
 
-    private void ShowChaosError(string message)
-    {
-        _chaosErrorMessage = message;
-        var currentVersion = ++_chaosErrorVersion;
-        _ = HideChaosErrorAfterDelayAsync(currentVersion);
-    }
-
-    private async Task HideChaosErrorAfterDelayAsync(int expectedVersion)
-    {
-        try { await Task.Delay(TimeSpan.FromSeconds(3)); }
-        catch (TaskCanceledException) { return; }
-
-        if (expectedVersion != _chaosErrorVersion) return;
-
-        await InvokeAsync(() =>
-        {
-            if (expectedVersion != _chaosErrorVersion) return;
-            _chaosErrorMessage = null;
-            StateHasChanged();
-        });
-    }
-
     private void RevealAnswer()
     {
         CloseBuzzWindow();
@@ -713,13 +662,13 @@ q.Value);
     }
 
     [NewRelic.Api.Agent.Transaction]
-    private void HandleCompleteQuestion(int questionPoints)
+    private async Task HandleCompleteQuestion(int questionPoints)
     {
         if (_currentQuestion is null) return;
 
         if (!_scoreApplied && _buzzedTeam is not null)
         {
-            AdjustScore(_buzzedTeam, questionPoints);
+            await AdjustScore(_buzzedTeam, questionPoints);
         }
 
         CloseBuzzWindow();
@@ -748,7 +697,7 @@ q.Value);
     private bool IsScoreCoolingDown(Team team, int points) => _scoreCooldownKeys.Contains(ScoreCooldownKey(team, points));
 
     [NewRelic.Api.Agent.Transaction]
-    private async void AdjustScore(Team team, int delta)
+    private async Task AdjustScore(Team team, int delta)
     {
         var key = ScoreCooldownKey(team, delta);
         if (_scoreCooldownKeys.Contains(key)) return; // ignore rapid repeat clicks
@@ -768,7 +717,7 @@ q.Value);
     // Manual scoreboard edit: set a team's score to an absolute value (no cooldown —
     // it's a deliberate correction, not a repeatable +/- click).
     [NewRelic.Api.Agent.Transaction]
-    private async void SetScore(Team team, int newScore)
+    private async Task SetScore(Team team, int newScore)
     {
         team.Score = newScore;
         _scoreApplied = true;

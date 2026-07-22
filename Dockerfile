@@ -38,6 +38,9 @@ ENV NEW_RELIC_LICENSE_KEY=
 
 # CORECLR_PROFILER_PATH is set at container startup by docker-entrypoint.sh
 # based on the detected CPU architecture (x86_64 → linux-x64, aarch64 → linux-arm64).
+# This image doesn't ship the native profiler binaries (only newrelic.config), so
+# docker-entrypoint.sh disables profiling automatically if the .so is missing —
+# mount/COPY the New Relic .NET agent profiler files to actually enable APM.
 ENV CORECLR_ENABLE_PROFILING=1 \
     CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
     CORECLR_NEWRELIC_HOME=/app/newrelic \
