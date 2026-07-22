@@ -491,6 +491,35 @@ q.Value);
     [NewRelic.Api.Agent.Transaction]
     private void ImportQuestions(string? tsv)
     {
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return;
+
+        var names = raw
+            .Split(new[] { '\n', '\r', ',' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(500)
+            .ToList();
+
+        if (names.Count == 0) return;
+
+        _teams.Clear();
+        foreach (var name in names)
+        {
+            _teams.Add(new Team(name));
+        }
+    }
+
+    private string? _importMessage;
+
+    /// <summary>
+    /// Extends the board from pasted TSV (cols: Category, Value, Prompt, Answer, [DoubleDown]).
+    /// Questions for an existing category name are appended; a new category is created and
+    /// auto-selected. Reports a summary + any skipped rows via <see cref="_importMessage"/>.
+    /// </summary>
+    [NewRelic.Api.Agent.Transaction]
+    private void ImportQuestions(string? tsv)
+    {
         if (string.IsNullOrWhiteSpace(tsv))
         {
             _importMessage = "Nothing to import.";
@@ -621,6 +650,28 @@ q.Value);
         ResetBuzzState();
         StartTimer();
         OpenBuzzWindow();
+    }
+
+    private void ShowChaosError(string message)
+    {
+        _chaosErrorMessage = message;
+        var currentVersion = ++_chaosErrorVersion;
+        _ = HideChaosErrorAfterDelayAsync(currentVersion);
+    }
+
+    private async Task HideChaosErrorAfterDelayAsync(int expectedVersion)
+    {
+        try { await Task.Delay(TimeSpan.FromSeconds(3)); }
+        catch (TaskCanceledException) { return; }
+
+        if (expectedVersion != _chaosErrorVersion) return;
+
+        await InvokeAsync(() =>
+        {
+            if (expectedVersion != _chaosErrorVersion) return;
+            _chaosErrorMessage = null;
+            StateHasChanged();
+        });
     }
 
     private void ShowChaosError(string message)
@@ -845,6 +896,7 @@ q.Value);
         StopBuzzPolling();
         if (!_enableBuzzer || !BuzzService.IsConfigured) return;
         // _questionStartedUnixMs is set by OpenBuzzWindow before StartBuzzPolling is called.
+        _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         _lastHandledBuzzUnixMs = _questionStartedUnixMs;
         _buzzPollingCancellation = new CancellationTokenSource();
         _ = PollRemoteBuzzAsync(_buzzPollingCancellation.Token);
@@ -936,6 +988,8 @@ q.Value);
             Logger.LogInformation("Ignoring remote buzz from unknown team: {0}", normalizedName);
             return;
         }
+        StopTimer();
+        if (!_enableTimer || _phase != GamePhase.Question) return;
 
         _buzzCandidates.Add((matchingTeam, buzzedAtUtcMs));
         Logger.LogInformation("Buzz candidate collected: Team={0}, BuzzedAtUtcMs={1}", matchingTeam.Name, buzzedAtUtcMs);
