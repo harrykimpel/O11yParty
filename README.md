@@ -53,7 +53,7 @@ Configure via the `BuzzHub` section of `appsettings.json` (or the `BuzzHub__Shar
 
 | Key | Default | Notes |
 | ----- | --------- | ------- |
-| `SharedSecret` | _(required outside Development)_ | Token the buzzer must present (as `?access_token=` on the WebSocket, or `Authorization: Bearer`) to connect to the hub. Must match the buzzer's configured secret. Left blank, the hub fails **open** (accepts unauthenticated connections, Development only) or fails **closed** (rejects all connections) in every other environment. |
+| `SharedSecret` | _(required outside Development)_ | Token the buzzer must present (as `?access_token=<token>` on the WebSocket URL, or `Authorization: Bearer <token>`) to connect to the hub. Must match the buzzer's configured secret. Left blank, the hub fails **open** (accepts unauthenticated connections, Development only) or fails **closed** (rejects all connections) in every other environment. |
 
 In Docker/Elastic Beanstalk compose mode, EB does not auto-inject environment properties into the
 container — `BuzzHub__SharedSecret` must be passed through explicitly (see `docker-compose.yml`).
