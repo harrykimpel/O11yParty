@@ -844,7 +844,7 @@ q.Value);
     {
         StopBuzzPolling();
         if (!_enableBuzzer || !BuzzService.IsConfigured) return;
-        // _questionStartedUnixMs is set by OpenBuzzWindow before StartBuzzPolling is called.
+        // Legacy (polling) path: reset timestamps used for the NRQL query window and de-duping.
         _questionStartedUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         _lastHandledBuzzUnixMs = _questionStartedUnixMs;
         _buzzPollingCancellation = new CancellationTokenSource();
