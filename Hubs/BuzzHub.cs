@@ -64,17 +64,23 @@ public sealed class BuzzHub : Hub
     /// <summary>
     /// Invoked by the buzzer client to push a buzz event into the game.
     /// </summary>
-    public Task Buzz(string teamName, long buzzedAtUtcMs)
+public Task Buzz(string teamName, long buzzedAtUtcMs)
+{
+    if (string.IsNullOrWhiteSpace(teamName))
     {
-        if (string.IsNullOrWhiteSpace(teamName))
-        {
-            _logger.LogWarning("BuzzHub: Received Buzz with empty teamName from connection {ConnectionId}; ignoring.", Context.ConnectionId);
-            return Task.CompletedTask;
-        }
-
-        var notification = new BuzzNotification(teamName.Trim(), buzzedAtUtcMs);
-        _logger.LogInformation("BuzzHub: Buzz received — Team={TeamName}, BuzzedAtUtcMs={BuzzedAtUtcMs}", notification.Name, notification.BuzzedAtUtcMs);
-        _notifier.Publish(notification);
+        _logger.LogWarning("BuzzHub: Received Buzz with empty teamName from connection {ConnectionId}; ignoring.", Context.ConnectionId);
         return Task.CompletedTask;
+    }
+
+    var serverBuzzedAtUtcMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    var notification = new BuzzNotification(teamName.Trim(), serverBuzzedAtUtcMs);
+    _logger.LogInformation(
+        "BuzzHub: Buzz received — Team={TeamName}, ClientBuzzedAtUtcMs={ClientBuzzedAtUtcMs}, ServerBuzzedAtUtcMs={ServerBuzzedAtUtcMs}",
+        notification.Name,
+        buzzedAtUtcMs,
+        serverBuzzedAtUtcMs);
+    _notifier.Publish(notification);
+    return Task.CompletedTask;
+}
     }
 }
