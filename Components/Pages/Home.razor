@@ -937,9 +937,12 @@ q.Value);
             Logger.LogInformation("Ignoring remote buzz from unknown team: {0}", normalizedName);
             return;
         }
-        StopTimer();
-        if (!_enableTimer || _phase != GamePhase.Question) return;
+        if (_phase != GamePhase.Question) return;
 
+        if (_enableTimer)
+        {
+            StopTimer();
+        }
         _buzzCandidates.Add((matchingTeam, buzzedAtUtcMs));
         Logger.LogInformation("Buzz candidate collected: Team={0}, BuzzedAtUtcMs={1}", matchingTeam.Name, buzzedAtUtcMs);
 
