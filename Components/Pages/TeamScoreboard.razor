@@ -8,7 +8,7 @@
             {
                 var scoreTeam = team;
                 <div class="wth-team-card" @key="scoreTeam">
-                    <span class="team-name">@team.Name</span>
+                    <span class="team-name" title="@team.Name">@team.Name</span>
                     <input class="team-score team-score-input" type="number" inputmode="numeric"
                            aria-label="@($"Score for {team.Name} — edit to set manually")"
                            value="@team.Score" @onchange="e => SetScore(scoreTeam, e.Value?.ToString())" />
@@ -17,7 +17,7 @@
         </div>
         <div class="wth-add-team-row">
             <input class="wth-input" placeholder="Add a team/attendee…"
-                   value="@_newTeamName" @oninput="e => _newTeamName = e.Value?.ToString() ?? string.Empty"
+                   @bind="_newTeamName" @bind:event="oninput"
                    @onkeydown="HandleKeyDown" />
             <button class="wth-button ghost" type="button" @onclick="SubmitNewTeam"
                     disabled="@string.IsNullOrWhiteSpace(_newTeamName)">Add</button>
