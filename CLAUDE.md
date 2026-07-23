@@ -76,6 +76,16 @@ Two ways the companion buzzer app can report a buzz-in, selected at startup via
 - **Legacy polling** — `NewRelicBuzzService` polls NerdGraph; NRQL's `earliest()` resolves the
   winner server-side, so no local arbitration window is needed.
 
+> **Known limit (2026-07-23):** the buzzer app holds exactly one long-lived SignalR connection to
+> this hub, so every concurrent buzz it forwards serializes through that one connection —
+> load testing (companion buzzer repo, `../concurrency-tests/`, `buzzer:http-load`) found this
+> degrades past roughly 25-40 truly-simultaneous buzzes (~300ms/buzz queueing). Not a concern for
+> realistic play (a handful of teams buzzing within the same second is fine); `BuzzHub` and
+> `IBuzzNotifier` themselves showed no issues under load. Reminder while testing this path:
+> `CollectBuzzAsync` only displays a buzz whose name exactly (case-insensitively) matches a real
+> team in `_teams` — an arbitrary/synthetic team name is silently ignored, which looks like a
+> transport bug but isn't one.
+
 ### Auto-mark answered on award
 
 Setup toggle `AutoMarkAnsweredOnAward` (on by default). `AdjustScore` and `HandleCompleteQuestion`

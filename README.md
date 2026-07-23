@@ -58,6 +58,12 @@ Configure via the `BuzzHub` section of `appsettings.json` (or the `BuzzHub__Shar
 In Docker/Elastic Beanstalk compose mode, EB does not auto-inject environment properties into the
 container — `BuzzHub__SharedSecret` must be passed through explicitly (see `docker-compose.yml`).
 
+**Known limit:** the buzzer holds one persistent SignalR connection to this hub, so every buzz it
+forwards serializes through that one connection. Load testing (see the companion buzzer's README,
+"Known limits") found this degrades past roughly 25-40 truly-simultaneous buzzes — fine for
+realistic teams-buzzing-in-the-same-second usage, not something this app needs to compensate for
+today.
+
 ### Legacy New Relic polling
 
 Set `NewRelic:UseLegacyBuzzPolling` to `true` to instead poll New Relic for buzz events published
