@@ -166,6 +166,17 @@ When any chaos mode is active, a red banner is displayed at the top of the app c
 dotnet dev-certs https --trust
 ```
 
+- `Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException: The antiforgery token could
+  not be decrypted.` / `CryptographicException: The key {...} was not found in the key ring.` —
+  Data Protection keys default to ephemeral, per-instance storage, so every ECS task replacement
+  (redeploy, scale event) generates a fresh key ring; any token or cookie issued before the swap
+  fails to decrypt afterward. On a single-task deployment this is expected and self-resolving:
+  it surfaces once, only for a browser tab that had the page open across that exact redeploy —
+  refreshing the page gets a token from the new key ring. Persisting keys across redeploys (e.g.
+  to SSM Parameter Store or an EFS-mounted directory) would eliminate this, at the cost of extra
+  IAM/infrastructure; not done here since it's a rare, low-stakes, self-recovering hiccup for this
+  app.
+
 ## Screenshots
 
 ### Setup View
