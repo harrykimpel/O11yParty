@@ -52,6 +52,11 @@
                 Buzzer Mode
             </label>
             <label class="wth-toggle">
+                <input type="checkbox" checked="@AutoMarkAnsweredOnAward"
+                       @onchange="e => AutoMarkAnsweredOnAwardChanged.InvokeAsync((bool)(e.Value ?? false))" />
+                Auto-mark answered on award
+            </label>
+            <label class="wth-toggle">
                 Seconds per question
                 <input class="wth-input small" type="number" min="10" max="120" value="@QuestionSeconds"
                        @onchange="e => QuestionSecondsChanged.InvokeAsync(int.TryParse(e.Value?.ToString(), out var s) ? s : QuestionSeconds)" />
@@ -128,6 +133,8 @@ Networking→200→Default HTTPS port?→443→true</pre>
     [Parameter] public EventCallback<bool> EnableTimerChanged { get; set; }
     [Parameter] public bool EnableBuzzer { get; set; }
     [Parameter] public EventCallback<bool> EnableBuzzerChanged { get; set; }
+    [Parameter] public bool AutoMarkAnsweredOnAward { get; set; }
+    [Parameter] public EventCallback<bool> AutoMarkAnsweredOnAwardChanged { get; set; }
     [Parameter] public int QuestionSeconds { get; set; }
     [Parameter] public EventCallback<int> QuestionSecondsChanged { get; set; }
     [Parameter] public int NumberOfQuestions { get; set; }

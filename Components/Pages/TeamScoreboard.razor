@@ -15,6 +15,13 @@
                 </div>
             }
         </div>
+        <div class="wth-add-team-row">
+            <input class="wth-input" placeholder="Add a team/attendee…"
+                   value="@_newTeamName" @oninput="e => _newTeamName = e.Value?.ToString() ?? string.Empty"
+                   @onkeydown="HandleKeyDown" />
+            <button class="wth-button ghost" type="button" @onclick="SubmitNewTeam"
+                    disabled="@string.IsNullOrWhiteSpace(_newTeamName)">Add</button>
+        </div>
     </details>
 </section>
 
@@ -27,6 +34,11 @@
     /// <summary>Raised when the host edits a team's score directly to an absolute value.</summary>
     [Parameter] public EventCallback<(Team Team, int Score)> OnScoreSet { get; set; }
 
+    /// <summary>Raised when the host adds a team/attendee from the scoreboard, mid-game.</summary>
+    [Parameter] public EventCallback<string> OnTeamAdded { get; set; }
+
+    private string _newTeamName = string.Empty;
+
     private async Task SetScore(Team team, string? raw)
     {
         // Absolute set: the host types the team's new total. Ignore non-numeric input
@@ -35,5 +47,17 @@
         {
             await OnScoreSet.InvokeAsync((team, newScore));
         }
+    }
+
+    private async Task SubmitNewTeam()
+    {
+        if (string.IsNullOrWhiteSpace(_newTeamName)) return;
+        await OnTeamAdded.InvokeAsync(_newTeamName);
+        _newTeamName = string.Empty;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SubmitNewTeam();
     }
 }

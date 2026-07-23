@@ -49,7 +49,8 @@
     <GameHeader Phase="_phase" IsBoardValid="IsBoardValid" NumberOfQuestions="_numberOfQuestions"
                 OnResetGame="ResetGame" OnEndGame="EndGame" />
 
-    <TeamScoreboard Teams="_teams" StartCollapsed="true" OnScoreSet="args => SetScore(args.Team, args.Score)" />
+    <TeamScoreboard Teams="_teams" StartCollapsed="true" OnScoreSet="args => SetScore(args.Team, args.Score)"
+                    OnTeamAdded="name => AddTeam(name)" />
 
     @if (!_isLoaded)
     {
@@ -62,11 +63,13 @@
         <GameSetupPanel Teams="_teams" EnableDoubleDown="_enableDoubleDown"
                         EnableDoubleDownChanged="v => _enableDoubleDown = v" EnableTimer="_enableTimer"
                         EnableTimerChanged="v => _enableTimer = v" EnableBuzzer="_enableBuzzer"
-                        EnableBuzzerChanged="v => _enableBuzzer = v" QuestionSeconds="_questionSeconds"
+                        EnableBuzzerChanged="v => _enableBuzzer = v"
+                        AutoMarkAnsweredOnAward="_autoMarkAnsweredOnAward"
+                        AutoMarkAnsweredOnAwardChanged="v => _autoMarkAnsweredOnAward = v" QuestionSeconds="_questionSeconds"
                         QuestionSecondsChanged="v => _questionSeconds = v" NumberOfQuestions="_numberOfQuestions"
                         SourceCategories="_sourceCategories" SelectedCategoryNames="_selectedCategoryNames" IsBoardValid="IsBoardValid"
                         OnTeamNameChanged="args => UpdateTeamName(args.Index, args.Value)" OnTeamRemoved="RemoveTeam"
-                        OnTeamAdded="AddTeam" OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
+                        OnTeamAdded="() => AddTeam()" OnNumberOfQuestionsChanged="HandleNumberOfQuestionsChanged"
                         OnCategoryToggled="args => ToggleCategory(args.Name, args.Selected)" OnTeamsPasted="ReplaceTeams"
                         OnQuestionsImported="ImportQuestions" ImportMessage="@_importMessage"
                         OnStartGame="StartGame" />
@@ -116,6 +119,7 @@
     private bool _enableDoubleDown = true;
     private bool _enableTimer = true;
     private bool _enableBuzzer = true;
+    private bool _autoMarkAnsweredOnAward = true;
     private int _questionSeconds = 30;
     private int _timeRemaining;
     private int _maxWager;
@@ -451,9 +455,24 @@ q.Value);
         _phase = GamePhase.Winner;
     }
 
-    private void AddTeam()
+    private void AddTeam(string? name = null)
     {
-        _teams.Add(new Team($"Team {_teams.Count + 1}"));
+        if (name is null)
+        {
+            _teams.Add(new Team($"Team {_teams.Count + 1}"));
+            return;
+        }
+
+        var trimmed = name.Trim();
+        if (trimmed.Length == 0) return;
+
+        if (_teams.Any(t => string.Equals(t.Name.Trim(), trimmed, StringComparison.OrdinalIgnoreCase)))
+        {
+            ShowScoreToast($"\"{trimmed}\" already exists");
+            return;
+        }
+
+        _teams.Add(new Team(trimmed));
     }
 
     /// <summary>
@@ -671,6 +690,16 @@ q.Value);
             await AdjustScore(_buzzedTeam, questionPoints);
         }
 
+        // No-op if AdjustScore already completed it via auto-mark-on-award.
+        CompleteCurrentQuestion();
+    }
+
+    // Shared by the explicit "Mark Answered" action and auto-mark-on-award; safe to call
+    // even if the question was already completed (e.g. by the auto-mark path above).
+    private void CompleteCurrentQuestion()
+    {
+        if (_currentQuestion is null) return;
+
         CloseBuzzWindow();
         StopTimer();
         _currentQuestion.IsAnswered = true;
@@ -709,6 +738,14 @@ q.Value);
         var verb = delta >= 0 ? "Awarded" : "Removed";
         var preposition = delta >= 0 ? "to" : "from";
         ShowScoreToast($"{verb} {Math.Abs(delta)} {preposition} {team.Name} — now {team.Score} pts");
+
+        // A positive award is treated as "this team got it right" — auto-advance past the
+        // question so the host doesn't also have to click Mark Answered. Penalties (delta <= 0)
+        // never do this: the question should stay open for another team to try.
+        if (delta > 0 && _autoMarkAnsweredOnAward)
+        {
+            CompleteCurrentQuestion();
+        }
 
         _ = ReenableScoreButtonAsync(key);
         await RecordTeamScoreAsync(team);

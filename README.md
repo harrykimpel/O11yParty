@@ -126,12 +126,30 @@ You can change the content by editing the data files **or** directly in the Setu
 ## Game Controls
 
 - Use **New Game** to reset teams and the board.
+- **Add a team/attendee at any time** — expand the scoreboard (it's visible in every phase, just
+  collapsed by default outside Setup) and use the name field + **Add** button. A duplicate name
+  (case-insensitive) is rejected with a toast instead of being added, since buzz-in matching is
+  by name.
 - Select a tile to reveal the clue.
 - Use **Show Answer** to reveal the response.
 - **Scoring:** award/deduct with the per-question buttons, or **click a team's score in the
   scoreboard and type a new total** to correct it directly. Each change shows a brief
   confirmation, and the per-question buttons are disabled for a few seconds after a click so
   points aren't double-applied by accident.
+- **Double Down** (Setup toggle, on by default) — each game randomly marks about a third of the
+  questions (at least one) as Double Down. On those, the host sets a custom wager (100 up to the
+  higher of the board's max point value or any team's current score) instead of the fixed point
+  value.
+- **Question Timer** (Setup toggle, on by default) — shows a countdown badge during a question;
+  when it reaches zero the buzzer locks and the game auto-advances to the answer.
+- **Buzzer Mode** (Setup toggle, on by default) — shows the buzz-in banner and locks in whichever
+  team buzzed first, via the companion buzzer app (SignalR push, or legacy New Relic polling —
+  see [Buzzer Integration](#optional-buzzer-integration)). When off, score manually with the
+  per-team buttons instead.
+- **Auto-mark answered on award** (Setup toggle, on by default) — awarding points to any team
+  while a question is open immediately marks it answered and returns to the board, so you don't
+  also have to click **Mark Answered** separately. Penalties never trigger this, so the question
+  stays open for another team to try.
 - When a team buzzes in, a banner appears just below the header (it doesn't cover the question).
 
 ## Chaos / Synthetic Failure Modes
